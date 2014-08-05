@@ -1,5 +1,5 @@
 # Blog of KyleWong
-  KyleWong ,a coder who wanna make a difference.
+  KyleWong ,a coder who wanna to make a difference.
 ## Contents
 - [Introduction]
 - [Technology Posts]

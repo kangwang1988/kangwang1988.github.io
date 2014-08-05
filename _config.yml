@@ -7,7 +7,6 @@ permalink:        pretty
 
 # Setup
 title:            KyleWong's Blog
-tagline:          'A Jekyll theme'
 description:      'A coder wanna to make a difference.Connect me by <a href="http://weibo.com/kangwang1988" target="_blank">@KyleWong</a>.'
 url:              https://github.com/kangwang1988/kangwang1988.github.io
 baseurl:          /
