@@ -97,3 +97,5 @@ Introduction to Functional Programming by Philip Wadler and Richard Bird<br>
 No Bugs! by David Thielen<br>
 Rework by Jason Freid and DHH<br>
 JUnit in Action<br>
+
+See More [@StackOverflow](http://stackoverflow.com/questions/1711/what-is-the-single-most-influential-book-every-programmer-should-read)
