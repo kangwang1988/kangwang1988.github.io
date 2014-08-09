@@ -6,13 +6,13 @@ pygments:         true
 permalink:        pretty
 
 # Setup
-title:            KyleWong's Blog
+title:            Kyle Wong's Blog
 description:      'A coder wanna to make a difference.Connect me by <a href="http://weibo.com/kangwang1988" target="_blank">@KyleWong</a>.'
 url:              https://github.com/kangwang1988/kangwang1988.github.io
 baseurl:          /
 
 author:
-  name:           'KyleWong'
+  name:           'Kyle Wong'
   url:            http://kangwang1988.github.io/
 
 paginate:         5
