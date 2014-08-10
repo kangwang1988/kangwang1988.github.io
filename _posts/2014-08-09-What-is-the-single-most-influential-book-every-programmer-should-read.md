@@ -3,7 +3,7 @@ layout: post
 title: What is the single most influential book every programmer should read?
 ---
 
-9 Aug 2014 - HangZhou
+@HangZhou
 
 Code Complete (2nd edition) by Steve McConnell<br>
 The Pragmatic Programmer<br>
