@@ -23,7 +23,7 @@ a='hello'<br>
 b='world'<br>
 c=$a$b<br>
 echo $c<br>
-> helloworld<br>
+helloworld<br>
 ================ Snippet End ================<br>
 ================ Snippet Begin ================<br>
 SVN checkout the contents of a folder, not the folder itself<br>
