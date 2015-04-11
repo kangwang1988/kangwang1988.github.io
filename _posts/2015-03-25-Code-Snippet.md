@@ -231,3 +231,6 @@ curl -L -b headers http://localhost/<br>
 lipo -info xx.a<br>
 creates or operate on fat (multi-architecture) files.<br>
 ================ Snippet End ================<br>
+================ Snippet Begin ================<br>
+curl --header "Cookie: xq_a_token=tokenvalue;" http://api.xueqiu.com/v4/stock/quote.json?code=SHcode<br>
+================ Snippet End ================<br>
