@@ -39,3 +39,15 @@ base64 编码图片 Pros and Cons
 图片无需再次请求
 无法缓存
 ==================================<br>
+================ class-dump ================<br>
+classdump ./App.app > api.txt
+print property,method list of a objective-c app
+==================================<br>
+================ dsym file  ================<br>
+dwarfdump --uuid dsym/app file <get a uuid>
+crashlog -> indident identifier (They two would be exactly the same.)
+To analyze crash logs, we have two options:
+1.Readable crash callstack.
+2.Combine the crash log with the dsym file.(dwarfdump command)
+--uuid & --lookup
+==================================<br>
