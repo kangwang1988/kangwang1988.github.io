@@ -14,11 +14,16 @@ resolveclassmethod
 load
 
 objc_getassociatedobject/set
+objc_getClassList
 
+imp_implementationWithBlock
+
+class_getName
 class_getmethod(class,instance)/addmethod/replacemethod
 class_copymethodlist
 class_copypropertylist/property_getname
 
+method_getTypeEncoding
 method_getimplementation
 method_exchange
 ==================================<br>
@@ -71,4 +76,7 @@ To analyze crash logs, we have two options:
 - Operator override
 - Multiple inheritance
 - Dynamic type make it hard for compiler optimization
+==================================<br>
+================ @encode  ================<br>
+- all data types, class,method could be expressed in ASCII encoded string.
 ==================================<br>
