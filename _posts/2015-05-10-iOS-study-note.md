@@ -80,3 +80,8 @@ To analyze crash logs, we have two options:
 ================ @encode  ================<br>
 - all data types, class,method could be expressed in ASCII encoded string.
 ==================================<br>
+================ @import  ================<br>
+- No need to link it in the build phases
+- if referenced, will be copyed,otherwise do nothing
+- can add specific file.
+==================================<br>
