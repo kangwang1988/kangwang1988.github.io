@@ -56,9 +56,19 @@ To analyze crash logs, we have two options:
 - MRC & ARC -> Reference counting.Compiler add retain/release when needed.
 - Efficiency may be better than MRC.(Add release/autorelease to realize MRC, maybe some opimization)
 ==================================<br>
-==================================<br>
 ================ Autolayout  ================<br>
 - Use xib for constraints
 - Use Code <NSLayoutConstraint>
 - Use Visual Formatted Language
+==================================<br>
+================ Objective C (pros and cons)  ================<br>
+- Pros
+- Runtime (mini and powerful)
+- Base on C (current compile compatible and lots of library available)
+- Cons
+- Garbage collection
+- Namespace
+- Operator override
+- Multiple inheritance
+- Dynamic type make it hard for compiler optimization
 ==================================<br>
