@@ -51,3 +51,14 @@ To analyze crash logs, we have two options:
 2.Combine the crash log with the dsym file.(dwarfdump command)
 --uuid & --lookup
 ==================================<br>
+================ ARC  ================<br>
+- fobjc-arc/fno-objc-arc single file enable/disable ARC
+- MRC & ARC -> Reference counting.Compiler add retain/release when needed.
+- Efficiency may be better than MRC.(Add release/autorelease to realize MRC, maybe some opimization)
+==================================<br>
+==================================<br>
+================ Autolayout  ================<br>
+- Use xib for constraints
+- Use Code <NSLayoutConstraint>
+- Use Visual Formatted Language
+==================================<br>
