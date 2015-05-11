@@ -85,3 +85,9 @@ To analyze crash logs, we have two options:
 - if referenced, will be copyed,otherwise do nothing
 - can add specific file.
 ==================================<br>
+================ Animation  ================<br>
+- UIView animation over Core Animation Over Core Graphics
+- UIView animation:duration delay option curve animationblock completionblock
+- CoreAnimation:CABasicAnimation、CAKeyFrameAnimation、CAAnimationGroup(duration\timingfunction\values\fromvalue\tovalue\delegate\strong)
+- CoreAnimation focus on content vs CoreGraphics focus on vector view.
+==================================<br>
