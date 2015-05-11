@@ -107,5 +107,6 @@ To analyze crash logs, we have two options:
 - NSOperation Queue is OC level,GCD is C level.
 - NSOperation is internal implemented with GCD
 - If you want to simply use a block , no need for high-level abstract(cancel,number limits,dependency) use GCD, otherwise use NSOperationQueue.
-- dispatch_after,dispatch_async,dispatch_once,dispatch_group,dispatch_wait,dispatch_notify,
+- dispatch_after,dispatch_async,dispatch_once,dispatch_group,dispatch_wait,dispatch_notify
+- NSOperationQueue high-level abstract,make it little work for limit control,cancel,dependency;If you only need to use a block, no need for the additional advantages, use GCD.
 ==================================<br>
