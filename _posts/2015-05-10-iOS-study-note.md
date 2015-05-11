@@ -132,4 +132,5 @@ To analyze crash logs, we have two options:
 - Coordinator(Model ->persistence Type,URL)
 - Insert -> NSEntityDescription insertNewObjectForEntityForName:inManagedObjectContext: Save
 - Fetch -> NSEntityDescription entityForName:inManagedObjectContext: Request setEntity: Context Fetch Request
+- Concurrency -> Coordinator shared, Context mergeusing notification.
 ==================================<br>
