@@ -91,3 +91,21 @@ To analyze crash logs, we have two options:
 - CoreAnimation:CABasicAnimation、CAKeyFrameAnimation、CAAnimationGroup(duration\timingfunction\values\fromvalue\tovalue\delegate\strong)
 - CoreAnimation focus on content vs CoreGraphics focus on vector view.
 ==================================<br>
+================ Notification(event occuring) and KVO(value change)  ================<br>
+- They are both based on Observer Pattern
+- KVO is implemented by NSObject while Notification is implemented in NSNotification
+- KVO is ofter used to observe value change while notification is used for some accident.
+- [NSNotificationCenter defaultCenter] addobserver:selector:name:object
+- Object addObserver:forKeyPath:options:context:
+- It is possible to use delegates array with key of(notificationname,keypath,etc)
+- Notification and KVO are 1->multiple need to be removed(not easy to trace,third party participated)
+- KVO(string,refactor will make it not work,only one method with multiple ifs,remove)
+- Delegate is 1->1,need to be set to nil(1->1,delegate nil)
+==================================<br>
+================ NSOperation Queue vs GCD  ================<br>
+- For task-based concurrency model
+- NSOperation Queue is OC level,GCD is C level.
+- NSOperation is internal implemented with GCD
+- If you want to simply use a block , no need for high-level abstract(cancel,number limits,dependency) use GCD, otherwise use NSOperationQueue.
+- dispatch_after,dispatch_async,dispatch_once,dispatch_group,dispatch_wait,dispatch_notify,
+==================================<br>
