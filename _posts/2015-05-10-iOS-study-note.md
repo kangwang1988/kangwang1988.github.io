@@ -124,4 +124,12 @@ To analyze crash logs, we have two options:
 - local object,self.xxx object -> will retain
 - to make a object to be editable in a block, use __block to make it like static,global
 - In MRC,__block won't retain, in ARC, __block will retain.
+- Don't release a object when it is still in use(crash) and don't retain a object when it is no use(retain cycle).Avoid retain cycle.
+==================================<br>
+================ CoreData  ================<br>
+- Model
+- Context
+- Coordinator(Model ->persistence Type,URL)
+- Insert -> NSEntityDescription insertNewObjectForEntityForName:inManagedObjectContext: Save
+- Fetch -> NSEntityDescription entityForName:inManagedObjectContext: Request setEntity: Context Fetch Request
 ==================================<br>
