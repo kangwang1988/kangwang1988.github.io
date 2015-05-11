@@ -110,3 +110,18 @@ To analyze crash logs, we have two options:
 - dispatch_after,dispatch_async,dispatch_once,dispatch_group,dispatch_wait,dispatch_notify
 - NSOperationQueue high-level abstract,make it little work for limit control,cancel,dependency;If you only need to use a block, no need for the additional advantages, use GCD.
 ==================================<br>
+================ @block  ================<br>
+- Function pointer
+- Have access to outer variables Function & Enviroment
+- Object
+- Global & Stack & Heap
+- Block->Global,Stack(Using any local variable) BlockCopy(Stackblock->HeapBlock)
+- Block retain,release,copy->retaincount always be 1
+- Local auto object -> copy
+- static,global object -> address
+- OC object -> address
+- static,global,non-oc object -> won't retain
+- local object,self.xxx object -> will retain
+- to make a object to be editable in a block, use __block to make it like static,global
+- In MRC,__block won't retain, in ARC, __block will retain.
+==================================<br>
