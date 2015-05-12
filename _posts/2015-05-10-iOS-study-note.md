@@ -170,3 +170,7 @@ InputSource:Timer,Selector,Port,CustomSrc.
 - init -> lock
 - dealloc -> unlock
 ==================================<br>
+================ JS call OC  ================<br>
+- open -> NSURLProtocol -> register/scan decide / handle can initwithrequest
+- iframe -> change src -> shouldstartloadwithrequest
+==================================<br>
