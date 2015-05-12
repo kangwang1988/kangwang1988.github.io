@@ -134,3 +134,19 @@ To analyze crash logs, we have two options:
 - Fetch -> NSEntityDescription entityForName:inManagedObjectContext: Request setEntity: Context Fetch Request
 - Concurrency -> Coordinator shared, Context mergeusing notification.
 ==================================<br>
+================ NSRunloop  ================<br>
+- Event Handling Runloop
+- InputSource & Timer
+- Timer Schedule -> add to current runloop/Default Mode
+- Other timer, addtimer formode:
+- In a thread, you have to manually start the runloop.
+- NSStream,NSURLConnection->Runloop needed; First create a request, then scheduleinrunloop:formode,start request.
+- NSRunloopCommonMode(NSRunloopDefaultMode,) 
+1.Harm->Timer(schedule->add to current runloop in defaultmode,otherwise,you may have to add it in current runloop with specific mode.)
+2.Timer & Events, 
+3.Runloop runMode:beforeDate
+4.NSURLConnection,NSStream->
+YES->DefaultMode,UITrackingRunloopMode will be sorry.
+NO->start:NO,schedule:CommonMode(Default,Tracking),start manually.
+InputSource:Timer,Selector,Port,CustomSrc.
+==================================<br>
