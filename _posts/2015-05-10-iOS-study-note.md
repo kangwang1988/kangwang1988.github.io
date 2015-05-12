@@ -162,7 +162,7 @@ InputSource:Timer,Selector,Port,CustomSrc.
 - CoreText a great rendering engine.
 ==================================<br>
 ================ CoreImage  ================<br>
-- CIContext
-- CIImage
-- CIFilter
+- CIContext -> Options
+- CIImage -> Content
+- CIFilter ->Filter Processing.
 ==================================<br>
