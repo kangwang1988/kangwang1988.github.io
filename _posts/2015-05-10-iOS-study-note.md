@@ -150,3 +150,14 @@ YES->DefaultMode,UITrackingRunloopMode will be sorry.
 NO->start:NO,schedule:CommonMode(Default,Tracking),start manually.
 InputSource:Timer,Selector,Port,CustomSrc.
 ==================================<br>
+================ CoreData  ================<br>
+- Context 上下文
+- Model 数据模型
+- Coordinator 
+- NSManagedObject
+- Storage
+==================================<br>
+================ CoreText  ================<br>
+- Safari is a good web browser, but consumes a lot of memory.
+- CoreText a great rendering engine.
+==================================<br>
