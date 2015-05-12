@@ -166,3 +166,7 @@ InputSource:Timer,Selector,Port,CustomSrc.
 - CIImage -> Content
 - CIFilter ->Filter Processing.
 ==================================<br>
+================ Autoreleased LocalObject  ================<br>
+- init -> lock
+- dealloc -> unlock
+==================================<br>
