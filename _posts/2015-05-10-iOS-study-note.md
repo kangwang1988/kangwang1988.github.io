@@ -174,3 +174,12 @@ InputSource:Timer,Selector,Port,CustomSrc.
 - open -> NSURLProtocol -> register/scan decide / handle can initwithrequest
 - iframe -> change src -> shouldstartloadwithrequest
 ==================================<br>
+================ Extension Communicate With App  ================<br>
+- App Groups
+- UserDefaults/ShareFile
+==================================<br>
+================ Pan Move a Cell  ================<br>
+- Create a snapshot view
+- Pan Gesture Recognizer Delegate, move it.
+- When finished,change datasource,update UI.
+==================================<br>
