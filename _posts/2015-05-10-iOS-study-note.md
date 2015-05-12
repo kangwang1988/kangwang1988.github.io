@@ -191,3 +191,6 @@ InputSource:Timer,Selector,Port,CustomSrc.
 - Array
 - Dictionary
 ==================================<br>
+================ UIButton  ================<br>
+- Button 排他点击 ExclusiveTouch  YES
+==================================<br>
