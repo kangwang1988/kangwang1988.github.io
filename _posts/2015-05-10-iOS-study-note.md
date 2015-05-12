@@ -186,3 +186,8 @@ InputSource:Timer,Selector,Port,CustomSrc.
 ================ Core Bluetooth  ================<br>
 - 
 ==================================<br>
+================ Literal  ================<br>
+- Number
+- Array
+- Dictionary
+==================================<br>
