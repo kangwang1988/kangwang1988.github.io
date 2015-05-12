@@ -161,3 +161,8 @@ InputSource:Timer,Selector,Port,CustomSrc.
 - Safari is a good web browser, but consumes a lot of memory.
 - CoreText a great rendering engine.
 ==================================<br>
+================ CoreImage  ================<br>
+- CIContext
+- CIImage
+- CIFilter
+==================================<br>
