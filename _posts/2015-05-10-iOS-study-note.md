@@ -204,3 +204,6 @@ InputSource:Timer,Selector,Port,CustomSrc.
 - 性能 （代理、享元）
 - 对象状态 （备忘录）
 ==================================<br>
+================ Array PerformSelector  ================<br>
+- makeObjectsPerformSelector
+==================================<br>
