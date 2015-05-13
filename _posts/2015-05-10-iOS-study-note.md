@@ -224,3 +224,7 @@ InputSource:Timer,Selector,Port,CustomSrc.
 ================ ImageIO  ================<br>
 - read image data from source and write it into destination.
 ==================================<br>
+================ self/super  ================<br>
+- they are one things.
+- however,when super appears, runtime will use objc_msgSendSuper instead of objc_msgSend.
+==================================<br>
