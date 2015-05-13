@@ -221,3 +221,6 @@ InputSource:Timer,Selector,Port,CustomSrc.
 - Reponse Chain: UIView->SuperView->Controller/SuperView->Window->Application(处理机制)
 - HitTest chain: Reverse.
 ==================================<br>
+================ ImageIO  ================<br>
+- read image data from source and write it into destination.
+==================================<br>
