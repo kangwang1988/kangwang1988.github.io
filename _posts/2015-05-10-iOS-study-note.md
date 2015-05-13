@@ -160,6 +160,12 @@ InputSource:Timer,Selector,Port,CustomSrc.
 ================ CoreText  ================<br>
 - Safari is a good web browser, but consumes a lot of memory.
 - CoreText a great rendering engine.
+- Context
+- AttributedString
+- CTFrameSettingref
+- CTFrame(CGPath、VisibleRange)
+- Draw
+- Transform
 ==================================<br>
 ================ CoreImage  ================<br>
 - CIContext -> Options
