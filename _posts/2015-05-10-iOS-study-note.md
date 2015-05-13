@@ -207,3 +207,11 @@ InputSource:Timer,Selector,Port,CustomSrc.
 ================ Array PerformSelector  ================<br>
 - makeObjectsPerformSelector
 ==================================<br>
+================ Object ownership  ================<br>
+- alloc new copy mutablecopy
+==================================<br>
+================ iOS Events  ================<br>
+- 触摸事件、传感器、远程控制
+- Reponse Chain: UIView->SuperView->Controller/SuperView->Window->Application(处理机制)
+- HitTest chain: Reverse.
+==================================<br>
