@@ -228,3 +228,70 @@ InputSource:Timer,Selector,Port,CustomSrc.
 - they are one things.
 - however,when super appears, runtime will use objc_msgSendSuper instead of objc_msgSend.
 ==================================<br>
+================ Literal Objects  ================<br>
+- Immutable
+- Must be foundation objects.
+==================================<br>
+================ About Objective C  ================<br>
+- Avoid preprocessor defines. No type information,just replace.
+- Global Constants.External and Define.
+==================================<br>
+================ Use Enumerations   ================<br>
+- Use Enumerations for States,Status,Options.
+- NS_ENUM/NS_OPTIONS
+- 2^power
+- switch-default
+==================================<br>
+================ Memory Layout  ================<br>
+- Class{@public NSDate *_dateOfBirth;NSString *firstName;NSString *_lastName;}
+- [           Class]
+- [+0         firstName]
+- [+0         secondName]
+- [+0         birthOfDate]
+==================================<br>
+================ Property Modified  ================<br>
+- assign
+- strong
+- weak
+- unsafe_unretained
+- copy
+==================================<br>
+================ Remember  ================<br>
+- @property -> data encapsulates
+- atomic,nonatomic
+- read using direct access and write using setter.(direct could be faster because there is no objc_msgSend like calls,by kvo will be bypassed,setter,debug.)
+- Read directly, and write using setter.(faster/kvo,setter,debug)
+- Equal(==,class,equalto,hash).
+- Equal must have same hash, but objects with the same hash may not be equal.
+- objc_get/set/remove associatedobjects
+- id returnvalue = objc_msgSend(someobject,@selector(messageName),parameter)
+- objc_msgSendSuper
+- resolveInstanceMethod(class_addMethod) -> will be called.
+- Message Forwarding
+- 1.Resolve Instance Method(resolve class method)
+- 2.forwardingTargetForSelector
+- 3.forwardInvocation
+- Message Forwarding happeds when a object is found not to be responding to a selector.
+- Dynamic
+- Forwarding Target
+- Full Forwarding
+- Selector Table:
+- MethodName -> IMP
+- Switch
+- Exchange
+- Method Swizzerling is often used for debug, not because it can.
+- Method swizzling.
+- class
+- {
+- isa
+- super_class
+- name
+- version
+- info 
+- instance_size
+- ivars
+- methodlist
+- caches
+- protocols
+- }
+==================================<br>
