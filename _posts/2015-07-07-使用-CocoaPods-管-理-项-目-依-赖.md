@@ -78,7 +78,7 @@ verbose开启，可以帮助诊断更新详情。
 	pod 'PodName', :git => 'gitpath' #use master branch
 	pod 'PodName', :git => 'gitpath', :branch => 'dev' #use dev branch
 	pod 'PodName', :git => 'gitpath', :tag => '0.8.0' #use tag
-	pod 'PodName', :git => 'gitpath', :commit => '082f8319af'
+	pod 'PodName', :git => 'gitpath', :commit => '082f8319af' #use commit
 
 #### 参考资料
 
