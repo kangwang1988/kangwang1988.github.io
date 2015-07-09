@@ -1,3 +1,4 @@
+# 代码片段
 #### To check if a directory exists in a shell script you can use the following:
 	
 	if [ -d "$DIRECTORY" ]; then
