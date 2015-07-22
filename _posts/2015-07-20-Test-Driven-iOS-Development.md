@@ -1,31 +1,63 @@
 # TDD in iOS
 
-![Mou icon](http://25.io/mou/Mou_128.png)
+![TDD icon](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/tdd.jpg)
 
-## Overview
+## System test
 
-**Mou**, the missing Markdown editor for *web developers*.
+Automated with iOS apps - **UI Automation**
 
-### Syntax
+### Penetration Test
+Look for security problems by feeding the application with malformed input.
 
-#### Strong and Emphasize 
+#### Usability test
+Users interacting with the application,taking note of anything that the users got wrong.
 
-**strong** or __strong__ ( Cmd + B )
+#### Unit Test
+Unit tests are small pieces of code that test the behavior of other code. They set up the preconditions,run the code under test, and make assertions about the final state.
 
-*emphasize* or _emphasize_ ( Cmd + I )
+#### Repeatable tests
+Warn you about regression bugs. Provide a safety net where you want to edit the source without any change in behavior.
 
-**Sometimes I want a lot of text to be bold.
-Like, seriously, a _LOT_ of text**
+#### Code coverage
+Measuring code coverage partially addresses the problems with test counting by mesuring the account of application code that is being executed when the tests are run. They may have value, but they still aren't the most value of your time.Eg, switch statements and or cases.
 
-#### Blockquotes
+#### Red,Green,Refactor
+It's all very well saying that you should write the best before you write the code,but how do you write that test?
+It I had to use code that should solved this problem, how would i want to use it?
+Red -> Something wrong -> Write code to make it work -> Green -> Eliminate Redundancy (Refactor,don't hurry to do that).
 
-> Right angle brackets &gt; are used for block quotes.
+Red -> Green -> Refactor -> Red(Iterator)
+vs 
+A dozen features that have all been started but are all incomplete and unusable.
 
-#### Links and Email
+#### Refactor
+
+Turn bad smelled codes into codes without smell.
+
+#### YAGNI
+Ya ain't gonna need it.
+
+#### Unit Test Requirement
+Identify what the application needs to do.
+
+#### Unit Test Case Design
+Design aimming at interfaces.
+Write basic test cases(interfaces),modify it to meet all demands(implements),move test code to real code, refactoring, test the combined one.
+Fake objects instead of more complicated objects.
+
+#### Making the tests more readable
+Macro magics
+
+#### Frameworks
+STTest\GHUnit\OCMock
+
+#### CI
+Hudson,Jenkins,Xcode Server
+
 
 An email <example@example.com> link.
 
-Simple inline link <http://chenluois.com>, another inline link [Smaller](http://25.io/smaller/), one more inline link with title [Resize](http://resizesafari.com "a Safari extension").
+Simple inline link <http://chenluois.com>, another inline link [Smaller](http://25.io/smalle one more inline link with title [Resize](http://resizesafari.com "a Safari extension").
 
 A [reference style][id] link. Input id, then anywhere in the doc, define the link with corresponding id:
 
