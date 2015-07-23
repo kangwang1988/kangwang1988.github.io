@@ -173,3 +173,10 @@
 	creates or operate on fat (multi-architecture) files.
 #### 雪球Data
 	curl --header "Cookie: xq_a_token=tokenvalue;" http://api.xueqiu.com/v4/stock/quote.json?code=SHcode
+	
+#### iOS9 http load
+	<key>NSAppTransportSecurity</key>
+		<dict>
+   	 	<key>NSAllowsArbitraryLoads</key>
+   	 	<true/>
+	</dict>
