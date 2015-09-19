@@ -1,7 +1,9 @@
 # XcodeGhost 剖析
 
-
+![Xcode](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/xcodeghost_4.jpg)
+![Ghost](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/xcodeghost_5.jpeg)
 ## 引子
+	
 	最近XcodeGhost引起的风波愈演愈烈，众多知名APP中枪，各种说法也有。作为一个iOS Developer，觉得有必要基于自己的专业知识，给大家提供一个新的认知维度，如有纰漏或是错误，还请不吝赐教。
 ## 何为XcodeGhost
 	说白了，XcodeGhost就是一段恶意代码(不管作者主观意愿如何)，作者通过篡改苹果官方的Xcode安装包，在其中加入了某原本不存在的CoreService库文件，使用此Xcode版本编译出的APP由于加载了此库，导致其中恶意代码被执行.
@@ -87,41 +89,24 @@
 	
 ## 如何检测你的APP是否中招
 ### 设置代理，检测异常流量
-	
+	为了现身说法，装了一个中国联通网上营业厅的APP，
 ### 分析ipa文件
 	class-dump 方式:
 	通过网络获得的微信6.2.5的ipa包，找到其.app文件，调用:
 	class-dump --arch armv7 wechat/Payload/WeChat.app > ~/Desktop/wechat.apis
 ![微信6.2.5](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/xcodeghost_6.png)
-
+	
+	由上图不难看到xcodeghost的特征函数。
+	
 	或者使用otool直接分析二进制文件的TEXT段，提取__cstring如下:
 	otool -arch armv7 -v -s __TEXT __cstring wechat/Payload/WeChat.app/WeChat > wechat.strings
+![微信6.2.5](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/xcodeghost_7.png)
 	
-	
+	由上图不难看到xcodeghost的特征字符串http://init.icloud-analysis.com
 ### Fetch apis
 
 	class-dump-z ./CLPDemo.app/CLPDemo > CLPDemo.api
 
-## Get the private api list.
->	Private apis are api which developers are prevented from using. In order to get private apis list for checking, We have to get all apis provided by apple first(api-a). By excluding those public apis declared in the header files, documented apis from .docset, we will get a list of private apis.
-
-	1.Get apis lists(api-a) from a framework.(e.g Foundation.framework)
-	class-dump --arch i386 /path2IosSdks/SDKs/iPhoneSimulator.sdk/System/Library/Frameworks/Foundation.framework/Foundation > Foundations.api
-	2.Get apis from XXXFramework/*.h(api-b).
-	2.Get documented apids(api-c)
-	sqlite3 /path2docset/com.apple.adc.documentation.iOS.docset/Contents/Resources/docSet.dsidx "select ZDECLARATION from ZTOKENMETAINFORMATION" >~/documented.api
-	ps. Some steps may need further processing before well organized.
-	
->   There is also some public-repository where all apis are presented.
-	Refer to: https://github.com/nst/iOS-Runtime-Headers.git.
-	
-## Useful commands
-
-	otool:提取并显示ios下目标文件的相关信息，包括头部，加载命令，各个段，共享库，动态库等等。它拥有大量的命令选项，是一个功能强大的分析工具，当然还可以做反汇编的工具使用。
-	lipo:是一款创建或处理通用文件的命令行工具.
-	nm:列出一个函数库文件中的符号表。
-	class-dump:dump出破解之后的iOS二进制文件的头文件信息。
-	sqlite3:处理sqlite数据库的命令行工具。
 
 ## 更多
 Contact [KyleWong](mailto:kang.wang1988@gmail.com) for more.
