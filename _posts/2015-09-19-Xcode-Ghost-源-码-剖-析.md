@@ -1,3 +1,7 @@
+---
+layout: post
+title: XcodeGhost 源码剖析
+---
 # XcodeGhost 源码剖析
 
 ![Xcode](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/xcodeghost_4.jpg)
