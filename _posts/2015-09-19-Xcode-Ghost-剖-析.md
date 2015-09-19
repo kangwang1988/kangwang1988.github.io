@@ -13,10 +13,27 @@
 		shasum file
 	求文件file的md5/sha值。
 ## CoreService文件分析
-	本来想下载一个CoreService dump一下看看有哪些API调用的，没找到。就使用下已有的分析吧:
-	
+	本来想下载一个CoreService dump一下看看有哪些API调用的，没找到。就使用下已有的分析吧。
+![Pic 1](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/xcodeghost_1.jpg)
+![Pic 2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/xcodeghost_2.png)
+
+	咋一看这个APP也就搜集了些APP的信息和设备信息，并传到了某网站，危害并没有那么大，看官别急，一会我们再分析下源码。
 	(截图来自http://drops.wooyun.org/news/8864)
 ## XcodeGhost源文件解析及其危害
+	时间越闹越大，有个人出来说是他干的，并且放出了相关的源代码(可信度较高)，本文的重点也在于对于其源码的分析。
+[查看源码](https://github.com/XcodeGhostSource/XcodeGhost)
+	
+	恶意代码包括两部分:
+	UIWindow(didFinishLaunchingWithOptions)和UIDevice(AppleIncReservedDevice)
+	作者偷偷地加载了有问题的Library到包中，并巧妙利用了苹果的runtime机制，使用Category污染你的APP。通过重写原有的makeKeyAndVisible(开发者在APP启动的时候通常会调用此函数)函数，其添加了一个定时任务和四个通知处理函数。
+	1.定时任务:每15s执行一次，其作用在于当APP在前台运行时，获取你的隐私信息(具体看后文)，将其DES加密(密钥为@"stringWithFormat",其可在服务端对其对称解密，对于捕捉到异常流量而又不知道加密算法的人只是一堆乱码),然后将数据通过http请求发送到其设定的服务器(http://init.icloud-analysis.com,说对方关闭服务器就没事的亲，DNS劫持听过没？路由器中的DNS记录被篡改分分钟搭建起此服务器，btw 来路不明的Wifi不要随便连啊).
+	2.监听APP进入Active状态(到前台)的通知，以@“launch”为参数(此参数将同个人隐私数据一同打包)，发送网络请求给上述后台服务器。
+	3.监听APP退出Active状态(APP切换)的通知，以@“resignActive”为参数发送网络请求。
+	4.监听APP将要Terminate(杀掉)的通知，以@"terminate"为参数发送网络请求。
+	5.监听APP进入后台(退到后台)的通知，以@"suspend"为参数发送网络请求。
+	看起来也没什么是吧，too young, too simple.
+	当后台接收到网络请求之后，会发送Response给客户端(具体内容天知道)，客户端对其进行处理，首先解密，如果让休息，那就乖乖滴停一会(免得被发现啊...),检查如果服务端返回了某些有效信息，则分别进行处理。
+	1.弹框:如果客户端返回了可供显示的Alert内容，你的App就莫名地谈一个框，如果点击了确定，给后端发一个@"alertView"为参数的请求，并且应用内弹出Appstore.既然分析，不妨邪恶一点，假设你在
 ## 如何检测你的APP是否中招
 ### 设置代理，检测异常流量
 ### 分析ipa文件
