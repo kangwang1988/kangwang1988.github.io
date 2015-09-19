@@ -89,6 +89,8 @@
 ### 设置代理，检测异常流量
 	
 ### 分析ipa文件
+	class-dump 方式:
+	通过网络获得的微信6.2.5的ipa包，找到其.app文件，调用class-dump 命令，获得其
 ### Fetch apis
 
 	class-dump-z ./CLPDemo.app/CLPDemo > CLPDemo.api
