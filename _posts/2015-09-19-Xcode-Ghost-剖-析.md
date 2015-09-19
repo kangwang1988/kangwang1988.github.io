@@ -90,7 +90,14 @@
 	
 ### 分析ipa文件
 	class-dump 方式:
-	通过网络获得的微信6.2.5的ipa包，找到其.app文件，调用class-dump 命令，获得其
+	通过网络获得的微信6.2.5的ipa包，找到其.app文件，调用:
+	class-dump --arch armv7 wechat/Payload/WeChat.app > ~/Desktop/wechat.apis
+![微信6.2.5](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/xcodeghost_6.png)
+
+	或者使用otool直接分析二进制文件的TEXT段，提取__cstring如下:
+	otool -arch armv7 -v -s __TEXT __cstring wechat/Payload/WeChat.app/WeChat > wechat.strings
+	
+	
 ### Fetch apis
 
 	class-dump-z ./CLPDemo.app/CLPDemo > CLPDemo.api
