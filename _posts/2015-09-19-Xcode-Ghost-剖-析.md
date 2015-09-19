@@ -89,7 +89,10 @@
 	
 ## 如何检测你的APP是否中招
 ### 设置代理，检测异常流量
-	为了现身说法，装了一个中国联通网上营业厅的APP，
+	为了现身说法，装了一个中国联通网上营业厅的APP，Mac上开启Charles并设置好手机的代理，让我们来捕捉下流量。
+	APP第一次启动，啥都没干，就偷偷地发送了5次请求，我也是醉了。
+![中国联通网上营业厅](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/xcodeghost_8.jpg)
+![Charles异常流量](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/xcodeghost_9.png)
 ### 分析ipa文件
 	class-dump 方式:
 	通过网络获得的微信6.2.5的ipa包，找到其.app文件，调用:
@@ -103,9 +106,10 @@
 ![微信6.2.5](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/xcodeghost_7.png)
 	
 	由上图不难看到xcodeghost的特征字符串http://init.icloud-analysis.com
-### Fetch apis
+## 意见与建议
 
-	class-dump-z ./CLPDemo.app/CLPDemo > CLPDemo.api
+	按理来说，我们要是做一些类似的不是坏事的实验(都不敢说好事...)，都是通过写个小Demo，然后都不发布去做的，以此事的发生轨迹，预谋已久，影响范围大，来看，我更愿意相信作者没那么纯洁,只是事情闹大了，很早地被发现了，不好收场而已，建议大家及时更新新版本，如果没有新版本，删掉等新版本修复。虽说后门服务器关掉了，可后门还在，随时都会有问题，大家还是要养成良好的信息安全习惯和意识，涉事单位厂商以及码农兄弟们也要小心了，这次的事情还好没有造成太大的后果，不然真是不敢想象，脊背发凉。。。
+	
 
 
 ## 更多
