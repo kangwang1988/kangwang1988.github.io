@@ -212,3 +212,6 @@
                                alpha:((CGFloat)rgba[3])/255.0];
     }
     }
+#### Xcode show its current uuid.
+
+defaults read /Applications/Xcode.app/Contents/Info DVTPlugInCompatibilityUUID
