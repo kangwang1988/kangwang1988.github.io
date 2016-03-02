@@ -215,3 +215,7 @@
 #### Xcode show its current uuid.
 
 defaults read /Applications/Xcode.app/Contents/Info DVTPlugInCompatibilityUUID
+
+#### Xcode show malloc info with certain memory address.
+(lldb) command script import lldb.macosx.heap
+(lldb) malloc_info --stack-history 0XAddress
