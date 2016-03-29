@@ -190,7 +190,7 @@ LLVM的3阶段设计
 ### Python plugin for lldb
 	代码:
 	Write Python module with a command function like:
-	def <function>(debugger, command, result, internal_dict)
+	def <function>(debugger, command, result, internal_dict)	
 	使用:
 	Import module into LLDB(~/.lldbinit)
 	(Bind Python function to command)
@@ -210,13 +210,19 @@ LLVM的3阶段设计
 		An object that encapsulates data objects.
 
 ### References
-[LLDB wiki1](https://en.wikipedia.org/wiki/LLDB_%28debugger%29)
+[LLDB wiki1](https://en.wikipedia.org/wiki/LLDB_%28debugger%29)	
 [LLDB wiki2](http://lldb.llvm.org/lldb-gdb.html)
+
 [ARM architecture](http://infocenter.arm.com/help/topic/com.arm.doc.ihi0042f/IHI0042F_aapcs.pdf)
+
 [LLDB python reference](http://lldb.llvm.org/python-reference.html)
+
 [LLDB tutorials in Raywenderlich](https://www.raywenderlich.com/tag/lldb)
+
 [Facebook’s chisel for lldb](https://github.com/facebook/chisel)
+
 [Wiki for debugserver](http://iphonedevwiki.net/index.php/Debugserver)
+
 [Dancing with lldb in objc.io](https://www.objc.io/issues/19-debugging/lldb-debugging)
 
 #End
