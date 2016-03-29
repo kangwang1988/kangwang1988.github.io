@@ -113,5 +113,110 @@ LLVM的3阶段设计
 	Approach 1:
 	Method Swizzle(hook).
 
-![Application:Alert from2]()
+![Application:Alert from2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/rage-comic-proud.png)
+
+	Approach 2:	
+	breakpoint set -r “initWithTitle:*”
+![Application:Alert from3](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/lldb-application-br-initwithtitle.png)
+
+![Application:Alert from4](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/rage-comic-cry.png)
+
+### Application: (Who change the data?)
+
+![Application:Data changed](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-watchpoint-who-changed-the-data.png)
+
+	Approach 1:
+	Override Setter
 	
+	Approach 2:
+	KVO
+	
+![Application:Data changed2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/rage-comic-proud.png)
+
+	Approach3:
+	watchpoint set expression self.dataModel->_dataSource
+![Application:Data changed3](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/lldb-application-watchpoint-who-changed-the-data2.png)
+
+![Application:Data changed4](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/rage-comic-cry.png)
+
+### Application:(debugserver)
+
+	debugserver是用于辅助gdb或者lldb远程调试的命令行APP。当iOS设备用于开发时其会被安装。Xcode	调试时，会触发此进程用于远程调试。
+	越狱设备调试时，首先拷贝debugserver到越狱机，然后使用debugserver启动需要调试的APP，	lldb(gdb)使用gdb-remote协议，在debugserver的协助下，实现调试功能。
+	
+### Application:(远程调试)
+![Application:remote debug](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-remote-debug.png)
+
+![Application:remote debug2](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-remote-debug2.png)
+
+![Application:remote debug3](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-remote-debug3.png)
+
+![Application:remote debug4](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-remote-debug4.png)
+
+### Application:(App Install Progress)
+![Application:App Install Progress](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-app-install-progress.png)
+
+![Application:App Install Progress2](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-app-install-progress2.png)
+
+![Application:App Install Progress3](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-app-install-progress3.png)
+
+![Application:App Install Progress4](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-app-install-progress4.png)
+
+### Application:(Xcode Tweak)
+![Application:Xcode Tweak](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/lldb-applcation-xcode-tweak.png)
+
+![Application:Xcode Tweak2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/lldb-applcation-xcode-tweak2.png)
+
+### Application: (How WeChat show web progress?)
+![Application:WeChat Web Progress](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-how-wechat-show-web-progress.png)
+
+![Application:WeChat Web Progress2](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-how-wechat-show-web-progress2.png)
+
+![Application:WeChat Web Progress3](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-how-wechat-show-web-progress3.png)
+
+### Application : (Analyse/Debug a third-party app)
+	
+	Mac
+	target create /bin/ls
+	breakpoint set --name malloc
+	process launch /bin/ls
+	或process attach —pid 123/—name Safari
+	iOS
+	远程调试：
+	ssh(越狱)
+	debugserver(ios)
+	lldb(mac)
+
+### Python plugin for lldb
+	代码:
+	Write Python module with a command function like:
+	def <function>(debugger, command, result, internal_dict)
+	使用:
+	Import module into LLDB(~/.lldbinit)
+	(Bind Python function to command)
+![Python Plugin](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-python-plugin-for-lld.png)
+
+	SBDebugger:(SB is abbr for Scripting bridge)
+		The command interpreter,Always be one.
+	SBTarget:
+		Represents the target program under debugger.
+	SBProcess:
+		Contains the process of the selected target.
+	SBThread:
+    	Contains the process of the currently select thread.
+	SBFrame:
+    	Contains the selected frame.
+	SBValue:
+		An object that encapsulates data objects.
+
+### References
+[LLDB wiki1](https://en.wikipedia.org/wiki/LLDB_%28debugger%29)
+[LLDB wiki2](http://lldb.llvm.org/lldb-gdb.html)
+[ARM architecture](http://infocenter.arm.com/help/topic/com.arm.doc.ihi0042f/IHI0042F_aapcs.pdf)
+[LLDB python reference](http://lldb.llvm.org/python-reference.html)
+[LLDB tutorials in Raywenderlich](https://www.raywenderlich.com/tag/lldb)
+[Facebook’s chisel for lldb](https://github.com/facebook/chisel)
+[Wiki for debugserver](http://iphonedevwiki.net/index.php/Debugserver)
+[Dancing with lldb in objc.io](https://www.objc.io/issues/19-debugging/lldb-debugging)
+
+#End
