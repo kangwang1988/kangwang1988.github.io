@@ -219,3 +219,9 @@ defaults read /Applications/Xcode.app/Contents/Info DVTPlugInCompatibilityUUID
 #### Xcode show malloc info with certain memory address.
 (lldb) command script import lldb.macosx.heap
 (lldb) malloc_info --stack-history 0XAddress
+#### Code(dylib) injection in iOS
+clang -arch armv7 -arch arm64 -isysroot $(xcodebuild -sdk iphoneos -version Path) -shared test.m -framework Foundation -framework UIKit -o test.dylib
+optool install -c load -p "@executable_path/test.dylib" -t ./WeChat.app/WeChat
+cp ../test.dylib ./WeChat.app/
+codesign -fs "iPhone Distribution" ./WeChat.app/test.dylib
+codesign -fs "iPhone Distribution" ./WeChat.app
