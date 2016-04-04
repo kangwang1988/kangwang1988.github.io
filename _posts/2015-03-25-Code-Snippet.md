@@ -1,4 +1,11 @@
-# 代码片段
+---
+layout: post
+section-type: post
+title: Code Snippets
+category: tech
+tags: [ 'technique', 'code']
+---
+
 #### To check if a directory exists in a shell script you can use the following:
 	
 	if [ -d "$DIRECTORY" ]; then
@@ -10,7 +17,7 @@
 	fi
 	
 #### In general to concatenate two variables you can just write them one after another:
-
+	
 	a='hello'
 	b='world'
 	c=$a$b
@@ -18,11 +25,11 @@
 	helloworld
 	
 #### SVN checkout the contents of a folder, not the folder itself
-
+	
 	svn checkout file:///home/landonwinters/svn/waterproject/trunk
 	
 #### SVN not updating recursively
-
+	
 	svn up --depth infinity
 	svn up --set-depth infinity
 	
@@ -104,16 +111,19 @@
 	subs_birthday = VALUES(subs_birthday)
 
 #### Reading HTML content from a UIWebView
+
 	NSString *html = [yourWebView	stringByEvaluatingJavaScriptFromString:
 	@"document.body.innerHTML"];
 
 #### Cropping a UIImage
+
 	CGImageRef imageRef = CGImageCreateWithImageInRect([largeImage CGImage], cropRect);
 	// or use the UIImage wherever you like
 	[UIImageView setImage:[UIImage imageWithCGImage:imageRef]];
 	CGImageRelease(imageRef);
 
 #### How to change Status Bar text color in iOS 7.
+
 	Set the UIViewControllerBasedStatusBarAppearance to YES in the .plist file.
 	In the viewDidLoad do a [self 	setNeedsStatusBarAppearanceUpdate];
 	Add the following method:
@@ -122,12 +132,16 @@
 	}
 	
 #### makeObjectsPerformSelector:
+
 	NSArray *newArray = [[NSArray alloc] initWithArray:oldArray copyItems:YES];
 	[newArray makeObjectsPerformSelector:@selector(doSomethingToObject)];
+
 #### iOS - Identify what UIViewController was previously shown in a UINavigationController
+
 	- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 
 #### Efficiently finding the average color of a UIImage
+
 	#import "UIImage+AverageColor.h"
 	@implementation UIImage (AverageColor)
 	- (UIColor *)averageColor {
@@ -153,7 +167,9 @@
 	}
 	}
 	@end
+
 #### Curl 
+
 	GET with JSON:
 	curl -i -H "Accept: application/json" -H "Content-Type: application/json" http://hostname/resource
 	with XML:
@@ -168,13 +184,18 @@
 	For logging into a site (auth):
 	curl -d "username=admin&password=admin&submit=Login" --dump-header headers http://localhost/Login
 	curl -L -b headers http://localhost/
+
 #### .a Opertion
+
 	lipo -info xx.a
 	creates or operate on fat (multi-architecture) files.
+
 #### 雪球Data
+
 	curl --header "Cookie: xq_a_token=tokenvalue;" http://api.xueqiu.com/v4/stock/quote.json?code=SHcode
 	
 #### iOS9 http load
+
 	<key>NSAppTransportSecurity</key>
 		<dict>
    	 	<key>NSAllowsArbitraryLoads</key>
@@ -212,16 +233,20 @@
                                alpha:((CGFloat)rgba[3])/255.0];
     }
     }
+
 #### Xcode show its current uuid.
 
-defaults read /Applications/Xcode.app/Contents/Info DVTPlugInCompatibilityUUID
+	defaults read /Applications/Xcode.app/Contents/Info DVTPlugInCompatibilityUUID
 
 #### Xcode show malloc info with certain memory address.
-(lldb) command script import lldb.macosx.heap
-(lldb) malloc_info --stack-history 0XAddress
+
+	(lldb) command script import lldb.macosx.heap
+	(lldb) malloc_info --stack-history 0XAddress
+
 #### Code(dylib) injection in iOS
-clang -arch armv7 -arch arm64 -isysroot $(xcodebuild -sdk iphoneos -version Path) -shared test.m -framework Foundation -framework UIKit -o test.dylib
-optool install -c load -p "@executable_path/test.dylib" -t ./WeChat.app/WeChat
-cp ../test.dylib ./WeChat.app/
-codesign -fs "iPhone Distribution" ./WeChat.app/test.dylib
-codesign -fs "iPhone Distribution" ./WeChat.app
+	
+	clang -arch armv7 -arch arm64 -isysroot $(xcodebuild -sdk iphoneos -version Path) -shared test.m -framework Foundation -framework UIKit -o test.dylib
+	optool install -c load -p "@executable_path/test.dylib" -t ./WeChat.app/WeChat
+	cp ../test.dylib ./WeChat.app/
+	codesign -fs "iPhone Distribution" ./WeChat.app/test.dylib
+	codesign -fs "iPhone Distribution" ./WeChat.app

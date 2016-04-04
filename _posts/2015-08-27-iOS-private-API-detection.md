@@ -1,4 +1,10 @@
-# iOS private API Detection
+---
+layout: post
+section-type: post
+title: iOS private API detection
+category: tech
+tags: [ 'technique']
+---
 
 
 ## Analyze your app(CLPDemo.app)
@@ -7,7 +13,8 @@
 	class-dump-z ./CLPDemo.app/CLPDemo > CLPDemo.api
 
 ## Get the private api list.
->	Private apis are api which developers are prevented from using. In order to get private apis list for checking, We have to get all apis provided by apple first(api-a). By excluding those public apis declared in the header files, documented apis from .docset, we will get a list of private apis.
+
+	Private apis are api which developers are prevented from using. In order to get private apis list for checking, We have to get all apis provided by apple first(api-a). By excluding those public apis declared in the header files, documented apis from .docset, we will get a list of private apis.
 
 	1.Get apis lists(api-a) from a framework.(e.g Foundation.framework)
 	class-dump --arch i386 /path2IosSdks/SDKs/iPhoneSimulator.sdk/System/Library/Frameworks/Foundation.framework/Foundation > Foundations.api
@@ -16,7 +23,7 @@
 	sqlite3 /path2docset/com.apple.adc.documentation.iOS.docset/Contents/Resources/docSet.dsidx "select ZDECLARATION from ZTOKENMETAINFORMATION" >~/documented.api
 	ps. Some steps may need further processing before well organized.
 	
->   There is also some public-repository where all apis are presented.
+	There is also some public-repository where all apis are presented.
 	Refer to: https://github.com/nst/iOS-Runtime-Headers.git.
 	
 ## Useful commands
@@ -26,6 +33,3 @@
 	nm:列出一个函数库文件中的符号表。
 	class-dump:dump出破解之后的iOS二进制文件的头文件信息。
 	sqlite3:处理sqlite数据库的命令行工具。
-
-## 更多
-Contact [KyleWong](mailto:kang.wang1988@gmail.com) for more.

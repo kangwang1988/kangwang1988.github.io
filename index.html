@@ -1,13 +1,9 @@
 ---
-layout: default
-title: Post Lists
+layout: index
+section-type: index
+sitemap:
+  priority: 1.0
 ---
-
-<div id="home">
-  <h1>Blog Posts</h1>
-  <ul class="posts">
-    {% for post in site.posts %}
-      <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
-    {% endfor %}
-  </ul>
-</div>
+<!--
+If you want to have a static message in your intro layout, disable the dynamic-typing in the _config.yml and write here your text
+-->

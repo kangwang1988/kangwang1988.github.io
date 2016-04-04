@@ -1,24 +1,193 @@
-# Dependencies
-markdown:         redcarpet
-pygments:         true
 
-# Permalinks
-permalink:        pretty
+# Site settings
 
-# Setup
-title:            Kyle Wong's Blog
-description:      'A coder wanna to make a difference.Connect me by <a href="http://weibo.com/kangwang1988" target="_blank">@KyleWong</a>.'
-url:              https://github.com/kangwang1988/kangwang1988.github.io
-baseurl:          /
+# NB! Set your site's url, otherwise stuff will break :)
 
-author:
-  name:           'Kyle Wong'
-  url:            http://kangwang1988.github.io/
+url: "https://kangwang1988.github.io"
 
-paginate:         5
+# If you're hosting your site at a Project repository on GitHub pages
+# (https://yourusername.github.io/repository-name)
+# and NOT your user repository (https://yourusername.github.io)
+# then add in the baseurl here, like this: "/repository-name"
+#
+# NB! Without this *nothing* will work, because it's used in every path :)
 
-# Custom vars
-version:          1.0.0
+#baseurl: /personal-jekyll-theme
+baseurl: 
 
-github:
-  repo:           https://github.com/kangwang1988/kangwang1988.github.io
+# Google tracking id to track your visitors
+
+google-tracking-id: "UA-75910216-1"
+
+# Forces https everywhere in your website, except when you serve it locally
+# If you are not hosted on Github Pages, and your host doesn't support https
+# then you should disable it
+
+force-https: False
+
+#############
+# HTML Head #
+#############
+
+lang: "en"
+author: "Kyle Wong"
+title: "{ Kyle Wong }"
+description: "'A coder wanna to make a difference."
+keywords: "Kyle, Blog, iOS, Tech, Science"
+favicon: "/img/favicon.ico"
+
+################
+# Header layout #
+################
+
+black-favicon: "/img/black-lab-glass.ico"
+
+background-img: "../img/intro-bg.jpg"
+
+##############################
+# Dynamic Text on the Header #
+##############################
+
+dynamic-typing: True
+shuffle: True # Shuffle the lines.
+loop: True
+loop-count: False # Set False for infinite loop, or set any number for finite loop.
+type-speed: 10
+start-delay: 200
+delete-delay: 5000
+lines: # You can add HTML Tags in the Text
+  - text: "Work hard,play hard."
+  - text: "It's never too late to be the one you would like to be."
+
+me-img: "/img/jetpacktocat.png"
+
+##############################
+# Color the browser elements #
+##############################
+color-browser: "#000000"
+apple-status-bar-style: "black"
+
+################
+# Web app mode #
+################
+
+web-app-mode: True
+
+# Icons for Web App mode
+
+icon-36p: "/img/web-app/icon-36p.png"
+icon-48p: "/img/web-app/icon-48p.png"
+icon-72p: "/img/web-app/icon-72p.png"
+icon-96p: "/img/web-app/icon-96p.png"
+icon-144p: "/img/web-app/icon-144p.png"
+icon-192p: "/img/web-app/icon-192p.png"
+
+########
+# Blog #
+########
+
+post-preview-words: 96
+
+paginate: 5
+
+email-share: True
+fb-share: False
+twitter-share: True
+linkedin-share: True
+reddit-share: False
+google-plus-share: False
+tumblr-share: False
+pinterest-share: False
+pocket-share: False
+vkontakte-share: False
+
+disqus-shortname: "kangwang1988githubio"
+
+syntax-highlight: True
+
+############
+# Timeline #
+############
+
+events:
+  - image: "/img/timeline/didi.jpg"
+    date: "June 2015 - Today"
+    description: "Still iOS development"
+  - image: "/img/timeline/netease.png"
+    date: "April 2013 - June 2015"
+    description: "Begin iOS development"
+  - image: "/img/timeline/xidian.jpg"
+    date: "September 2006 - March 2013"
+    description: "Student"
+
+# First image of the Timeline
+
+timeline-img: "/img/timeline/default.png"
+
+###########
+# Contact #
+###########
+
+email: "kang.wang1988@gmail.com"
+
+################
+# Author Blurb #
+################
+
+# The author blurb goes underneath blog posts.
+# This works best when your author blurb image has a transparent background, or matches your site background color.
+
+# if the author_blurb is not set, then this feature is skipped
+author_blurb: "Kyle is a iOS developer in China. He likes maths,physics,art,computer science. In his spare time, he would like to read books, write some codes he likes, go swimming or hiking."
+author_blurb_image: "/img/author.png"
+
+##################
+# Social Buttons #
+##################
+
+social:
+  - title: "weibo"
+    url: "https://weibo.com/"
+  - title: "github"
+    url: "https://github.com/kangwang1988"
+  - title: "rss"
+    url: "/feed.xml"
+  - title: "facebook"
+    url: "https://facebook.com/"
+  - title: "twitter"
+    url: "https://twitter.com/"
+
+############
+# 404 page #
+############
+
+404-img: "/img/labtocat.png"
+
+################################################################################
+
+# NB! Tread carefully if you want to change the variables below this point!
+
+# Sections shown in the index page
+
+pages_list:
+  About: 'about'
+  Blog: 'latest-post'
+  Timeline: 'timeline'
+  Contact: 'contact'
+
+# Exclusion list from the generated _site
+
+exclude: ["LICENSE", "README.md", "CONTRIBUTING", "CONTRIBUTORS", "scripts"]
+
+# Pagination path
+
+paginate_path: "blog/page:num/"
+
+# Enable minification SASS
+
+sass:
+  style: compressed
+
+gems:
+  - jekyll-paginate
+  - jemoji

@@ -1,6 +1,9 @@
 ---
 layout: post
+section-type: post
 title: What is the single most influential book every programmer should read?
+category: tech
+tags: [ 'technique','books' ]
 ---
 
 @HangZhou

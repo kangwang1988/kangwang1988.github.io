@@ -1,5 +1,13 @@
-# iOS study note
-####Runtime
+---
+layout: post
+section-type: post
+title: iOS study note
+category: tech
+tags: [ 'ios' ]
+---
+
+#### Runtime
+
 	respondstoselector
 	instancerespondstoselector
 	forwardingtargetforselector
@@ -22,6 +30,7 @@
 	method_exchange
 	
 #### NSURL
+
 	NSURL
 	scheme
 	host
@@ -32,6 +41,7 @@
 	fragment
 
 #### NSLogger
+
 	NSLog->__FILE__ __func__ __LINE__, _cmd,self
 	LogData/Image->Image或者Data->Boujour
 	base64 编码图片 Pros and Cons
@@ -39,10 +49,12 @@
 	无法缓存
 
 #### classdump
+
 	classdump ./App.app > api.txt
 	print property,method list of a objective-c app
 
 #### dsym file
+
 	dwarfdump --uuid dsym/app file <get a uuid>
 	crashlog -> indident identifier (They two would be 	exactly the same.)
 	To analyze crash logs, we have two options:
@@ -51,16 +63,19 @@
 	--uuid & --lookup
 	
 #### ARC
+
 	- fobjc-arc/fno-objc-arc single file enable/disable 	ARC
 	- MRC & ARC -> Reference counting.Compiler add 	retain/release when needed.
 	- Efficiency may be better than MRC.(Add release/	autorelease to realize MRC, maybe some opimization)
 
 #### Autolayout
+
 	- Use xib for constraints
 	- Use Code <NSLayoutConstraint>
 	- Use Visual Formatted Language
 
-#### Objective C (pros and cons) 
+#### Objective C (pros and cons)
+ 
 	Pros
 	- Runtime (mini and powerful)
 	- Base on C (current compile compatible and lots of library available)
@@ -72,18 +87,21 @@
 	- Dynamic type make it hard for compiler optimization
 
 #### @encode
+
 	- all data types, class,method could be expressed in ASCII encoded string.
 	- No need to link it in the build phases
 	- if referenced, will be copyed,otherwise do nothing
 	- can add specific file.
 
 #### Animation
+
 	- UIView animation over Core Animation Over Core Graphics
 	- UIView animation:duration delay option curve animationblock completionblock
 	- CoreAnimation:CABasicAnimation、CAKeyFrameAnimation、CAAnimationGroup(duration\timingfunction\values\fromvalue\tovalue\delegate\strong)
 	- CoreAnimation focus on content vs CoreGraphics focus on vector view.
 
 #### Notification(event occuring) and KVO(value change)
+
 	- They are both based on Observer Pattern
 	- KVO is implemented by NSObject while Notification is implemented in NSNotification
 	- KVO is ofter used to observe value change while notification is used for some accident.
@@ -95,6 +113,7 @@
 	- Delegate is 1->1,need to be set to nil(1->1,delegate nil)
 
 #### NSOperation Queue vs GCD
+
 	- For task-based concurrency model
 	- NSOperation Queue is OC level,GCD is C level.
 	- NSOperation is internal implemented with GCD
@@ -102,6 +121,7 @@
 	- NSOperationQueue high-level abstract,make it 	little work for limit control,cancel,dependency;If 	you only need to use a block, no need for the 	additional advantages, use GCD.
 
 #### @block
+
 	Function pointer
 	Have access to outer variables Function & Enviroment
 	Object
@@ -116,14 +136,18 @@
 	- to make a object to be editable in a block, use 	__block to make it like static,global
 	- In MRC,__block won't retain, in ARC, __block will retain.
 	- Don't release a object when it is still in use(crash) and don't retain a object when it is no use(retain cycle).Avoid retain cycle.
+	
 #### CoreData
+
 	- Model
 	- Context
 	- Coordinator(Model ->persistence Type,URL)
 	- Insert -> NSEntityDescription insertNewObjectForEntityForName:inManagedObjectContext: 	Save
 	- Fetch -> NSEntityDescription entityForName:inManagedObjectContext: Request setEntity: Context Fetch Request
 	- Concurrency -> Coordinator shared, Context mergeusing notification.
+	
 #### NSRunloop
+
 	- Event Handling Runloop
 	- InputSource & Timer
 	- Timer Schedule -> add to current runloop/Default Mode
@@ -136,13 +160,17 @@
 	3.Runloop runMode:beforeDate
 	4.NSURLConnection,NSStream->YES->DefaultMode,UITrackingRunloopMode will be sorry.NO->start:NO,schedule:CommonMode(Default,Tracking),start manually.
 	InputSource:Timer,Selector,Port,CustomSrc.
+	
 #### CoreData
+
 	- Context 上下文
 	- Model 数据模型
 	- Coordinator 
 	- NSManagedObject
 	- Storage
+	
 #### CoreText
+
 	- Safari is a good web browser, but consumes a lot of memory.
 	- CoreText a great rendering engine.
 	- Context
@@ -151,30 +179,46 @@
 	- CTFrame(CGPath、VisibleRange)
 	- Draw
 	- Transform
+	
 #### CoreImage
+
 	- CIContext -> Options
 	- CIImage -> Content
 	- CIFilter ->Filter Processing.
+	
 #### Autoreleased LocalObject
+
 	- init -> lock
 	- dealloc -> unlock
+	
 #### JS call OC
+
 	- open -> NSURLProtocol -> register/scan decide / handle can initwithrequest
 	- iframe -> change src -> shouldstartloadwithrequest
+	
 #### Extension Communicate With App
+
 	- App Groups
 	- UserDefaults/ShareFile
+	
 #### Pan Move a Cell
+
 	- Create a snapshot view
 	- Pan Gesture Recognizer Delegate, move it.
 	- When finished,change datasource,update UI.
+	
 #### Literal
+
 	- Number
 	- Array
 	- Dictionary
+	
 #### UIButton
+
 	- Button 排他点击 ExclusiveTouch  YES
+	
 #### iOS design pattern
+
 	- 构造器 (原型、抽象工厂、工厂方法、生成器、单例)
 	- 适配 （适配、桥接、外观）
 	- 解耦（观察者、中介者）
@@ -183,43 +227,65 @@
 	- 算法 （模板、命令、策略）
 	- 性能 （代理、享元）
 	- 对象状态 （备忘录）
+	
 #### Array PerformSelector
+
 	- makeObjectsPerformSelector
+	
 #### Object ownership
+
 	- alloc new copy mutablecopy
+	
 #### iOS Events
+
 	- 触摸事件、传感器、远程控制
 	- Reponse Chain: UIView->SuperView->Controller/SuperView->Window->Application(处理机制)
 	- HitTest chain: Reverse.
+	
 #### ImageIO
+
 	read image data from source and write it into destination.
+	
 #### self/super
+
 	- they are one things.
 	- however,when super appears, runtime will use objc_msgSendSuper instead of objc_msgSend.
+	
 #### Literal Objects
+
 	- Immutable
 	- Must be foundation objects.
+	
 #### About Objective C
+
 	Avoid preprocessor defines. No type information,just replace.
 	Global Constants.External and Define.
+	
 #### Use Enumerations
+
 	- Use Enumerations for States,Status,Options.
 	- NS_ENUM/NS_OPTIONS
 	- 2^power
 	- switch-default
+	
 #### Memory Layout
+
 	- Class{@public NSDate *_dateOfBirth;NSString 	*firstName;NSString *_lastName;}
 	- [           Class]
 	- [+0         firstName]
 	- [+0         secondName]
 	- [+0         birthOfDate]
+	
 #### Property Modified
+
 	- assign
 	- strong
 	- weak
 	- unsafe_unretained
 	- copy
-#### Remember	
+	
+#### Remember
+	
 	- @property -> data encapsulates
 	- atomic,nonatomic
 	- read using direct access and write using setter.(direct could be faster because there is no objc_msgSend like calls,by kvo will be bypassed,setter,debug.)
@@ -257,5 +323,3 @@
 	- caches
 	- protocols
 	- }
-### And more?
-Contact [KyleWong](mailto:kang.wang1988@gmail.com) for more.
