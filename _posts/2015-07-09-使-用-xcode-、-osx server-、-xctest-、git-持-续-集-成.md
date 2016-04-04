@@ -38,7 +38,7 @@ $19.9刀感觉贵的话，可以去百度云盘搜索。
 	* 如果创建Bot的时候选中了On Commit，那么提交代码即会运行Bot，否则将按照创建时的设置区运行Bot。
 	* Bot的运行主要包括了:Preparing-Checkout-Build-Test-Archive-处理结果-Upload等。
 	* 一切正常的话，在Server中打开设置运行的Bot，可看到如下的结果:
-![Bot Run Result](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/CIBotResult.png)
+![Bot Run Result](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/CIBotResult.png)
 
 	4.注意事项
 

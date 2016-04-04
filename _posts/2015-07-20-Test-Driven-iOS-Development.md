@@ -6,7 +6,7 @@ category: tech
 tags: [ 'technique' ]
 ---
 
-![TDD icon](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/tdd.jpg)
+![TDD icon](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/tdd.jpg)
 
 ## System test
 

@@ -6,8 +6,8 @@ category: tech
 tags: [ 'technique' ]
 ---
 
-![Xcode](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/xcodeghost_4.jpg)
-![Ghost](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/xcodeghost_5.jpeg)
+![Xcode](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/xcodeghost_4.jpg)
+![Ghost](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/xcodeghost_5.jpeg)
 
 ### 引子
 
@@ -27,8 +27,8 @@ tags: [ 'technique' ]
 ## CoreService文件分析
 	本想下载一个CoreService分析下有哪些API调用，半天没找到。就引用下已有的分析:
 	
-![Pic 1](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/xcodeghost_1.jpg)
-![Pic 2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/xcodeghost_2.png)
+![Pic 1](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/xcodeghost_1.jpg)
+![Pic 2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/xcodeghost_2.png)
 
 	初看其也就搜集了些APP和设备信息，并传到了某网站，危害并没有那么大，看官别急，一会我们分析下源码。
 	(截图来自http://drops.wooyun.org/news/8864)
@@ -50,7 +50,7 @@ tags: [ 'technique' ]
 	当后台接收到网络请求之后，会发送Response给客户端(具体内容天知道)，客户端对其进行处理，首先解密，如果让休息，那就乖乖停一会(免得被发现啊...),检查如果服务端返回某些有效信息，则分别进行处理。
 	1.弹框:如果服务端返回了可供显示的Alert内容，你的App就莫名地弹一个框，如果点击确定，给后端发一个@"alertView"为参数的请求，并且弹出某APP下载页面.如下所示:
 	
-	![应用内APP下载](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/xcodeghost_3.jpg)
+	![应用内APP下载](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/xcodeghost_3.jpg)
 	
 	容我脑补一下，如果同花顺里弹了一个框让你下载一个金融理财的软件，你以为是同花顺推的，下载下来，一用duang，账户空空如也。
 	
@@ -86,7 +86,7 @@ tags: [ 'technique' ]
 	而且这些scheme均可带参数调用，假设sinaweibo://支持发微博，呵呵，瞬间就可以调用数以千万级的肉鸡去发微博了，那画面太美我不敢看...
 	又或者微信里打开Safari跳到某个伪装成微信页面的连接，盗你的微信密码分分钟...
 	
-![应用内APP跳转](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/xcodeghost_10.jpg)
+![应用内APP跳转](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/xcodeghost_10.jpg)
 	
 	3.直接应用内弹出App下载页面，同1，只是更流氓而已。
 	
@@ -122,22 +122,22 @@ tags: [ 'technique' ]
 	为了现身说法，装了一个中国联通网上营业厅的APP，Mac上开启Charles并设置好手机的代理，让我们来捕捉下流量。
 	APP第一次启动，啥都没干，就偷偷地发送了5次请求，我也是醉了。
 	
-![中国联通网上营业厅](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/xcodeghost_8.jpg)
-![Charles异常流量](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/xcodeghost_9.png)
+![中国联通网上营业厅](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/xcodeghost_8.jpg)
+![Charles异常流量](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/xcodeghost_9.png)
 
 ### 分析ipa文件
 	class-dump 方式:
 	通过网络获得的微信6.2.5的ipa包，找到其.app文件，调用:
 	class-dump --arch armv7 wechat/Payload/WeChat.app > wechat.apis
 
-![微信6.2.5](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/xcodeghost_6.png)
+![微信6.2.5](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/xcodeghost_6.png)
 	
 	由上图不难看到xcodeghost的特征函数。
 	
 	或者使用otool直接分析二进制文件的TEXT段，提取__cstring如下:
 	otool -arch armv7 -v -s __TEXT __cstring wechat/Payload/WeChat.app/WeChat > wechat.strings
 
-![微信6.2.5](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/xcodeghost_7.png)
+![微信6.2.5](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/xcodeghost_7.png)
 	
 	由上图不难看到xcodeghost的特征字符串http://init.icloud-analysis.com
 

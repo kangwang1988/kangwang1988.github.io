@@ -15,9 +15,9 @@ tags: [ 'tutorial' ]
 ### What's and why lldb?
 	LLVM(Low Level Virtual Machine)是一个编译器基础架构的工程。其旨在通过提供一组带有良好定义接口可充用的库，用于编译器前端和后端的开发。
 经典编译器3阶段设计:
-![Class compiler three-phases](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/classic-compiler-three-phase.png)
+![Class compiler three-phases](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/classic-compiler-three-phase.png)
 LLVM的3阶段设计
-![LLVM three-phases](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/llvm-compiler-three-phases.png)
+![LLVM three-phases](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/llvm-compiler-three-phases.png)
 
 ### What's lldb?
 1.	LLVM的组件包括clang(前端编译器)，libc++(llvm的C++标准库)，lldb(调试器)等。
@@ -59,30 +59,30 @@ LLVM的3阶段设计
 6.	breakpoint command add 3
 
 #### command: command
-![Command Usage](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/lldb-command-command.png)
+![Command Usage](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-command-command.png)
 
 #### command: disassemble
-![Command:disassemble 1](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/lldb-command-disassemble.png)
-![Command:disassemble 2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/lldb-command-disassemble-2.png)
+![Command:disassemble 1](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-command-disassemble.png)
+![Command:disassemble 2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-command-disassemble-2.png)
 
 #### command:expression
 1.	p:an abbreviation for 'expression —'
 2.	po:an abbreviation for 'expression -O  -- ‘
 3.	print:an abbreviation for 'expression --'
 
-![Command:expression 1](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/lldb-command-expression.png)
-![Command:expression 2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/lldb-command-expression2.png)
-![Command:expression 3](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/lldb-command-expression3.png)
+![Command:expression 1](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-command-expression.png)
+![Command:expression 2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-command-expression2.png)
+![Command:expression 3](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-command-expression3.png)
 
 #### command:frame (栈帧)
-![Command:frame](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/lldb-command-frame.png)
+![Command:frame](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-command-frame.png)
 
 #### command:gdb-remote(远程调试协议)
 	process connect connect://10.0.77.165:1234
 	
 #### command:memory(malloc_info)
 1.	find/history/read/write
-![Command:memory](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-command-memory.png)
+![Command:memory](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-command-memory.png)
 
 #### command:process
 	attach/detach,
@@ -91,11 +91,11 @@ LLVM的3阶段设计
 	launch/signal/kill
 	
 #### command:register
-![Command:register](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-command-register.gif)
-![Command:register2](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-command-arm-arch.png)
+![Command:register](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-command-register.gif)
+![Command:register2](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-command-arm-arch.png)
 
 #### command:script
-![Command:script](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-command-script.png)
+![Command:script](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-command-script.png)
 
 #### command:watchpoint(wa)
 	set/list/enable/disable/delete
@@ -104,7 +104,7 @@ LLVM的3阶段设计
 	add/dump/list/load/lookup
 	
 #### command:thread (Flow Control)
-![Command:flow control](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-command-thread.gif)
+![Command:flow control](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-command-thread.gif)
 
 ### Application: (UI Related)
 	打印层次:
@@ -115,22 +115,22 @@ LLVM的3阶段设计
 	Create/Init/push a VC is also available.
 	
 #### Application: (Where is the alert from?)
-![Application:Alert from](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-where-is-alert-from.png)
+![Application:Alert from](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-where-is-alert-from.png)
 
 	Approach 1:
 	Method Swizzle(hook).
 
-![Application:Alert from2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/rage-comic-proud.png)
+![Application:Alert from2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/rage-comic-proud.png)
 
 	Approach 2:	
 	breakpoint set -r “initWithTitle:*”
-![Application:Alert from3](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/lldb-application-br-initwithtitle.png)
+![Application:Alert from3](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-application-br-initwithtitle.png)
 
-![Application:Alert from4](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/rage-comic-cry.png)
+![Application:Alert from4](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/rage-comic-cry.png)
 
 #### Application: (Who change the data?)
 
-![Application:Data changed](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-watchpoint-who-changed-the-data.png)
+![Application:Data changed](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-watchpoint-who-changed-the-data.png)
 
 	Approach 1:
 	Override Setter
@@ -138,13 +138,13 @@ LLVM的3阶段设计
 	Approach 2:
 	KVO
 	
-![Application:Data changed2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/rage-comic-proud.png)
+![Application:Data changed2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/rage-comic-proud.png)
 
 	Approach3:
 	watchpoint set expression self.dataModel->_dataSource
-![Application:Data changed3](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/lldb-application-watchpoint-who-changed-the-data2.png)
+![Application:Data changed3](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-application-watchpoint-who-changed-the-data2.png)
 
-![Application:Data changed4](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/rage-comic-cry.png)
+![Application:Data changed4](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/rage-comic-cry.png)
 
 #### Application:(debugserver)
 
@@ -152,34 +152,34 @@ LLVM的3阶段设计
 	越狱设备调试时，首先拷贝debugserver到越狱机，然后使用debugserver启动需要调试的APP，	lldb(gdb)使用gdb-remote协议，在debugserver的协助下，实现调试功能。
 	
 #### Application:(远程调试)
-![Application:remote debug](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-remote-debug.png)
+![Application:remote debug](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-remote-debug.png)
 
-![Application:remote debug2](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-remote-debug2.png)
+![Application:remote debug2](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-remote-debug2.png)
 
-![Application:remote debug3](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-remote-debug3.png)
+![Application:remote debug3](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-remote-debug3.png)
 
-![Application:remote debug4](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-remote-debug4.png)
+![Application:remote debug4](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-remote-debug4.png)
 
 #### Application:(App Install Progress)
-![Application:App Install Progress](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-app-install-progress.png)
+![Application:App Install Progress](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-app-install-progress.png)
 
-![Application:App Install Progress2](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-app-install-progress2.png)
+![Application:App Install Progress2](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-app-install-progress2.png)
 
-![Application:App Install Progress3](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-app-install-progress3.png)
+![Application:App Install Progress3](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-app-install-progress3.png)
 
-![Application:App Install Progress4](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-app-install-progress4.png)
+![Application:App Install Progress4](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-app-install-progress4.png)
 
 #### Application:(Xcode Tweak)
-![Application:Xcode Tweak](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/lldb-applcation-xcode-tweak.png)
+![Application:Xcode Tweak](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-applcation-xcode-tweak.png)
 
-![Application:Xcode Tweak2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/_images/lldb-applcation-xcode-tweak2.png)
+![Application:Xcode Tweak2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-applcation-xcode-tweak2.png)
 
 #### Application: (How WeChat show web progress?)
-![Application:WeChat Web Progress](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-how-wechat-show-web-progress.png)
+![Application:WeChat Web Progress](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-how-wechat-show-web-progress.png)
 
-![Application:WeChat Web Progress2](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-how-wechat-show-web-progress2.png)
+![Application:WeChat Web Progress2](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-how-wechat-show-web-progress2.png)
 
-![Application:WeChat Web Progress3](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-application-how-wechat-show-web-progress3.png)
+![Application:WeChat Web Progress3](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-how-wechat-show-web-progress3.png)
 
 ### Application : (Analyse/Debug a third-party app)
 	
@@ -201,7 +201,7 @@ LLVM的3阶段设计
 	使用:
 	Import module into LLDB(~/.lldbinit)
 	(Bind Python function to command)
-![Python Plugin](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/_images/lldb-python-plugin-for-lld.png)
+![Python Plugin](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-python-plugin-for-lld.png)
 
 	SBDebugger:(SB is abbr for Scripting bridge)
 		The command interpreter,Always be one.
