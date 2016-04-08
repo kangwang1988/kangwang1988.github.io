@@ -58,6 +58,7 @@ delete-delay: 5000
 lines: # You can add HTML Tags in the Text
   - text: "Work hard,play hard."
   - text: "It's never too late to be the one you would like to be."
+  - text: "The people who are crazy enough to think that they can change the world change the world."
 
 me-img: "/img/jetpacktocat.png"
 
