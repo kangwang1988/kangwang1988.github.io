@@ -168,4 +168,9 @@ p.s optool is a Mac command line app which helps you handle the Mach-O file.You 
 You can found more details on my prior blog.[Debugging with lldb.](http://kangwang1988.github.io/tech/2016/03/27/Debugging-with-lldb.html)
 
 	After sometime of debugging and testing, we will found three classes interested in:
-	
+
+![wechat-red-envelop-nodeview](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-red-envelop-nodeview.png)	
+
+![wechat-red-envelop-homeview](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-red-envelop-homeview.png)
+				
+![wechat-red-envelop-detailcontroller](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-red-envelop-detailcontroller.png)
