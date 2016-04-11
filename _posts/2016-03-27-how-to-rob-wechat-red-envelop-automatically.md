@@ -158,8 +158,9 @@ p.s optool is a Mac command line app which helps you handle the Mach-O file.You 
 
 	a.	Find which class and selector you would like to hook.
 	b.	Decide when a red envelop is available and choose a moment to open it.
-	c.	Consider cases like there are several envelops avaliable, provide interfaces for user to enable/disable this feature.
-	d.	Write, compile, inject, resign, install, test and redo the former procedures until success.
+	c.	Consider cases like there are several envelops avaliable. 
+	d.	Provide interfaces for user to enable/disable this feature.
+	e.	Write, compile, inject, resign, install, test and redo the former procedures until success.
 	
 2.Find which class/selector to hook(method swizzle).
 	
@@ -178,5 +179,15 @@ You can found more details on my prior blog.[Debugging with lldb.](http://kangwa
 	Then, dump all the objc classes and its interfaces using class-dump.
 	class-dump --arch arm64 ./WeChat.app/WeChat > WeChat.apis
 	
-
+From the WeChat.apis, we will get a list of the classes and corresponding selectors included in WeChat. Just take the WCPayC2CMessageNodeView for example.
+![WCPayC2CMessageNodeView-apis](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/WCPayC2CMessageNodeView-apis.png)
+	
+	In a word, we will call the onClick method of WCPayC2CMessageNodeView when its didMoveToSuperview is called.
+	
+3.The whold implementation of the plugin could be found in [Github](https://github.com/kangwang1988/WeChatPlugin)
 	 
+### Summary
+	
+	Objective-C is famous for its powerful runtime support. With categories, method swizzling, you can do a lot of job as you wanna. When you wanna to do some research or dig into its inner implementation, you might need a jailbroken device and a good use of lldb. Besides, hopper disassembler might also helps you a lot. With a good knowledge of how the app works and what selector from which class you are interested in, you can modify it using a method swizzling, compile it into a dylib, modify the binary's load commands and inject the dylib, resign it and it will work on a non-jailbroken device.
+	
+	This article is only for researching, don't do anything illegal with it.
