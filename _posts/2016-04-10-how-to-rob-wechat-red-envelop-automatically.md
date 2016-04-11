@@ -2,7 +2,7 @@
 layout: post
 comments: true
 section-type: post
-title: 如何实现不越狱实现微信抢红包？
+title: 如何不越狱实现微信自动抢红包？
 category: tech
 tags: [ 'tutorial' ]
 ---
