@@ -153,4 +153,9 @@ p.s optool is a Mac command line app which helps you handle the Mach-O file.You 
 	![wechat-plugin-injected](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-plugin-injected.png)
 
 ### Rob red envelop plugin
-	
+
+1.Design
+a.	Find when a red envelop is available and choose a moment to open it.
+b.	Find which class and selector you would like to hook.
+c.	Consider cases like there are several envelops avaliable, provide interfaces for user to enable/disable this feature.
+d.	Write, compile, inject, resign, install, test and redo the former procedures until success.
