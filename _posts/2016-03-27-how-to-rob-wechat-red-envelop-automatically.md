@@ -174,3 +174,9 @@ You can found more details on my prior blog.[Debugging with lldb.](http://kangwa
 ![wechat-red-envelop-homeview](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-red-envelop-homeview.png)
 				
 ![wechat-red-envelop-detailcontroller](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-red-envelop-detailcontroller.png)
+
+	Then, dump all the objc classes and its interfaces using class-dump.
+	class-dump --arch arm64 ./WeChat.app/WeChat > WeChat.apis
+	
+
+	 
