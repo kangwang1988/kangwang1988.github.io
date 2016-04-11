@@ -112,7 +112,7 @@ __LINKEDIT | The segment contains raw data used by the dynamic linker, such as s
 [Find more details about Mach-o from Apple.](https://developer.apple.com/library/mac/documentation/DeveloperTools/Conceptual/MachORuntime/index.html#//apple_ref/doc/uid/20001298-89026)
 
 With a WeChat.ipa downloaded from the jailbroken channel, we can find its inner content using MachOView:
-![wechat-load-commands-in-machoview-original](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-load-commands-in-machoview-original.png)
+![wechat-load-commands-in-machoview-original](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/wechat-load-commands-in-machoview-original.png)
 
 It's clear that the dylib link info is stored in the Load Commands(LC_LOAD_DYLIB) part. Henceforth, if we create a dylib and inject it into the binary by modifying the load commands, we might do something we want in WeChat.
 
@@ -149,13 +149,23 @@ p.s optool is a Mac command line app which helps you handle the Mach-O file.You 
 	codesign -fs "$certname" "Payload/${appname}.app/${pluginname}.dylib"
 	codesign -fs "$certname" --no-strict --entitlements="$entitlements" "${tempDir}/Payload/${appname}.app"
 	
-5.Install it using itools.
+5.Install it using itools.(non-jailbroken device)
 	![wechat-plugin-injected](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-plugin-injected.png)
 
 ### Rob red envelop plugin
 
 1.Design
-a.	Find when a red envelop is available and choose a moment to open it.
-b.	Find which class and selector you would like to hook.
-c.	Consider cases like there are several envelops avaliable, provide interfaces for user to enable/disable this feature.
-d.	Write, compile, inject, resign, install, test and redo the former procedures until success.
+
+	a.	Find which class and selector you would like to hook.
+	b.	Decide when a red envelop is available and choose a moment to open it.
+	c.	Consider cases like there are several envelops avaliable, provide interfaces for user to enable/disable this feature.
+	d.	Write, compile, inject, resign, install, test and redo the former procedures until success.
+	
+2.Find which class/selector to hook(method swizzle).
+	
+	To debug a app without its source code, you need a jailbroken device. Install debugserver.app into it, login in the device with ssh. Launch the WeChat.app you want to debug. Launch the debugserver.app with the options attaching to the already-existed WeChat.app. Launch lldb and communicate with the debugserver over the air.
+
+You can found more details on my prior blog.[Debugging with lldb.](http://kangwang1988.github.io/tech/2016/03/27/Debugging-with-lldb.html)
+
+	After sometime of debugging and testing, we will found three classes interested in:
+	
