@@ -34,5 +34,5 @@ __LINKEDIT | The segment contains raw data used by the dynamic linker, such as s
 With a WeChat.ipa downloaded from the jailbroken channel, we can find its inner content using MachOView:
 ![wechat-load-commands-in-machoview-original](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-load-commands-in-machoview-original.png)
 
-Those dylib 
+Those dylib link info is stored in the load commands part.
 
