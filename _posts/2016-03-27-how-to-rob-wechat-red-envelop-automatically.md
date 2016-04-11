@@ -20,6 +20,8 @@ A typical Mach-o file is given below:
 
 ![Mach-o file format](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/mach_o_segments.gif)
 
+The header specify the binary's 
+
 Segment | Description 
 ------------ | -------------
 __PAGEZERO | The first segment of an executable file.It is located at virtual memory location 0 and has no protection rights assigned, the combination of which causes accesses to NULL, a common C programming error, to immediately crash. 
@@ -34,5 +36,5 @@ __LINKEDIT | The segment contains raw data used by the dynamic linker, such as s
 With a WeChat.ipa downloaded from the jailbroken channel, we can find its inner content using MachOView:
 ![wechat-load-commands-in-machoview-original](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-load-commands-in-machoview-original.png)
 
-Those dylib link info is stored in the load commands part.
+It's clear that the dylib link info is stored in the Load Commands(LC_LOAD_DYLIB) part.
 
