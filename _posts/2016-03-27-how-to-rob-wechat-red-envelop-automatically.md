@@ -12,7 +12,7 @@ tags: [ 'tutorial' ]
 	3.Wechat analyze and hack
 	4.Resign
 	5.References
-### Mach-o file format 
+### Mach-O file format 
 	
 	Mach-o file format is the standard used to store program and library on disk in the Mac App Binary Interface(ABI). 
 	
@@ -114,5 +114,34 @@ __LINKEDIT | The segment contains raw data used by the dynamic linker, such as s
 With a WeChat.ipa downloaded from the jailbroken channel, we can find its inner content using MachOView:
 ![wechat-load-commands-in-machoview-original](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-load-commands-in-machoview-original.png)
 
-It's clear that the dylib link info is stored in the Load Commands(LC_LOAD_DYLIB) part.
+It's clear that the dylib link info is stored in the Load Commands(LC_LOAD_DYLIB) part. Henceforth, if we create a dylib and inject it into the binary by modifying the load commands, we might do something we want in WeChat.
 
+
+### dylib create and injection.
+	
+1.Write your source code.
+
+	//test.m
+	__attribute__((constructor))
+	static void dylibRuntimeInjection() {    		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * 		NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Hacked" 		message:@"Plugin for WeChat injected" delegate:nil 		cancelButtonTitle:@"哈哈" otherButtonTitles:nil, nil];
+   		[alertView show];
+  		});
+	}
+
+ps. The constructor attribute causes the function to be called automatically before execution enters main (). Similarly, the destructor attribute causes the function to be called automatically after main () has completed or exit () has been called. Functions with these attributes are useful for initializing data that will be used implicitly during the execution of the program.__attribute__((constructor)) is not Standard C++. It is GCC's extension.
+
+2.Compile the .m file(s) into dylib using clang.
+
+	clang -arch armv7 -arch arm64 -isysroot $(xcodebuild -sdk iphoneos -version Path) -shared test.m -framework Foundation -framework UIKit -o test.dylib
+		
+3.Inject the dylib into the binary file.
+
+	optool install -c load -p "@executable_path/test.dylib" -t ./WeChat.app/WeChat
+	cp ../test.dylib ./WeChat.app/
+	
+p.s optool is a Mac command line app which helps you handle the Mach-O file.You may find its source code in Github.[Clone optool](https://github.com/alexzielenski/optool)
+	![]
+4. 
+	codesign -fs "iPhone Distribution" ./WeChat.app/test.dylib
+	codesign -fs "iPhone Distribution" ./WeChat.app
