@@ -141,7 +141,8 @@ ps. The constructor attribute causes the function to be called automatically bef
 	cp ../test.dylib ./WeChat.app/
 	
 p.s optool is a Mac command line app which helps you handle the Mach-O file.You may find its source code in Github.[Clone optool](https://github.com/alexzielenski/optool)
-	![]
+![wechat-load-commands-in-machoview-injected](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-load-commands-in-machoview-injected.png)
+
 4. 
-	codesign -fs "iPhone Distribution" ./WeChat.app/test.dylib
-	codesign -fs "iPhone Distribution" ./WeChat.app
+	codesign -fs "$certname" "Payload/${appname}.app/${pluginname}.dylib"
+	codesign -fs "$certname" --no-strict --entitlements="$entitlements" "${tempDir}/Payload/${appname}.app"
