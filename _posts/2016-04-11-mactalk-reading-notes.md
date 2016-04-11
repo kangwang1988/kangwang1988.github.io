@@ -6,231 +6,89 @@ title: 《Mactalk》读书笔记
 category: tech
 tags: [ 'book' ]
 ---
-### Contents
-	1.What's and why lldb?
-	2.LLDB commands usage.
-	3.Applications
-	4.Python lldb
-	5.References
-### What's and why lldb?
-	LLVM(Low Level Virtual Machine)是一个编译器基础架构的工程。其旨在通过提供一组带有良好定义接口可充用的库，用于编译器前端和后端的开发。
-经典编译器3阶段设计:
-![Class compiler three-phases](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/classic-compiler-three-phase.png)
-LLVM的3阶段设计
-![LLVM three-phases](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/llvm-compiler-three-phases.png)
+### 程序员篇
 
-### What's lldb?
-1.	LLVM的组件包括clang(前端编译器)，libc++(llvm的C++标准库)，lldb(调试器)等。
-2.	作为LLVM提供的软件调试器，lldb(LLDB debugger)虽处于早期开发当中，依旧提供了对C,C++,Objective-C,Swift语言程序的调试支持。
-3.	lldb继承了GDB的优点，弥补了GDB的不足，如GUI，性能改善，插件式支持(提供C++/Python的API)和扩展。
-4.	LLDB可工作于OSX，Linux，FreeBSD，Windows，支持i386，x86-64,ARM架构。从Xcode4.3开始，lldb即为默认调试器。
-5.	[LLDB代码全部开源。](lldb.llvm.org/)
+>	程序员真正的价值在于:最小的代价解决问题，ps.这也是诸多工程师的价值所在吧。
 
-### Why lldb？
-1.	Xcode默认调试器，功能强大。
-2.	很多常用命令同gdb，从gdb转过来无不适应感。
-3.	良好使用可以改进开发和调试过程。
-4.	在更基础的层面理解系统和代码。
-5.	分析和学习好的代码设计。
-6.	分析系统可用API，开发某些定制化功能/需求。
-7.	调试器本身支持插件化，可定制实现功能。
+>	程序员如何选择技术方向:至少一门静态语言(Objective-C)，至少一门动态语言(Python),一些同时具备动态和静态特性的语言(Swift).
 
-### Commands
-1.	help-Show a list of all debugger commands, or give details
-2.	breakpoint-A set of commands for operating on breakpoints.
-3.	command- A set of commands for managing or customising the debugger commands.
-4.	disassemble - Disassemble bytes in the current function, or elsewhere in the 5.	executable program as specified by the user.
-6.	expression - Evaluate an expression (ObjC++ or Swift) in the current program context, using user defined variables and variables currently in scope.
-7.	frame - A set of commands for operating on the current thread’s frame.
-8.	gdb-remote- Connect to a remote GDB server.  If no hostname is provided,localhost is assumed.
-9.	memory - A set of commands for operating on memory.
-10.	process - A set of commands for operating on a process.
-11.	register- A set of commands to access thread register.
-12.	script - Pass an expression to the script interpreter for evaluation and return the results. Drop into the interactive interpreter if no expression is given.
-13.	watchpoint - A set of commands for operating on watchpoints.
-14.	image - ('target modules')  A set of commands for accessing information for one or more target modules.
+>	程序员接到需求怎么办:	
 
-#### command: breakpoint(br)
-1.	set/list/enable/disable/delete
-2.	breakpoint set -S "length" 
-3.	breakpoint set -F "[UIViewController viewDidLoad]”
-4.	breakpoint set -r “initWithTitle:*”
-5.	breakpoint set -F "[NKHomeViewController viewWillAppear:]" -c "shownTimes == 3”
-6.	breakpoint command add 3
+* 问题是什么？
+* 假设问题的原因。
+* 正视问题的假设
+* 预测实验的结果
+* 观察实验的结果
+* 由实验得出结论
 
-#### command: command
-![Command Usage](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-command-command.png)
+>	We build things.
 
-#### command: disassemble
-![Command:disassemble 1](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-command-disassemble.png)
-![Command:disassemble 2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-command-disassemble-2.png)
+>	不要让开发人员不做项目只预研，他们会缺少成就感和安全感。
 
-#### command:expression
-1.	p:an abbreviation for 'expression —'
-2.	po:an abbreviation for 'expression -O  -- ‘
-3.	print:an abbreviation for 'expression --'
+>	尽可能地把开发者推荐到你信任的团队里。
+### 苹果篇
 
-![Command:expression 1](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-command-expression.png)
-![Command:expression 2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-command-expression2.png)
-![Command:expression 3](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-command-expression3.png)
+>	1984 & 1997
 
-#### command:frame (栈帧)
-![Command:frame](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-command-frame.png)
+>	这事儿和流行文化无关，和坑蒙拐骗无关，和说服人们接受一件他们压根儿不需要的东西也无关我们只是在搞明白了我们自己需要什么。而且我认为，我们已经建立了一套良好的思维体系，以确保其他许多人都会需要这个东西。
 
-#### command:gdb-remote(远程调试协议)
-	process connect connect://10.0.77.165:1234
-	
-#### command:memory(malloc_info)
-1.	find/history/read/write
-![Command:memory](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-command-memory.png)
+### 设计篇
+>	Kiss: Keep it simple, stupid.
 
-#### command:process
-	attach/detach,
-	continue/interrupt,
-	load/unload,
-	launch/signal/kill
-	
-#### command:register
-![Command:register](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-command-register.gif)
-![Command:register2](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-command-arm-arch.png)
+>	足够简单:不看操作指南，例如苹果的Home按键，单键鼠标。
 
-#### command:script
-![Command:script](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-command-script.png)
+>	优雅与使用并世无双。
+### 产品篇
+>	几乎所有成功的产品，都是边看便做出来的，伟大的梦想，常常始于微不足道。
 
-#### command:watchpoint(wa)
-	set/list/enable/disable/delete
-	
-#### command:image(镜像)
-	add/dump/list/load/lookup
-	
-#### command:thread (Flow Control)
-![Command:flow control](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-command-thread.gif)
+>	用户在于系统对话，学习(条件反射)。
 
-### Application: (UI Related)
-	打印层次:
-	po [aView recursiveDescription]
-	更改UI:
-	expression [self.tableView setBackgroundColor:[UIColor redColor]
-	expression (void)[CATransaction flush]
-	Create/Init/push a VC is also available.
-	
-#### Application: (Where is the alert from?)
-![Application:Alert from](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-where-is-alert-from.png)
+> 	赢者全拿
 
-	Approach 1:
-	Method Swizzle(hook).
+>	猴子理论:与时俱进
 
-![Application:Alert from2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/rage-comic-proud.png)
+>	买伞&种树
+## 为人处世篇
+>	术:解决问题，道:创造解决问题的方法。
 
-	Approach 2:	
-	breakpoint set -r “initWithTitle:*”
-![Application:Alert from3](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-application-br-initwithtitle.png)
+>	真正的朋友:无论多久不联系，遇到困难的时候，你会想到他，你会为这样的朋友甘心付出时间和资源，你能够随时像这样的朋友请求帮助并且确定他会帮助你。
 
-![Application:Alert from4](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/rage-comic-cry.png)
+>	无论世界多么复杂哦，总有人潜与浮华之下，在深水河中静静地打磨那些精美的鹅暖石和珍珠，追逐自己的梦想。
 
-#### Application: (Who change the data?)
+>	努力去寻找自己的宁静与安全，是每个人一生的宿命。
 
-![Application:Data changed](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-watchpoint-who-changed-the-data.png)
+>	回忆是美好的，但不可考，可以回忆，但不要沉迷。
 
-	Approach 1:
-	Override Setter
-	
-	Approach 2:
-	KVO
-	
-![Application:Data changed2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/rage-comic-proud.png)
+>	引导人们通向艺术与科学的最强的动机在于拜托日常生活机器令人痛苦的粗糙状态和无望的枯燥乏味，摆脱一个人自身总是在变化着的欲望的羁绊。
 
-	Approach3:
-	watchpoint set expression self.dataModel->_dataSource
-![Application:Data changed3](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-application-watchpoint-who-changed-the-data2.png)
+>	不管做什么，从年轻的时候，对自身要做的事情有深入的了解，不肤浅，不浮躁，坚持去做一件事情，同时有意识地提升自己的能力。
 
-![Application:Data changed4](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/rage-comic-cry.png)
+>	每个人都知道运动和良好的饮食可以保持健康和身材，但少有人可以做到，每个人都知道坚持，练习和恰当的方法，可以让我们脱颖而出，但少有人做到。世界上优秀的人本来就是少数，认识到这一点，你会更容易理解这个世界。
 
-#### Application:(debugserver)
+>	Get busy living, or get busy dying.
 
-	debugserver是用于辅助gdb或者lldb远程调试的命令行APP。当iOS设备用于开发时其会被安装。Xcode	调试时，会触发此进程用于远程调试。
-	越狱设备调试时，首先拷贝debugserver到越狱机，然后使用debugserver启动需要调试的APP，	lldb(gdb)使用gdb-remote协议，在debugserver的协助下，实现调试功能。
-	
-#### Application:(远程调试)
-![Application:remote debug](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-remote-debug.png)
+>	有些鸟儿是无法被困住的，因为他们的予以是如此的流光溢彩，当它们飞走时，我们只能由衷地祝愿他们获得了自由和更广阔的天空。
 
-![Application:remote debug2](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-remote-debug2.png)
+>	通往肥胖的道路上往往是一马平川，二手认知率确实艰险崎岖，就是这样。
 
-![Application:remote debug3](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-remote-debug3.png)
+>	A reader lives a thousand lives before he dies.The man who never reads live only once.
 
-![Application:remote debug4](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-remote-debug4.png)
+>	像外行一样思考，像内行一样实践。<马斯克-只要做的事情符合物理定律，就可以或者应该去做；不应因为太成功了所以无法颠覆。
 
-#### Application:(App Install Progress)
-![Application:App Install Progress](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-app-install-progress.png)
+>	There is always another way.
 
-![Application:App Install Progress2](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-app-install-progress2.png)
+>	跳出自己的舒适区，有节奏地忙起来。
 
-![Application:App Install Progress3](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-app-install-progress3.png)
+>	你知道吗？人们每天起床，做着同样的事情，有一天要改变生活，但他们从不付诸行动，我想改变自己的生活。
 
-![Application:App Install Progress4](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-app-install-progress4.png)
+>	历史和社会不是缓慢爬行的，而是在一步步跳跃，他们从一个断层调到另一个断层，期间极少有波折。
 
-#### Application:(Xcode Tweak)
-![Application:Xcode Tweak](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-applcation-xcode-tweak.png)
+>	而我们以及历史削减喜欢相信那些我们呢能够预测的小的逐步转变。
 
-![Application:Xcode Tweak2](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/lldb-applcation-xcode-tweak2.png)
+>	第十人理论，为了正确的决策，信息不足的情况下去全面考虑问题，找到特例，通过逆向，帮助决策，而不是为了反对，为了异议而异议。
 
-#### Application: (How WeChat show web progress?)
-![Application:WeChat Web Progress](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-how-wechat-show-web-progress.png)
+>	因为在这个大部分人注意力缺失的世界，只要比别人专注一点点，你就赢在了起跑线上，如果你确实在跑道上的话。
 
-![Application:WeChat Web Progress2](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-how-wechat-show-web-progress2.png)
+>	人文历史，无更多了解，圈子越来越窄。
 
-![Application:WeChat Web Progress3](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-application-how-wechat-show-web-progress3.png)
-
-### Application : (Analyse/Debug a third-party app)
-	
-	Mac
-	target create /bin/ls
-	breakpoint set --name malloc
-	process launch /bin/ls
-	或process attach —pid 123/—name Safari
-	iOS
-	远程调试：
-	ssh(越狱)
-	debugserver(ios)
-	lldb(mac)
-
-### Python plugin for lldb
-	代码:
-	Write Python module with a command function like:
-	def <function>(debugger, command, result, internal_dict)	
-	使用:
-	Import module into LLDB(~/.lldbinit)
-	(Bind Python function to command)
-![Python Plugin](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/lldb-python-plugin-for-lld.png)
-
-	SBDebugger:(SB is abbr for Scripting bridge)
-		The command interpreter,Always be one.
-	SBTarget:
-		Represents the target program under debugger.
-	SBProcess:
-		Contains the process of the selected target.
-	SBThread:
-    	Contains the process of the currently select thread.
-	SBFrame:
-    	Contains the selected frame.
-	SBValue:
-		An object that encapsulates data objects.
-
-### References
-[LLDB wiki1](https://en.wikipedia.org/wiki/LLDB_%28debugger%29)	
-[LLDB wiki2](http://lldb.llvm.org/lldb-gdb.html)
-
-[ARM architecture](http://infocenter.arm.com/help/topic/com.arm.doc.ihi0042f/IHI0042F_aapcs.pdf)
-
-[LLDB python reference](http://lldb.llvm.org/python-reference.html)
-
-[LLDB tutorials in Raywenderlich](https://www.raywenderlich.com/tag/lldb)
-
-[Facebook’s chisel for lldb](https://github.com/facebook/chisel)
-
-[Wiki for debugserver](http://iphonedevwiki.net/index.php/Debugserver)
-
-[Dancing with lldb in objc.io](https://www.objc.io/issues/19-debugging/lldb-debugging)
-
-
-### End
+>	人生得意须尽欢，莫使金樽空对月。不妄自尊大，不妄自菲薄。
