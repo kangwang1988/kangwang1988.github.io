@@ -143,6 +143,11 @@ ps. The constructor attribute causes the function to be called automatically bef
 p.s optool is a Mac command line app which helps you handle the Mach-O file.You may find its source code in Github.[Clone optool](https://github.com/alexzielenski/optool)
 ![wechat-load-commands-in-machoview-injected](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-load-commands-in-machoview-injected.png)
 
-4. 
+4. Resign it with your certificate.
+	After injection, you may wanna to install the ipa into your device to have a try. However, as the original one is signed with a certificate which you don't have, the app will fail when launching as the signing identity doesn't match.(Remember the dylib you created?) So, you may want to resign it with your certificate, if possible, the bundle id might be also altered.
+	
 	codesign -fs "$certname" "Payload/${appname}.app/${pluginname}.dylib"
 	codesign -fs "$certname" --no-strict --entitlements="$entitlements" "${tempDir}/Payload/${appname}.app"
+	
+5.	Install it using itools.
+	![]()
