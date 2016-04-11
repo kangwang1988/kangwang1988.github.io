@@ -13,6 +13,10 @@ tags: [ 'tutorial' ]
 	4.Resign
 	5.References
 ### Mach-o file format 
+	
+	Mach-o file format is the standard used to store program and library on disk in the Mac App Binary Interface(ABI). 
+	
+A typical Mach-o file is given below: 
 
 ![Mach-o file format](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/mach_o_segments.gif)
 
@@ -26,4 +30,9 @@ __IMPORT | The segment contains symbol stubs and non-lazy pointers to symbols no
 __LINKEDIT | The segment contains raw data used by the dynamic linker, such as symbol, string, and relocation table entries.
 
 [Find more details about Mach-o from Apple.](https://developer.apple.com/library/mac/documentation/DeveloperTools/Conceptual/MachORuntime/index.html#//apple_ref/doc/uid/20001298-89026)
+
+With a WeChat.ipa downloaded from the jailbroken channel, we can find its inner content using MachOView:
+![wechat-load-commands-in-machoview-original](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-load-commands-in-machoview-original.png)
+
+Those dylib 
 
