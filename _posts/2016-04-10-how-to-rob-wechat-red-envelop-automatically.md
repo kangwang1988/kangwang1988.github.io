@@ -6,12 +6,13 @@ title: 如何实现不越狱实现微信抢红包？
 category: tech
 tags: [ 'tutorial' ]
 ---
+
 ### Content
 	1.Mach-o file format
 	2.dylib create and injection
 	3.Wechat analyze and hack
-	4.Resign
-	5.References
+	4.Summary
+	
 ### Mach-O file format 
 	
 	Mach-o file format is the standard used to store program and library on disk in the Mac App Binary Interface(ABI). 
@@ -152,7 +153,7 @@ p.s optool is a Mac command line app which helps you handle the Mach-O file.You 
 5.Install it using itools.(non-jailbroken device)
 	![wechat-plugin-injected](https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-plugin-injected.png)
 
-### Rob red envelop plugin
+### Wechat analyze and hack
 
 1.Design
 
