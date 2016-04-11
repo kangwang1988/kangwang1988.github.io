@@ -16,11 +16,89 @@ tags: [ 'tutorial' ]
 	
 	Mach-o file format is the standard used to store program and library on disk in the Mac App Binary Interface(ABI). 
 	
-A typical Mach-o file is given below: 
 
 ![Mach-o file format](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/mach_o_segments.gif)
 
-The header specify the binary's 
+Codes below specifying the header/load commands data structure can be found in the <mach-o/loader.h> file.
+
+	/*
+ 	* The 32-bit mach header appears at the very beginning of the object file for
+ 	* 32-bit architectures.
+ 	*/
+		struct mach_header {
+		uint32_t	magic;		/* mach magic number identifier */
+		cpu_type_t	cputype;	/* cpu specifier */
+		cpu_subtype_t	cpusubtype;	/* machine specifier */
+		uint32_t	filetype;	/* type of file */
+		uint32_t	ncmds;		/* number of load commands */
+		uint32_t	sizeofcmds;	/* the size of all the load commands */
+		uint32_t	flags;		/* flags */
+		};
+
+	/* Constant for the magic field of the mach_header (32-bit architectures) */
+	#define	MH_MAGIC	0xfeedface	/* the mach magic number */
+	#define MH_CIGAM	0xcefaedfe	/* NXSwapInt(MH_MAGIC) */
+
+	/*
+ 	 * The 64-bit mach header appears at the very beginning of object files for
+ 	 * 64-bit architectures.
+	 */
+		struct mach_header_64 {
+		uint32_t	magic;		/* mach magic number identifier */
+		cpu_type_t	cputype;	/* cpu specifier */
+		cpu_subtype_t	cpusubtype;	/* machine specifier */
+		uint32_t	filetype;	/* type of file */
+		uint32_t	ncmds;		/* number of load commands */
+		uint32_t	sizeofcmds;	/* the size of all the load commands */
+		uint32_t	flags;		/* flags */
+		uint32_t	reserved;	/* reserved */
+		};
+
+	/*
+ 	 * The segment load command indicates that a part of this file is to be
+ 	 * mapped into the task's address space.  The size of this segment in memory,
+ 	 * vmsize, maybe equal to or larger than the amount to map from this file,
+ 	 * filesize.  The file is mapped starting at fileoff to the beginning of
+ 	 * the segment in memory, vmaddr.  The rest of the memory of the segment,
+ 	 * if any, is allocated zero fill on demand.  The segment's maximum virtual
+ 	 * memory protection and initial virtual memory protection are specified
+ 	 * by the maxprot and initprot fields.  If the segment has sections then the
+ 	 * section structures directly follow the segment command and their size is
+ 	 * reflected in cmdsize.
+ 	 */
+		struct segment_command { /* for 32-bit architectures */
+			uint32_t	cmd;		/* LC_SEGMENT */
+			uint32_t	cmdsize;	/* includes sizeof section structs */
+			char		segname[16];	/* segment name */
+			uint32_t	vmaddr;		/* memory address of this segment */
+			uint32_t	vmsize;		/* memory size of this segment */
+			uint32_t	fileoff;	/* file offset of this segment */
+			uint32_t	filesize;	/* amount to map from the file */
+			vm_prot_t	maxprot;	/* maximum VM protection */
+			vm_prot_t	initprot;	/* initial VM protection */
+			uint32_t	nsects;		/* number of sections in segment */
+			uint32_t	flags;		/* flags */
+		};
+
+	/*
+	 * The 64-bit segment load command indicates that a part of this file is to be
+	 * mapped into a 64-bit task's address space.  If the 64-bit segment has
+ 	* sections then section_64 structures directly follow the 64-bit segment
+ 	* command and their size is reflected in cmdsize.
+ 	*/
+		struct segment_command_64 { /* for 64-bit architectures */
+		uint32_t	cmd;		/* LC_SEGMENT_64 */
+		uint32_t	cmdsize;	/* includes sizeof section_64 structs */
+		char		segname[16];	/* segment name */
+		uint64_t	vmaddr;		/* memory address of this segment */
+		uint64_t	vmsize;		/* memory size of this segment */
+		uint64_t	fileoff;	/* file offset of this segment */
+		uint64_t	filesize;	/* amount to map from the file */
+		vm_prot_t	maxprot;	/* maximum VM protection */
+		vm_prot_t	initprot;	/* initial VM protection */
+		uint32_t	nsects;		/* number of sections in segment */
+		uint32_t	flags;		/* flags */
+		};
 
 Segment | Description 
 ------------ | -------------
