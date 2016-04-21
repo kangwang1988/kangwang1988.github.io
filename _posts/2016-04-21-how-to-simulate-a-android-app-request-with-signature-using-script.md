@@ -77,7 +77,7 @@ tags: [ 'tutorial' ]
     	}
 	}
 	
-	其中digestString可以直接从apk反编译得到java实现。
+	其中digestString()方法可以直接从apk反编译得到java实现。
 	Done.
 	
 ### Summary
