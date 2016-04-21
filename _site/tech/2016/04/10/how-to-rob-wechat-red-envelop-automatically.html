@@ -1,0 +1,656 @@
+
+<!-- Post Layout Start -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+  
+<!-- HEAD Start -->
+
+<head>
+  
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="'A coder wanna to make a difference.">
+  <meta name="author" content="Kyle Wong">
+  <meta name="keywords" content="Kyle, Blog, iOS, Tech, Science">
+  <link rel="canonical" href="/tech/2016/04/10/how-to-rob-wechat-red-envelop-automatically.html">
+  <title>{ Kyle Wong } | 如何不越狱实现微信自动抢红包？</title>
+
+  <!-- Bootstrap Core CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+  <!-- Custom CSS -->
+  <link href="/css/grayscale.css" rel="stylesheet">
+  
+
+  <!-- Custom Fonts -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+  <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/rrssb.css" />
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico">
+  
+
+  
+
+  
+
+
+  <!-- iOS Web App mode -->
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" sizes="36x36" href="/img/web-app/icon-36p.png">
+  <link rel="apple-touch-icon" sizes="48x48" href="/img/web-app/icon-48p.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/img/web-app/icon-72p.png">
+  <link rel="apple-touch-icon" sizes="96x96" href="/img/web-app/icon-96p.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/img/web-app/icon-144p.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/img/web-app/icon-192p.png">
+
+  <!-- Android Web App mode -->
+
+  <link rel="manifest" href="/manifest.json">
+
+
+
+
+  
+<!-- Chrome, Firefox OS and Opera -->
+<meta name="theme-color" content="#000000">
+<!-- Windows Phone -->
+<meta name="msapplication-navbutton-color" content="#000000">
+<!-- iOS Safari -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+
+  
+
+
+  <!-- Syntax highlight in post pages -->
+
+  <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.2/styles/monokai_sublime.min.css">
+
+
+
+
+</head>
+
+<!-- HEAD End -->
+
+
+  <body>
+
+    
+<!-- Navigation Start -->
+
+<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+        <i class="fa fa-bars"></i>
+      </button>
+      
+        <a class="navbar-brand" href="/">
+      
+          <div>
+            
+              <img src="/img/black-lab-glass.ico" alt="">
+            
+            { Kyle Wong }
+          </div>
+        </a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+      <ul class="nav navbar-nav">
+        
+          <!-- Blog, Post, Tag and Error pages -->
+          
+            <li>
+            
+                <a href="/#about"> About </a>
+            
+            </li>
+          
+            <li>
+            
+              
+                <a href="/blog/"> Blog </a>
+              
+            
+            </li>
+          
+            <li>
+            
+                <a href="/#timeline"> Timeline </a>
+            
+            </li>
+          
+            <li>
+            
+                <a href="/#contact"> Contact </a>
+            
+            </li>
+          
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Navigation End -->
+
+
+    <section id="post" class="container content-section text-center">
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+
+          
+<!-- Swipe Instructions Start -->
+
+<div id="swipe-instruction">
+  <div>
+    <p><br><br><br></p>
+    <i id="hand-swipe" class="fa fa-hand-o-up"></i>
+    <p><strong>
+    
+      Did you know that you can navigate the posts by swiping left and right?
+    
+    </strong></p>
+    <button type="button" class="btn btn-default ok-btn close-swipe-instruction">
+      
+        Awesome!
+      
+    </button>
+  </div>
+</div>
+
+<!-- Swipe Instructions End -->
+
+
+          <h1><strong>如何不越狱实现微信自动抢红包？</strong></h1>
+          <h4>
+            <strong>10 Apr 2016</strong>
+            <small>
+              . category:
+              <a class="category" href="/categories/tech.html">
+                tech
+              </a>.
+              <a href="/tech/2016/04/10/how-to-rob-wechat-red-envelop-automatically.html#disqus_thread">Comments</a>
+              <br />
+              
+                <a class="tag" href="/tags/tutorial.html">#tutorial</a>
+              
+            </small>
+          </h4>
+
+          <h3 id="content">Content</h3>
+<div class="highlighter-rouge"><pre class="highlight"><code>1.Mach-o file format
+2.dylib create and injection
+3.Wechat analyze and hack
+4.Summary
+</code></pre>
+</div>
+
+<h3 id="mach-o-file-format">Mach-O file format</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Mach-o file format is the standard used to store program and library on disk in the Mac App Binary Interface(ABI). 
+</code></pre>
+</div>
+
+<p><img src="https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/mach_o_segments.gif" alt="Mach-o file format" /></p>
+
+<p>Codes below specifying the header/load commands data structure can be found in the &lt;mach-o/loader.h&gt; file.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/*
+ 	* The 32-bit mach header appears at the very beginning of the object file for
+ 	* 32-bit architectures.
+ 	*/
+	struct mach_header {
+	uint32_t	magic;		/* mach magic number identifier */
+	cpu_type_t	cputype;	/* cpu specifier */
+	cpu_subtype_t	cpusubtype;	/* machine specifier */
+	uint32_t	filetype;	/* type of file */
+	uint32_t	ncmds;		/* number of load commands */
+	uint32_t	sizeofcmds;	/* the size of all the load commands */
+	uint32_t	flags;		/* flags */
+	};
+
+/* Constant for the magic field of the mach_header (32-bit architectures) */
+#define	MH_MAGIC	0xfeedface	/* the mach magic number */
+#define MH_CIGAM	0xcefaedfe	/* NXSwapInt(MH_MAGIC) */
+
+/*
+ 	 * The 64-bit mach header appears at the very beginning of object files for
+ 	 * 64-bit architectures.
+ */
+	struct mach_header_64 {
+	uint32_t	magic;		/* mach magic number identifier */
+	cpu_type_t	cputype;	/* cpu specifier */
+	cpu_subtype_t	cpusubtype;	/* machine specifier */
+	uint32_t	filetype;	/* type of file */
+	uint32_t	ncmds;		/* number of load commands */
+	uint32_t	sizeofcmds;	/* the size of all the load commands */
+	uint32_t	flags;		/* flags */
+	uint32_t	reserved;	/* reserved */
+	};
+
+/*
+ 	 * The segment load command indicates that a part of this file is to be
+ 	 * mapped into the task's address space.  The size of this segment in memory,
+ 	 * vmsize, maybe equal to or larger than the amount to map from this file,
+ 	 * filesize.  The file is mapped starting at fileoff to the beginning of
+ 	 * the segment in memory, vmaddr.  The rest of the memory of the segment,
+ 	 * if any, is allocated zero fill on demand.  The segment's maximum virtual
+ 	 * memory protection and initial virtual memory protection are specified
+ 	 * by the maxprot and initprot fields.  If the segment has sections then the
+ 	 * section structures directly follow the segment command and their size is
+ 	 * reflected in cmdsize.
+ 	 */
+	struct segment_command { /* for 32-bit architectures */
+		uint32_t	cmd;		/* LC_SEGMENT */
+		uint32_t	cmdsize;	/* includes sizeof section structs */
+		char		segname[16];	/* segment name */
+		uint32_t	vmaddr;		/* memory address of this segment */
+		uint32_t	vmsize;		/* memory size of this segment */
+		uint32_t	fileoff;	/* file offset of this segment */
+		uint32_t	filesize;	/* amount to map from the file */
+		vm_prot_t	maxprot;	/* maximum VM protection */
+		vm_prot_t	initprot;	/* initial VM protection */
+		uint32_t	nsects;		/* number of sections in segment */
+		uint32_t	flags;		/* flags */
+	};
+
+/*
+ * The 64-bit segment load command indicates that a part of this file is to be
+ * mapped into a 64-bit task's address space.  If the 64-bit segment has
+ 	* sections then section_64 structures directly follow the 64-bit segment
+ 	* command and their size is reflected in cmdsize.
+ 	*/
+	struct segment_command_64 { /* for 64-bit architectures */
+	uint32_t	cmd;		/* LC_SEGMENT_64 */
+	uint32_t	cmdsize;	/* includes sizeof section_64 structs */
+	char		segname[16];	/* segment name */
+	uint64_t	vmaddr;		/* memory address of this segment */
+	uint64_t	vmsize;		/* memory size of this segment */
+	uint64_t	fileoff;	/* file offset of this segment */
+	uint64_t	filesize;	/* amount to map from the file */
+	vm_prot_t	maxprot;	/* maximum VM protection */
+	vm_prot_t	initprot;	/* initial VM protection */
+	uint32_t	nsects;		/* number of sections in segment */
+	uint32_t	flags;		/* flags */
+	};
+</code></pre>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Segment</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>__PAGEZERO</td>
+      <td>The first segment of an executable file.It is located at virtual memory location 0 and has no protection rights assigned, the combination of which causes accesses to NULL, a common C programming error, to immediately crash.</td>
+    </tr>
+    <tr>
+      <td>__TEXT</td>
+      <td>The segment contains <code class="highlighter-rouge">executable</code> code and other <code class="highlighter-rouge">read-only</code> data. To allow the kernel to map it directly from the executable into sharable memory, the static linker sets this segment’s virtual memory permissions to disallow writing. When the segment is mapped into memory, it can be shared among all processes interested in its contents.</td>
+    </tr>
+    <tr>
+      <td>__DATA</td>
+      <td>The segment contains writable data. The static linker sets the virtual memory permissions of this segment to allow both reading and writing. Because it is writable, the <code class="highlighter-rouge">__DATA</code> segment of a framework or other shared library is logically copied for each process linking with the library. When memory pages such as those making up the __DATA segment are readable and writable, the kernel marks them copy-on-write; therefore when a process writes to one of these pages, that process receives its own private copy of the page.</td>
+    </tr>
+    <tr>
+      <td>__OBJC</td>
+      <td>The segment contains data used by the Objective-C language runtime support library.</td>
+    </tr>
+    <tr>
+      <td>__IMPORT</td>
+      <td>The segment contains symbol stubs and non-lazy pointers to symbols not defined in the executable. This segment is generated only for executables targeted for the IA-32 architecture.</td>
+    </tr>
+    <tr>
+      <td>__LINKEDIT</td>
+      <td>The segment contains raw data used by the dynamic linker, such as symbol, string, and relocation table entries.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><a href="https://developer.apple.com/library/mac/documentation/DeveloperTools/Conceptual/MachORuntime/index.html#//apple_ref/doc/uid/20001298-89026">Find more details about Mach-o from Apple.</a></p>
+
+<p>With a WeChat.ipa downloaded from the jailbroken channel, we can find its inner content using MachOView:
+<img src="https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/wechat-load-commands-in-machoview-original.png" alt="wechat-load-commands-in-machoview-original" /></p>
+
+<p>It’s clear that the dylib link info is stored in the Load Commands(LC_LOAD_DYLIB) part. Henceforth, if we create a dylib and inject it into the binary by modifying the load commands, we might do something we want in WeChat.</p>
+
+<h3 id="dylib-create-and-injection">dylib create and injection.</h3>
+
+<p>1.Write your source code.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>//test.m
+__attribute__((constructor))
+static void dylibRuntimeInjection() {    		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * 		NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Hacked" 		message:@"Plugin for WeChat injected" delegate:nil 		cancelButtonTitle:@"哈哈" otherButtonTitles:nil, nil];
+   		[alertView show];
+  		});
+}
+</code></pre>
+</div>
+
+<p>ps. The constructor attribute causes the function to be called automatically before execution enters main (). Similarly, the destructor attribute causes the function to be called automatically after main () has completed or exit () has been called. Functions with these attributes are useful for initializing data that will be used implicitly during the execution of the program.<strong>attribute</strong>((constructor)) is not Standard C++. It is GCC’s extension.</p>
+
+<p>2.Compile the .m file(s) into dylib using clang.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>clang -arch armv7 -arch arm64 -isysroot $(xcodebuild -sdk iphoneos -version Path) -shared test.m -framework Foundation -framework UIKit -o test.dylib
+</code></pre>
+</div>
+
+<p>3.Inject the dylib into the binary file.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>optool install -c load -p "@executable_path/test.dylib" -t ./WeChat.app/WeChat
+cp ../test.dylib ./WeChat.app/
+</code></pre>
+</div>
+
+<p>p.s optool is a Mac command line app which helps you handle the Mach-O file.You may find its source code in Github.<a href="https://github.com/alexzielenski/optool">Clone optool</a>
+<img src="https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-load-commands-in-machoview-injected.png" alt="wechat-load-commands-in-machoview-injected" /></p>
+
+<p>4.Resign it with your certificate.
+	After injection, you may wanna install the ipa into your device to have a try. However, as the original one is signed with a certificate which you don’t have, the app will fail when launching as the signing identity doesn’t match.(Remember the dylib you created?) So, you have to resign it with your certificate, if possible, the bundle id might be also altered.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>codesign -fs "$certname" "Payload/${appname}.app/${pluginname}.dylib"
+codesign -fs "$certname" --no-strict --entitlements="$entitlements" "${tempDir}/Payload/${appname}.app"
+</code></pre>
+</div>
+
+<p>5.Install it using itools.(non-jailbroken device)
+	<img src="https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-plugin-injected.png" alt="wechat-plugin-injected" /></p>
+
+<h3 id="wechat-analyze-and-hack">Wechat analyze and hack</h3>
+
+<p>1.Design</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>a.	Find which class and selector you would like to hook.
+b.	Decide when a red envelop is available and choose a proper moment to open it.
+c.	Consider cases like there are several envelops avaliable. 
+d.	Provide interfaces for user to enable/disable this feature.
+e.	Write, compile, inject, resign, install, test and redo the former procedures until success.
+</code></pre>
+</div>
+
+<p>2.Find which class/selector to hook(method swizzle).</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>To debug a app without the source code, you need a jailbroken device. Install debugserver.app in it and login into the device using ssh. Launch the WeChat.app you want to debug and run the debugserver.app with the options attaching to the already-existed WeChat.app. Launch lldb and communicate with the debugserver over the air.
+</code></pre>
+</div>
+
+<p>You can found more details on my prior blog.<a href="http://kangwang1988.github.io/tech/2016/03/27/Debugging-with-lldb.html">Debugging with lldb.</a></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>After sometime of debugging and testing, we will found three classes interested in:
+</code></pre>
+</div>
+
+<p><img src="https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-red-envelop-nodeview.png" alt="wechat-red-envelop-nodeview" /></p>
+
+<p><img src="https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-red-envelop-homeview.png" alt="wechat-red-envelop-homeview" /></p>
+
+<p><img src="https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/wechat-red-envelop-detailcontroller.png" alt="wechat-red-envelop-detailcontroller" /></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Then, dump all the objc classes and its interfaces using class-dump.
+class-dump --arch arm64 ./WeChat.app/WeChat &gt; WeChat.apis
+</code></pre>
+</div>
+
+<p>From the WeChat.apis, we will get a list of the classes and corresponding selectors included in WeChat. Just take the WCPayC2CMessageNodeView for example.
+<img src="https://github.com/kangwang1988/kangwang1988.github.io/raw/master/img/WCPayC2CMessageNodeView-apis.png" alt="WCPayC2CMessageNodeView-apis" /></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>In a word, we will call the onClick method of WCPayC2CMessageNodeView when its `didMoveToSuperview` is called.
+</code></pre>
+</div>
+
+<p>3.The whold implementation of the plugin could be found in <a href="https://github.com/kangwang1988/WeChatPlugin">Github</a></p>
+
+<h3 id="summary">Summary</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Objective-C is famous for its powerful runtime support. With categories, method swizzling, you can do a lot of job as you wanna. When you wanna do some research or dig into its inner implementation, you might need a jailbroken device and a good use of lldb. Besides, hopper disassembler might also help you a lot. With a good knowledge of how the app works and what selector from which class you are interested in, you can modify it using a method swizzling, compile it into a dylib, modify the binary's load commands and inject the dylib, resign it and it will work on a non-jailbroken device.
+
+This article is only for researching, don't do anything illegal with it.
+</code></pre>
+</div>
+
+
+          
+<!-- Share Buttons Start -->
+<div>
+  <ul class="rrssb-buttons clearfix">
+    
+      <li class="rrssb-email">
+        <a href="mailto:?subject=如何不越狱实现微信自动抢红包？&body=https://kangwang1988.github.io/tech/2016/04/10/how-to-rob-wechat-red-envelop-automatically.html" data-proofer-ignore>
+          <span class="rrssb-icon">
+            <svg xmlns="https://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
+              <path d="M20.11 26.147c-2.335 1.05-4.36 1.4-7.124 1.4C6.524 27.548.84 22.916.84 15.284.84 7.343 6.602.45 15.4.45c6.854 0 11.8 4.7 11.8 11.252 0 5.684-3.193 9.265-7.398 9.3-1.83 0-3.153-.934-3.347-2.997h-.077c-1.208 1.986-2.96 2.997-5.023 2.997-2.532 0-4.36-1.868-4.36-5.062 0-4.75 3.503-9.07 9.11-9.07 1.713 0 3.7.4 4.6.972l-1.17 7.203c-.387 2.298-.115 3.3 1 3.4 1.674 0 3.774-2.102 3.774-6.58 0-5.06-3.27-8.994-9.304-8.994C9.05 2.87 3.83 7.545 3.83 14.97c0 6.5 4.2 10.2 10 10.202 1.987 0 4.09-.43 5.647-1.245l.634 2.22zM16.647 10.1c-.31-.078-.7-.155-1.207-.155-2.572 0-4.596 2.53-4.596 5.53 0 1.5.7 2.4 1.9 2.4 1.44 0 2.96-1.83 3.31-4.088l.592-3.72z"
+              />
+            </svg>
+          </span>
+          <span class="rrssb-text">email</span>
+        </a>
+      </li>
+    
+    
+    
+      <li class="rrssb-twitter">
+        <a href="https://twitter.com/share?url=https://kangwang1988.github.io/tech/2016/04/10/how-to-rob-wechat-red-envelop-automatically.html&text=如何不越狱实现微信自动抢红包？"
+        class="popup">
+          <span class="rrssb-icon"><svg xmlns="https://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><path d="M24.253 8.756C24.69 17.08 18.297 24.182 9.97 24.62c-3.122.162-6.22-.646-8.86-2.32 2.702.18 5.375-.648 7.507-2.32-2.072-.248-3.818-1.662-4.49-3.64.802.13 1.62.077 2.4-.154-2.482-.466-4.312-2.586-4.412-5.11.688.276 1.426.408 2.168.387-2.135-1.65-2.73-4.62-1.394-6.965C5.574 7.816 9.54 9.84 13.802 10.07c-.842-2.738.694-5.64 3.434-6.48 2.018-.624 4.212.043 5.546 1.682 1.186-.213 2.318-.662 3.33-1.317-.386 1.256-1.248 2.312-2.4 2.942 1.048-.106 2.07-.394 3.02-.85-.458 1.182-1.343 2.15-2.48 2.71z"/></svg></span>
+          <span class="rrssb-text">twitter</span>
+        </a>
+      </li>
+    
+    
+      <li class="rrssb-linkedin">
+      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://kangwang1988.github.io/tech/2016/04/10/how-to-rob-wechat-red-envelop-automatically.html" class="popup">
+        <span class="rrssb-icon">
+          <svg xmlns="https://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
+            <path d="M25.424 15.887v8.447h-4.896v-7.882c0-1.98-.71-3.33-2.48-3.33-1.354 0-2.158.91-2.514 1.802-.13.315-.162.753-.162 1.194v8.216h-4.9s.067-13.35 0-14.73h4.9v2.087c-.01.017-.023.033-.033.05h.032v-.05c.65-1.002 1.812-2.435 4.414-2.435 3.222 0 5.638 2.106 5.638 6.632zM5.348 2.5c-1.676 0-2.772 1.093-2.772 2.54 0 1.42 1.066 2.538 2.717 2.546h.032c1.71 0 2.77-1.132 2.77-2.546C8.056 3.593 7.02 2.5 5.344 2.5h.005zm-2.48 21.834h4.896V9.604H2.867v14.73z"
+            />
+          </svg>
+        </span>
+        <span class="rrssb-text">linkedin</span>
+      </a>
+      </li>
+    
+    
+    
+    
+    
+    
+    
+  </ul>
+</div>
+
+<!-- Share Buttons End -->
+
+
+          
+
+
+          <hr />
+
+          
+          <div class="author row">
+            <img class="col-xs-4 col-sm-3 col-md-2" src="/img/author.png" alt="Me" />
+            <p class="col-xs-8 col-sm-9 col-md-10">
+              Kyle is a iOS developer in China. He likes mathematics,physics,art,computer science. In his spare time, he would like to read books, write some codes he likes, go swimming or hiking.
+            </p>
+          </div>
+          
+        </div>
+      </div>
+    </section>
+
+    
+ <!-- Footer Start -->
+
+<footer>
+
+    
+<!-- Social Buttons Start -->
+
+<ul class="list-inline social-buttons">
+  
+    <li><a href="https://weibo.com/" target="_blank"><i class="fa fa-weibo fa-fw"></i></a></li>
+  
+    <li><a href="https://github.com/kangwang1988" target="_blank"><i class="fa fa-github fa-fw"></i></a></li>
+  
+    <li><a href="/feed.xml" target="_blank"><i class="fa fa-rss fa-fw"></i></a></li>
+  
+    <li><a href="https://facebook.com/" target="_blank"><i class="fa fa-facebook fa-fw"></i></a></li>
+  
+    <li><a href="https://twitter.com/" target="_blank"><i class="fa fa-twitter fa-fw"></i></a></li>
+  
+</ul>
+
+<!-- Social Buttons End -->
+
+
+    <p><br><br></p>
+
+    <div class="container text-center">
+      <p>Copyright &copy; Kyle Wong 2016</p>
+    </div>
+</footer>
+
+<p><br><br><br><br><br><br></p>
+
+<!-- Footer End -->
+
+
+    
+<!-- Javascript Start -->
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<!-- Plugin JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<!--* Start Bootstrap - Grayscale Bootstrap Theme (http://startbootstrap.com)
+* Code licensed under the Apache License v2.0.
+* For details, see http://www.apache.org/licenses/LICENSE-2.0.-->
+<script>
+function toggleNavCollapse(){50<$(".navbar").offset().top?$(".navbar-fixed-top").addClass("top-nav-collapse"):$(".navbar-fixed-top").removeClass("top-nav-collapse");}
+$(document).ready(toggleNavCollapse);
+$(window).scroll(toggleNavCollapse);$(function(){$("a.page-scroll").bind("click",function(b){var a=$(this);$("html, body").stop().animate({scrollTop:$(a.attr("href")).offset().top-50},1500,"easeInOutExpo",function(){a.blur()});b.preventDefault()})});$(".navbar-collapse ul li a").click(function(){$(".navbar-toggle:visible").click()});
+</script>
+
+
+
+
+
+  <!-- Syntax highlight in post pages-->
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.2/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+  <!-- Share buttons Start -->
+
+  <script src="/js/rrssb.min.js"></script>
+
+  <!-- Share buttons End -->
+
+
+
+
+
+<script>
+function addTohistory() {
+  if (!window.location.host.startsWith("127.0.0.1")) {
+    history.pushState({}, '如何不越狱实现微信自动抢红包？', 'https://kangwang1988.github.io/tech/2016/04/10/how-to-rob-wechat-red-envelop-automatically.html');
+  }
+}
+</script>
+
+
+
+  <!-- Post Gesture Navigation Start -->
+
+  <script type="text/javascript" src="/js/hammer.min.js"></script>
+
+  <script>
+    var post = document.getElementById('post');
+
+    new Hammer(post).on('swipeleft', function(event) {
+      addTohistory();
+      
+        document.location.replace("/tech/2016/03/27/Debugging-with-lldb.html");
+      
+    });
+
+    new Hammer(post).on('swiperight', function(event) {
+      addTohistory();
+      
+        document.location.replace("/tech/2016/04/10/mactalk-reading-notes.html");
+      
+    });
+  </script>
+
+  <!-- Post Gesture Navigation Start -->
+
+
+
+
+
+
+
+
+
+  <!-- Swipe Instructions for Post Start -->
+
+  <script>
+    $(document).ready(function(){
+      if(!localStorage.getItem('post-swipeshowed')){
+        $("#swipe-instruction").fadeIn();
+        $("#swipe-instruction .close-swipe-instruction").click(function(){
+          $("#swipe-instruction").fadeOut();
+        });
+        localStorage.setItem('post-swipeshowed', true);
+      }
+    });
+  </script>
+
+  <!-- Swipe Instructions for Post End -->
+
+
+
+<!-- Javascript End -->
+
+
+  </body>
+</html>
+
+<!-- Post Layout End -->
