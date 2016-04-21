@@ -2,7 +2,7 @@
 layout: post
 comments: true
 section-type: post
-title: 如何使用脚本去模拟Android APP请求
+title: 如何用脚本模拟Android APP内带签名的网络请求
 category: tech
 tags: [ 'tutorial' ]
 ---

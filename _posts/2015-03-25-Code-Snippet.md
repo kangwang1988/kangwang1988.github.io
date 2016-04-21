@@ -250,3 +250,7 @@ tags: [ 'technique', 'code']
 	cp ../test.dylib ./WeChat.app/
 	codesign -fs "iPhone Distribution" ./WeChat.app/test.dylib
 	codesign -fs "iPhone Distribution" ./WeChat.app
+	
+#### Git set default commit message
+	git config commit.template absolute-path-to-your-gitmessage.txt
+	Attention:Use the absolute path instead of the relative one.It seems that the relative one doesn't work.
