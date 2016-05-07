@@ -2,7 +2,7 @@
 layout: post
 comments: true
 section-type: post
-title: 在MAMP环境下，启动自签名的基于IP的https服务
+title: mac启动自签名的基于IP的https服务
 category: tech
 tags: [ 'tutorial' ]
 ---
