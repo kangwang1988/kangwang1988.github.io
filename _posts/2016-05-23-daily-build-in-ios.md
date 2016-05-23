@@ -33,20 +33,24 @@ tags: [ 'tutorial' ]
 		User yourusername
 	当有多个公钥私钥对存在时，除过生成公钥私钥置于~/.ssh目录下外，还需要添加类似上述配置。
 	2.将公钥添加到git仓库中的sshkey中以便后续使用。
+	
 [git_common.sh](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/others/git_common.sh)
 ###	编译和签名
 	xcodebuild -workspace "$workspaceName" -scheme "$schemeName" -sdk "$sdkName" -configuration "$configuration" GCC_PREPROCESSOR_DEFINITIONS="$gccMacros" PROVISIONING_PROFILE="$provisionUUID" CONFIGURATION_BUILD_DIR="$tmpSysRoot" BUILT_PRODUCTS_DIR="$tmpSysRoot"
 	编译分发时，sdkName选择iphoneos,configuration如Release或Debug，自定义宏请写入gccMacros,需要用到的provision建议提前安装到系统并用iPhone Configuration Utility查看无误，将其Profile Identifier写入provisionUUID。
 	查看可用的编译设置使用xcodebuild -showBuildSettings
 	查看可用的scheme使用xcodebuild -list
+	
 [compile_common.sh](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/others/compile_common.sh)
 ### 打包
 	编译成功后生成的.app文件拷贝到一个Payload文件夹中后，压缩并将其重命名为xxx.ipa即可得到需要的app包。
+	
 [package_common.sh](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/others/package_common.sh)
 ### OTA安装
 	ipa包生成后，可利用网页嵌入itms-service连接来下载:
 	itms-services://?action=download-manifest&url=https://url-to-plist.plist
 	plist文件包含了需要下载的ipa的相关信息和实际的ipa链接地址。如果遇到没法将plist文件部署到https连接的问题，可使用基于ip的自签名ssl证书。
+	
 [ip-based self-signed ssl certificate](http://kangwang1988.github.io/tech/2016/05/07/start-ip-based-and-self-signed-https-service-in-macosx.html)
 ### 代码/资源检查等插件
 	可在run_release.sh中某个时间点添加代码/资源检查等功能的shell调用。
