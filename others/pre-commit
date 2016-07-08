@@ -1,0 +1,125 @@
+#!/bin/sh
+#
+# An example hook script to verify what is about to be committed.
+# Called by "git commit" with no arguments.  The hook should
+# exit with non-zero status after issuing an appropriate message if
+# it wants to stop the commit.
+
+errno=""
+illegal_contents=()
+
+function read_all_illegal_contens {
+	if [[ ${#illegal_contents} == 0 ]];then
+		#read global filter values
+		for ((i=0;i>=0;i++))
+		do
+			value=`git config --global filter..value$i`
+			if [[ ${#value} > 0 ]];then
+				if [[ ! " ${illegal_contents[@]} " =~ " ${value} " ]]; then
+					illegal_contents+=($value)
+				fi
+			else
+				break
+			fi
+		done
+		#read current repository filter values
+		remoteurl=`git config --get remote.origin.url`
+		#process ssh style.
+		git_regex="^(git@[^:]+)"
+		http_regex="(://[^/]+)"
+		if [[ $remoteurl =~ $git_regex ]];then
+			git_host=`echo ${BASH_REMATCH[0]} | cut -b 5-`
+		elif [[ $remoteurl =~ $http_regex ]];then
+			git_host=`echo ${BASH_REMATCH[0]} | cut -b 4-`
+		fi
+		for ((i=0;i>=0;i++))
+		do
+			value=`git config --global filter."$git_host".value$i`
+			if [[ ${#value} > 0 ]];then
+				if [[ ! " ${illegal_contents[@]} " =~ " ${value} " ]]; then
+					illegal_contents+=($value)
+				fi
+			else
+				break
+			fi
+		done
+	fi
+}
+
+function check_if_commitline_contains_illegal {
+	content=$3
+	read_all_illegal_contens
+	illegal_contents_len=${#illegal_contents[@]}
+	for ((i=0;i<$illegal_contents_len;i++))
+	do
+		illegal_content=${illegal_contents[$i]}
+		if [[ $content == *$illegal_content* ]];then
+			errno="$illegal_content"
+			return 1
+		fi
+	done
+	return 0
+} 
+
+if git rev-parse --verify HEAD >/dev/null 2>&1
+then
+	against=HEAD
+else
+	# Initial commit: diff against an empty tree object
+	against=4b825dc642cb6eb9a060e54bf8d69288fbee4904
+fi
+
+# Redirect output to stderr.
+exec 1>&2
+
+diff_content=$(git diff --cached)
+IFS=$'\n' read -rd '' -a diff_lines <<<"$diff_content"
+diff_lines_cnt=${#diff_lines[@]}
+cur_filename=""
+cur_chunk=""
+chunk_toline_from=0
+chunk_toline_len=0
+for ((j=0;j<$diff_lines_cnt;j++));do
+	line=${diff_lines[j]}
+	file_prefix="diff --git a/"
+	chunk_regex="^(@@ [-+][0-9]+,[0-9]+ [-+][0-9]+,[0-9]+ @@)"
+	if [[ $line == $file_prefix* ]];then
+		file_prefix_len=${#file_prefix}
+		cur_filename=`echo "$line" | cut -b $((file_prefix_len))-`
+		cur_filename=`echo ${cur_filename/ b\/*/}`
+	fi
+	if [[ $line =~  $chunk_regex ]];then
+		cur_chunk=${BASH_REMATCH[0]}
+		chunk_fromline_from=0
+		chunk_fromline_len=0
+		read chunk_fromline_from chunk_fromline_len chunk_toline_from chunk_toline_len<<<${cur_chunk//[^0-9]/ }
+	fi
+	if [[ ${#cur_filename} != 0 ]] && [[ ${#cur_chunk} != 0 ]] && [[ $line == "+"* ]];then
+		line=`echo "$line" | cut -b 2-`
+		check_if_commitline_contains_illegal "$cur_filename" "$cur_chunk" "$line"
+		exists=$?
+		if [[ $exists == 1 ]];then
+			echo ""
+cat <<EOF
+Error: Attempt to commit line
+	$line
+where illegal content:
+	$errno 
+	is included.
+To be allowed to commit,it is advisable to modify the file
+	$cur_filename
+at chunk
+	line:$chunk_toline_from~line:$(($chunk_toline_from+$chunk_toline_len)).
+EOF
+		exit 1
+		fi
+	fi
+	if [ $j == $((diff_lines_cnt-1)) ] || [[ ${diff_lines[j+1]} =~  $chunkRegex ]];then
+		cur_chunk=""
+	fi
+	if [ $j == $((diff_lines_cnt-1)) ] || [[ ${diff_lines[j+1]} == $file_prefix* ]];then
+		cur_filename=""
+	fi
+done
+# If there are whitespace errors, print the offending file names and fail.
+exec git diff-index --check --cached $against --
