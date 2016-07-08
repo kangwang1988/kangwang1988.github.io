@@ -6,15 +6,13 @@ title: 如何在git提交时避免提交敏感信息
 category: tech
 tags: [ 'tutorial' ]
 ---
-
-
 ### ###引言
 
 ​	如何检查你的git提交内容是否包含敏感信息？如何设置默认的git提交消息？如何验证客户端的内容是否具有良好的风格？怎么在服务端强制客户端提交符合格式的git记录？如何在git的各个阶段通知相关人员？如何针对不同的仓库使用自定义的敏感词过滤？
 
 ​	这些问题的答案就在于git提供的hook功能。
 
-## ###git hooks
+## ###git钩子
 
 ​	git hook(钩子)是一种方便用户在git的各阶段执行自定义操作的机制，默认情况下，所有的hook都存储在git仓库的.git/hooks文件夹里。
 
@@ -60,23 +58,21 @@ tags: [ 'tutorial' ]
 
 ​	下面就以敏感词过滤为例说明如何正确地使用git的pre-commit完成用户所需功能。
 
-​	
+​	1. git提供了一组后缀为.sample的钩子，将其pre-commit.sample重命名为pre-commit至于仓		库.git/hooks下即可保证pre-commit在提交前被执行。
 
-1.git提供了一组后缀为.sample的钩子，将其pre-commit.sample重命名为pre-commit至于仓库.git/hooks下即可保证pre-commit在提交前被执行。
+​	2.git config --global配置全局和不同仓库的敏感词列表。
 
-2.git config --global配置全局和不同仓库的敏感词列表。
+​	3.拷贝(如无则创建)git-template/hooks文件夹，并设置为init.templatedir,这样每次用户执行git init(任意一次)时，都会将其git-templates目录下的内容全部拷贝到当前仓库的.git目录下。
 
-3.拷贝(如无则创建)git-template/hooks文件夹，并设置为init.templatedir,这样每次用户执行git init(任意一次)时，都会将其git-templates目录下的内容全部拷贝到当前仓库的.git目录下。
-
-4.编辑pre-commit文件，提取提交内容并判断是否包含了已配置的敏感词列表，如果包含，错误提醒用户并终止commit。
-
-
+​	4.编辑pre-commit文件，提取提交内容并判断是否包含了已配置的敏感词列表，如果包含，错误提醒用户并终止commit。
 
 ### ###源代码
 
-[sh]()
+[commit-guard.sh](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/others/commit-guard.sh)
 
-[pre-commit]()
+[pre-commit](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/others/pre-commit)
+
+​	下载并将上述两个文件置于同目录下后，根据需要修改sh中的敏感词字段，再执行commit-guard.sh即可。
 
 ### ###参考资料
 
