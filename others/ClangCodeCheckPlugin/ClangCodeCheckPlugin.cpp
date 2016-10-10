@@ -3,6 +3,8 @@
 #include "clang/AST/ASTConsumer.h"
 #include "clang/Frontend/CompilerInstance.h"
 #include "clang/AST/RecursiveASTVisitor.h"
+#include<iostream>
+#include<sstream>
 /**
  * @discussion Enviroment:clang-3.9.1(release 39)
  * In terminal, use "/opt/llvm/llvm_build/bin/clang ../test.m -Xclang -load -Xclang lib/Debug/ClangCodeCheckPlugin.dylib -Xclang -plugin -Xclang ClangCodeCheckPlugin".
@@ -14,27 +16,93 @@
  */
 using namespace clang;
 using namespace std;
- 
+static string SSrcRootPath = "";
 namespace
 {
     class CodeCheckClassVisitor : public RecursiveASTVisitor<CodeCheckClassVisitor>
     {
     private:
         ASTContext *context;
+        string objcInterfaceDecl;
+        unsigned isInstanceMethod;
+        string objcMethodDecl;
+        string objcMethodSrcCode;
+        string objcMessageExpr;
     public:
         void setContext(ASTContext &context)
         {
             this->context = &context;
         }
-        bool VisitObjCInterfaceDecl(ObjCInterfaceDecl *declaration)
-        {
-//            printf("ObjClass: %s\n", declaration->getNameAsString().c_str());
-//            checkForLowercasedName(declaration);
-//            disable this check temporary
-//            checkForLowercasedName(declaration);
-            checkForUnderscoreInName(declaration);
+        bool VisitDecl(Decl *decl) {
+            if(isa<ObjCInterfaceDecl>(decl)){
+                ObjCInterfaceDecl *interDecl = (ObjCInterfaceDecl *)decl;
+                ostringstream stringStream;
+                stringStream<<interDecl->getNameAsString();
+                objcInterfaceDecl = stringStream.str();
+            }
+            if(isa<ObjCMethodDecl>(decl)){
+                ObjCMethodDecl *methodDecl = (ObjCMethodDecl *)decl;
+                ostringstream stringStream;
+                isInstanceMethod = methodDecl->isInstanceMethod();
+                stringStream<<methodDecl->getSelector().getAsString();
+                objcMethodDecl = stringStream.str();
+                if(methodDecl->hasBody()){
+                    Stmt *methodBody = methodDecl->getBody();
+                    objcMethodSrcCode.assign(context->getSourceManager().getCharacterData(methodBody->getSourceRange().getBegin()), methodBody->getSourceRange().getEnd().getRawEncoding()-methodBody->getSourceRange().getBegin().getRawEncoding()+1);
+                }
+            }
             return true;
         }
+
+        bool VisitObjCInterfaceDecl(ObjCInterfaceDecl *declaration)
+        {
+            return true;
+        }
+        
+        bool VisitStmt(Stmt *s) {
+            if(isa<ObjCMessageExpr>(s))
+            {
+                ObjCMessageExpr *objcExpr = (ObjCMessageExpr*)s;
+                ostringstream stringStream;
+                ObjCMessageExpr::ReceiverKind kind = objcExpr->getReceiverKind();
+                string clsPref = "",superPref = "";
+                switch (kind) {
+                    case ObjCMessageExpr::Class:
+                        clsPref = "+";
+                        break;
+                    case ObjCMessageExpr::Instance:
+                        clsPref = "-";
+                        break;
+                    case ObjCMessageExpr::SuperClass:
+                        clsPref = "+";
+                        superPref = "(super)";
+                        break;
+                    case ObjCMessageExpr::SuperInstance:
+                        clsPref = "-";
+                        superPref = "(super)";
+                        break;
+                    default:
+                        break;
+                }
+                string receiverType =objcExpr->getReceiverType().getAsString();
+                size_t pos = receiverType.find(" ");
+                if(pos!=string::npos){
+                    receiverType = receiverType.substr(0,pos);
+                }
+                stringStream<<receiverType<<" "<<objcExpr->getSelector().getAsString();
+                objcMessageExpr = stringStream.str();
+                string filename = context->getSourceManager().getFilename(s->getSourceRange().getBegin()).str();
+                pos = filename.find(SSrcRootPath);
+                if(pos!=string::npos){
+                    filename = filename.substr(SSrcRootPath.length(),filename.length()-SSrcRootPath.length());
+                    cout<<filename<<endl;
+                    cout<<(isInstanceMethod?"-":"+")<<"["<<objcInterfaceDecl<<" "<<objcMethodDecl<<"] call "<<clsPref<<"["<<objcMessageExpr<<"]"<<endl;
+                    cout<<objcMethodSrcCode<<endl;
+                }
+            }
+            return true;
+        }
+        
         void checkForLowercasedName(ObjCInterfaceDecl *declaration)
         {
             StringRef name = declaration->getName();
@@ -51,8 +119,8 @@ namespace
             size_t underscorePos = declaration->getName().find('_');
             if (underscorePos != StringRef::npos) {
                 DiagnosticsEngine &diagEngine = context->getDiagnostics();
-                unsigned diagID = diagEngine.getCustomDiagID(DiagnosticsEngine::Error, "Class name with `_` forbidden");
                 SourceLocation location = declaration->getLocation().getLocWithOffset(underscorePos);
+                unsigned diagID = diagEngine.getCustomDiagID(DiagnosticsEngine::Error, "[KWLM] Class name with `_` forbidden");
                 diagEngine.Report(location, diagID);
             }
         }
@@ -77,9 +145,12 @@ namespace
         {
             return unique_ptr<CodeCheckConsumer>(new CodeCheckConsumer);
         }
-        
         bool ParseArgs(const CompilerInstance &CI, const
                        std::vector<std::string>& args) {
+            size_t cnt = args.size();
+            if(cnt == 1){
+                SSrcRootPath = args.at(0);
+            }
             return true;
         }
     };
