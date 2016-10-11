@@ -5,6 +5,7 @@
 #include "clang/AST/RecursiveASTVisitor.h"
 #include<iostream>
 #include<sstream>
+#include "json.hpp"
 /**
  * @discussion Enviroment:clang-3.9.1(release 39)
  * In terminal, use "/opt/llvm/llvm_build/bin/clang ../test.m -Xclang -load -Xclang lib/Debug/ClangCodeCheckPlugin.dylib -Xclang -plugin -Xclang ClangCodeCheckPlugin".
@@ -16,7 +17,13 @@
  */
 using namespace clang;
 using namespace std;
+using namespace nlohmann;
 static string SSrcRootPath = "";
+static string kTokenSeperator="@";
+static string kKeyInterfSelDictFilename = "filename";
+static string kKeyInterfSelDictSource = "source";
+static string kKeyInterfSelDictRange = "range";
+static string kKeyInterfSelDictCallees = "callee";
 namespace
 {
     class CodeCheckClassVisitor : public RecursiveASTVisitor<CodeCheckClassVisitor>
@@ -24,9 +31,11 @@ namespace
     private:
         ASTContext *context;
         string objcInterfaceDecl;
-        unsigned isInstanceMethod;
+        unsigned objcIsInstanceMethod;
         string objcMethodDecl;
         string objcMethodSrcCode;
+        string objcMethodFilename;
+        string objcMethodRange;
         string objcMessageExpr;
     public:
         void setContext(ASTContext &context)
@@ -43,12 +52,23 @@ namespace
             if(isa<ObjCMethodDecl>(decl)){
                 ObjCMethodDecl *methodDecl = (ObjCMethodDecl *)decl;
                 ostringstream stringStream;
-                isInstanceMethod = methodDecl->isInstanceMethod();
+                objcIsInstanceMethod = methodDecl->isInstanceMethod();
                 stringStream<<methodDecl->getSelector().getAsString();
                 objcMethodDecl = stringStream.str();
                 if(methodDecl->hasBody()){
                     Stmt *methodBody = methodDecl->getBody();
-                    objcMethodSrcCode.assign(context->getSourceManager().getCharacterData(methodBody->getSourceRange().getBegin()), methodBody->getSourceRange().getEnd().getRawEncoding()-methodBody->getSourceRange().getBegin().getRawEncoding()+1);
+                    objcMethodSrcCode.assign(context->getSourceManager().getCharacterData(methodBody->getSourceRange().getBegin()),methodBody->getSourceRange().getEnd().getRawEncoding()-methodBody->getSourceRange().getBegin().getRawEncoding()+1);
+                    objcMethodFilename = context->getSourceManager().getFilename(methodBody->getSourceRange().getBegin()).str();
+                    size_t pos = objcMethodFilename.find(SSrcRootPath);
+                    if(pos!=string::npos){
+                        objcMethodFilename = objcMethodFilename.substr(SSrcRootPath.length(),objcMethodFilename.length()-SSrcRootPath.length());
+                        ostringstream stringStream;
+                        stringStream<<methodBody->getSourceRange().getBegin().getRawEncoding()<<kTokenSeperator<<methodBody->getSourceRange().getEnd().getRawEncoding();
+                        objcMethodRange = stringStream.str();
+                        cout<<endl<<"Filename:"<<objcMethodFilename<<endl<<"MethodName:"<<(objcIsInstanceMethod?"-":"+")<<"["<<objcInterfaceDecl<<" "<<objcMethodDecl<<"]"<<endl<<"SourceCode:"<<objcMethodSrcCode<<endl<<"CodeRange:"<<objcMethodRange<<endl;
+                    }
+                    else
+                        objcMethodFilename = "";
                 }
             }
             return true;
@@ -89,12 +109,8 @@ namespace
                 }
                 stringStream<<receiverType<<" "<<objcExpr->getSelector().getAsString();
                 objcMessageExpr = stringStream.str();
-                string filename = context->getSourceManager().getFilename(s->getSourceRange().getBegin()).str();
-                pos = filename.find(SSrcRootPath);
-                if(pos!=string::npos){
-                    filename = filename.substr(SSrcRootPath.length(),filename.length()-SSrcRootPath.length());
-                    cout<<filename<<endl<<(isInstanceMethod?"-":"+")<<"["<<objcInterfaceDecl<<" "<<objcMethodDecl<<"] call "<<clsPref<<"["<<objcMessageExpr<<"]"<<endl;
-                }
+                if(objcMethodFilename.length())
+                    cout<<"Call:"<<clsPref<<"["<<objcMessageExpr<<"]"<<endl;
             }
             return true;
         }

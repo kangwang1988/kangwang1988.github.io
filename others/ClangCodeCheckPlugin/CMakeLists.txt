@@ -28,7 +28,6 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}
   -Wall
   -Wno-unused-parameter
   -Wwrite-strings
-  -fno-exceptions 
   -fno-rtti")
 
 set (CMAKE_MODULE_LINKER_FLAGS "-Wl,-flat_namespace -Wl,-undefined -Wl,suppress")
@@ -116,6 +115,7 @@ set (USER_LIBS
 
 add_clang_plugin(ClangCodeCheckPlugin 
   ClangCodeCheckPlugin.cpp
+  json.hpp
 )
 
 set_target_properties(ClangCodeCheckPlugin PROPERTIES
