@@ -53,12 +53,10 @@ namespace
             }
             return true;
         }
-
         bool VisitObjCInterfaceDecl(ObjCInterfaceDecl *declaration)
         {
             return true;
         }
-        
         bool VisitStmt(Stmt *s) {
             if(isa<ObjCMessageExpr>(s))
             {
@@ -95,14 +93,11 @@ namespace
                 pos = filename.find(SSrcRootPath);
                 if(pos!=string::npos){
                     filename = filename.substr(SSrcRootPath.length(),filename.length()-SSrcRootPath.length());
-                    cout<<filename<<endl;
-                    cout<<(isInstanceMethod?"-":"+")<<"["<<objcInterfaceDecl<<" "<<objcMethodDecl<<"] call "<<clsPref<<"["<<objcMessageExpr<<"]"<<endl;
-                    cout<<objcMethodSrcCode<<endl;
+                    cout<<filename<<endl<<(isInstanceMethod?"-":"+")<<"["<<objcInterfaceDecl<<" "<<objcMethodDecl<<"] call "<<clsPref<<"["<<objcMessageExpr<<"]"<<endl;
                 }
             }
             return true;
         }
-        
         void checkForLowercasedName(ObjCInterfaceDecl *declaration)
         {
             StringRef name = declaration->getName();
@@ -140,13 +135,11 @@ namespace
     class CodeCheckASTAction : public PluginASTAction
     {
     public:
-        unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &Compiler,
-                                                      llvm::StringRef InFile)
+        unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &Compiler,llvm::StringRef InFile)
         {
             return unique_ptr<CodeCheckConsumer>(new CodeCheckConsumer);
         }
-        bool ParseArgs(const CompilerInstance &CI, const
-                       std::vector<std::string>& args) {
+        bool ParseArgs(const CompilerInstance &CI, const std::vector<std::string>& args) {
             size_t cnt = args.size();
             if(cnt == 1){
                 SSrcRootPath = args.at(0);
@@ -155,6 +148,6 @@ namespace
         }
     };
 }
- 
+
 static clang::FrontendPluginRegistry::Add<CodeCheckASTAction>
 X("ClangCodeCheckPlugin", "ClangCodeCheckPlugin");
