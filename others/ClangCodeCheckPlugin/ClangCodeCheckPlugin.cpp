@@ -1,11 +1,13 @@
+#include<iostream>
+#include<sstream>
+
 #include "clang/Frontend/FrontendPluginRegistry.h"
 #include "clang/AST/AST.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/Frontend/CompilerInstance.h"
 #include "clang/AST/RecursiveASTVisitor.h"
-#include<iostream>
-#include<sstream>
-#include "json.hpp"
+
+#include "CodeCheckHelper.h"
 /**
  * @discussion Enviroment:clang-3.9.1(release 39)
  * In terminal, use "/opt/llvm/llvm_build/bin/clang ../test.m -Xclang -load -Xclang lib/Debug/ClangCodeCheckPlugin.dylib -Xclang -plugin -Xclang ClangCodeCheckPlugin".
@@ -17,22 +19,16 @@
  */
 using namespace clang;
 using namespace std;
-using namespace nlohmann;
-static string SSrcRootPath = "";
-static string kTokenSeperator="@";
-static string kKeyInterfSelDictFilename = "filename";
-static string kKeyInterfSelDictSource = "source";
-static string kKeyInterfSelDictRange = "range";
-static string kKeyInterfSelDictCallees = "callee";
+extern string gSrcRootPath;
 namespace
 {
     class CodeCheckClassVisitor : public RecursiveASTVisitor<CodeCheckClassVisitor>
     {
     private:
         ASTContext *context;
-        string objcInterfaceDecl;
+        string objcCls;
         unsigned objcIsInstanceMethod;
-        string objcMethodDecl;
+        string objcSelector;
         string objcMethodSrcCode;
         string objcMethodFilename;
         string objcMethodRange;
@@ -43,29 +39,29 @@ namespace
             this->context = &context;
         }
         bool VisitDecl(Decl *decl) {
-            if(isa<ObjCInterfaceDecl>(decl)){
-                ObjCInterfaceDecl *interDecl = (ObjCInterfaceDecl *)decl;
+            if(isa<ObjCImplDecl>(decl)){
+                ObjCImplDecl *interDecl = (ObjCImplDecl *)decl;
                 ostringstream stringStream;
                 stringStream<<interDecl->getNameAsString();
-                objcInterfaceDecl = stringStream.str();
+                objcCls = stringStream.str();
             }
             if(isa<ObjCMethodDecl>(decl)){
                 ObjCMethodDecl *methodDecl = (ObjCMethodDecl *)decl;
                 ostringstream stringStream;
                 objcIsInstanceMethod = methodDecl->isInstanceMethod();
                 stringStream<<methodDecl->getSelector().getAsString();
-                objcMethodDecl = stringStream.str();
+                objcSelector = stringStream.str();
                 if(methodDecl->hasBody()){
                     Stmt *methodBody = methodDecl->getBody();
                     objcMethodSrcCode.assign(context->getSourceManager().getCharacterData(methodBody->getSourceRange().getBegin()),methodBody->getSourceRange().getEnd().getRawEncoding()-methodBody->getSourceRange().getBegin().getRawEncoding()+1);
                     objcMethodFilename = context->getSourceManager().getFilename(methodBody->getSourceRange().getBegin()).str();
-                    size_t pos = objcMethodFilename.find(SSrcRootPath);
+                    size_t pos = objcMethodFilename.find(gSrcRootPath);
                     if(pos!=string::npos){
-                        objcMethodFilename = objcMethodFilename.substr(SSrcRootPath.length(),objcMethodFilename.length()-SSrcRootPath.length());
+                        objcMethodFilename = objcMethodFilename.substr(gSrcRootPath.length(),objcMethodFilename.length()-gSrcRootPath.length());
                         ostringstream stringStream;
-                        stringStream<<methodBody->getSourceRange().getBegin().getRawEncoding()<<kTokenSeperator<<methodBody->getSourceRange().getEnd().getRawEncoding();
+                        stringStream<<methodBody->getSourceRange().getBegin().getRawEncoding()<<"-"<<methodBody->getSourceRange().getEnd().getRawEncoding();
                         objcMethodRange = stringStream.str();
-                        cout<<endl<<"Filename:"<<objcMethodFilename<<endl<<"MethodName:"<<(objcIsInstanceMethod?"-":"+")<<"["<<objcInterfaceDecl<<" "<<objcMethodDecl<<"]"<<endl<<"SourceCode:"<<objcMethodSrcCode<<endl<<"CodeRange:"<<objcMethodRange<<endl;
+                        CodeCheckHelper::sharedInstance()->appendObjcClsMethod(objcIsInstanceMethod, objcCls, objcSelector, objcMethodFilename, methodBody->getSourceRange().getBegin().getRawEncoding(),methodBody->getSourceRange().getEnd().getRawEncoding(), objcMethodSrcCode);
                     }
                     else
                         objcMethodFilename = "";
@@ -109,8 +105,9 @@ namespace
                 }
                 stringStream<<receiverType<<" "<<objcExpr->getSelector().getAsString();
                 objcMessageExpr = stringStream.str();
-                if(objcMethodFilename.length())
-                    cout<<"Call:"<<clsPref<<"["<<objcMessageExpr<<"]"<<endl;
+                if(objcMethodFilename.length()){
+//                    CodeCheckHelper::appendContent("Callee:"+clsPref+"["+objcMessageExpr+"]\n");
+                }
             }
             return true;
         }
@@ -131,7 +128,7 @@ namespace
             if (underscorePos != StringRef::npos) {
                 DiagnosticsEngine &diagEngine = context->getDiagnostics();
                 SourceLocation location = declaration->getLocation().getLocWithOffset(underscorePos);
-                unsigned diagID = diagEngine.getCustomDiagID(DiagnosticsEngine::Error, "[KWLM] Class name with `_` forbidden");
+                unsigned diagID = diagEngine.getCustomDiagID(DiagnosticsEngine::Error, "Class name with `_` forbidden");
                 diagEngine.Report(location, diagID);
             }
         }
@@ -140,9 +137,11 @@ namespace
     class CodeCheckConsumer : public ASTConsumer
     {
     public:
-        void HandleTranslationUnit(ASTContext &context) {
+        void HandleTranslationUnit(ASTContext &context){
+            CodeCheckHelper *helper = CodeCheckHelper::sharedInstance();
             visitor.setContext(context);
             visitor.TraverseDecl(context.getTranslationUnitDecl());
+            helper->synchronize();
         }
     private:
         CodeCheckClassVisitor visitor;
@@ -158,7 +157,7 @@ namespace
         bool ParseArgs(const CompilerInstance &CI, const std::vector<std::string>& args) {
             size_t cnt = args.size();
             if(cnt == 1){
-                SSrcRootPath = args.at(0);
+                gSrcRootPath = args.at(0);
             }
             return true;
         }
