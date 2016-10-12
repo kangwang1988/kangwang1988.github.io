@@ -21,8 +21,8 @@ public:
    static CodeCheckHelper *sharedInstance();
    void synchronize();
    void appendObjcClsMethod(bool isInstanceMethod,string cls,string selector,string filename,unsigned rangeFrom,unsigned rangeTo,string sourcecode);
+   void appendObjcMethodCall(bool isInstanceMethod,string cls,string selector,bool calleeIsInstanceMethod,string calleeCls,string calleeSel);
 private:
-//    map<string,map<string, string>> *clsMethodInfo;
     json clsMethodJson;
 };
 #endif /* CodeCheckHelper_h */

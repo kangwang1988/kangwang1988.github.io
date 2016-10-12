@@ -32,7 +32,6 @@ namespace
         string objcMethodSrcCode;
         string objcMethodFilename;
         string objcMethodRange;
-        string objcMessageExpr;
     public:
         void setContext(ASTContext &context)
         {
@@ -79,21 +78,14 @@ namespace
                 ObjCMessageExpr *objcExpr = (ObjCMessageExpr*)s;
                 ostringstream stringStream;
                 ObjCMessageExpr::ReceiverKind kind = objcExpr->getReceiverKind();
-                string clsPref = "",superPref = "";
+                bool calleeIsInstanceMethod = true;
                 switch (kind) {
                     case ObjCMessageExpr::Class:
-                        clsPref = "+";
+                    case ObjCMessageExpr::SuperClass:
+                        calleeIsInstanceMethod = false;
                         break;
                     case ObjCMessageExpr::Instance:
-                        clsPref = "-";
-                        break;
-                    case ObjCMessageExpr::SuperClass:
-                        clsPref = "+";
-                        superPref = "(super)";
-                        break;
                     case ObjCMessageExpr::SuperInstance:
-                        clsPref = "-";
-                        superPref = "(super)";
                         break;
                     default:
                         break;
@@ -103,10 +95,8 @@ namespace
                 if(pos!=string::npos){
                     receiverType = receiverType.substr(0,pos);
                 }
-                stringStream<<receiverType<<" "<<objcExpr->getSelector().getAsString();
-                objcMessageExpr = stringStream.str();
                 if(objcMethodFilename.length()){
-//                    CodeCheckHelper::appendContent("Callee:"+clsPref+"["+objcMessageExpr+"]\n");
+                    CodeCheckHelper::sharedInstance()->appendObjcMethodCall(objcIsInstanceMethod, objcCls, objcSelector,calleeIsInstanceMethod, receiverType, objcExpr->getSelector().getAsString());
                 }
             }
             return true;
