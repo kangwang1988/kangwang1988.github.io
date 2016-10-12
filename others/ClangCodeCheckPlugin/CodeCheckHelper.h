@@ -19,10 +19,16 @@ using namespace nlohmann;
 class CodeCheckHelper{
 public:
    static CodeCheckHelper *sharedInstance();
+   void appendObjcClsMethodImpl(bool isInstanceMethod,string cls,string selector,string filename,unsigned rangeFrom,unsigned rangeTo,string sourcecode);
+   void appendObjcMethodImplCall(bool isInstanceMethod,string cls,string selector,bool calleeIsInstanceMethod,string calleeCls,string calleeSel);
+   void appendObjcCls(string cls,string supCls,vector<string> protoVec);
+   void appendObjcClsInterf(string cls,bool isInstanceInterf,string selector);
+   void appendObjcProto(string proto,vector<string> refProto);
+   void appendObjcProtoInterf(string proto,bool isInstanceInterf,string selector);
    void synchronize();
-   void appendObjcClsMethod(bool isInstanceMethod,string cls,string selector,string filename,unsigned rangeFrom,unsigned rangeTo,string sourcecode);
-   void appendObjcMethodCall(bool isInstanceMethod,string cls,string selector,bool calleeIsInstanceMethod,string calleeCls,string calleeSel);
 private:
     json clsMethodJson;
+    json clsInterfHierachy;
+    json protoInterfHierachy;
 };
 #endif /* CodeCheckHelper_h */

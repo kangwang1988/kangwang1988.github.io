@@ -26,23 +26,60 @@ namespace
     {
     private:
         ASTContext *context;
-        string objcCls;
-        unsigned objcIsInstanceMethod;
+        string objcClsInterface;
+        string objcClsImpl;
+        string objcProtocol;
+        bool objcIsInstanceMethod;
         string objcSelector;
         string objcMethodSrcCode;
         string objcMethodFilename;
         string objcMethodRange;
+        vector<string> hierarchy;
     public:
         void setContext(ASTContext &context)
         {
             this->context = &context;
         }
         bool VisitDecl(Decl *decl) {
+            if(isa<ObjCInterfaceDecl>(decl) || isa<ObjCImplDecl>(decl) || isa<ObjCProtocolDecl>(decl)){
+                objcClsInterface = string();
+                objcClsImpl = string();
+                objcProtocol=string();
+                objcIsInstanceMethod = true;
+                objcSelector = string();
+                objcMethodSrcCode = string();
+                objcMethodFilename = string();
+                objcMethodRange = string();
+                hierarchy=vector<string>();
+            }
+            if(isa<ObjCInterfaceDecl>(decl)){
+                ObjCInterfaceDecl *interfDecl = (ObjCInterfaceDecl*)decl;
+                ostringstream stringStream;
+                stringStream<<interfDecl->getNameAsString();
+                objcClsInterface = stringStream.str();
+                vector<string> protoVec;
+                for(ObjCList<ObjCProtocolDecl>::iterator it = interfDecl->all_referenced_protocol_begin();it!=interfDecl->all_referenced_protocol_end();it++){
+                    protoVec.push_back((*it)->getNameAsString());
+                }
+                CodeCheckHelper::sharedInstance()->appendObjcCls(objcClsInterface, (interfDecl->getSuperClass()?interfDecl->getSuperClass()->getNameAsString():""),protoVec);
+            }
+            if(isa<ObjCProtocolDecl>(decl)){
+                ObjCProtocolDecl *protoDecl = (ObjCProtocolDecl *)decl;
+                ostringstream stringStream;
+                stringStream<<protoDecl->getNameAsString();
+                objcProtocol = stringStream.str();
+                
+                vector<string> refProtos;
+                for(ObjCProtocolList::iterator it = protoDecl->protocol_begin();it!=protoDecl->protocol_end();it++){
+                    refProtos.push_back((*it)->getNameAsString());
+                }
+                CodeCheckHelper::sharedInstance()->appendObjcProto(objcProtocol, refProtos);
+            }
             if(isa<ObjCImplDecl>(decl)){
                 ObjCImplDecl *interDecl = (ObjCImplDecl *)decl;
                 ostringstream stringStream;
                 stringStream<<interDecl->getNameAsString();
-                objcCls = stringStream.str();
+                objcClsImpl = stringStream.str();
             }
             if(isa<ObjCMethodDecl>(decl)){
                 ObjCMethodDecl *methodDecl = (ObjCMethodDecl *)decl;
@@ -50,26 +87,28 @@ namespace
                 objcIsInstanceMethod = methodDecl->isInstanceMethod();
                 stringStream<<methodDecl->getSelector().getAsString();
                 objcSelector = stringStream.str();
-                if(methodDecl->hasBody()){
-                    Stmt *methodBody = methodDecl->getBody();
-                    objcMethodSrcCode.assign(context->getSourceManager().getCharacterData(methodBody->getSourceRange().getBegin()),methodBody->getSourceRange().getEnd().getRawEncoding()-methodBody->getSourceRange().getBegin().getRawEncoding()+1);
-                    objcMethodFilename = context->getSourceManager().getFilename(methodBody->getSourceRange().getBegin()).str();
-                    size_t pos = objcMethodFilename.find(gSrcRootPath);
-                    if(pos!=string::npos){
-                        objcMethodFilename = objcMethodFilename.substr(gSrcRootPath.length(),objcMethodFilename.length()-gSrcRootPath.length());
-                        ostringstream stringStream;
-                        stringStream<<methodBody->getSourceRange().getBegin().getRawEncoding()<<"-"<<methodBody->getSourceRange().getEnd().getRawEncoding();
-                        objcMethodRange = stringStream.str();
-                        CodeCheckHelper::sharedInstance()->appendObjcClsMethod(objcIsInstanceMethod, objcCls, objcSelector, objcMethodFilename, methodBody->getSourceRange().getBegin().getRawEncoding(),methodBody->getSourceRange().getEnd().getRawEncoding(), objcMethodSrcCode);
+                if(objcClsInterface.length()){
+                    CodeCheckHelper::sharedInstance()->appendObjcClsInterf(objcClsInterface, objcIsInstanceMethod,objcSelector);
+                }
+                else if(objcProtocol.length()){
+                    CodeCheckHelper::sharedInstance()->appendObjcProtoInterf(objcProtocol, objcIsInstanceMethod, objcSelector);
+                }
+                else if(objcClsImpl.length()){
+                    if(methodDecl->hasBody()){
+                        Stmt *methodBody = methodDecl->getBody();
+                        objcMethodSrcCode.assign(context->getSourceManager().getCharacterData(methodBody->getSourceRange().getBegin()),methodBody->getSourceRange().getEnd().getRawEncoding()-methodBody->getSourceRange().getBegin().getRawEncoding()+1);
+                        objcMethodFilename = context->getSourceManager().getFilename(methodBody->getSourceRange().getBegin()).str();
+                        size_t pos = objcMethodFilename.find(gSrcRootPath);
+                        if(pos!=string::npos){
+                            objcMethodFilename = objcMethodFilename.substr(gSrcRootPath.length(),objcMethodFilename.length()-gSrcRootPath.length());
+                            ostringstream stringStream;
+                            stringStream<<methodBody->getSourceRange().getBegin().getRawEncoding()<<"-"<<methodBody->getSourceRange().getEnd().getRawEncoding();
+                            objcMethodRange = stringStream.str();
+                            CodeCheckHelper::sharedInstance()->appendObjcClsMethodImpl(objcIsInstanceMethod, objcClsImpl, objcSelector, objcMethodFilename, methodBody->getSourceRange().getBegin().getRawEncoding(),methodBody->getSourceRange().getEnd().getRawEncoding(), objcMethodSrcCode);
+                        }
                     }
-                    else
-                        objcMethodFilename = "";
                 }
             }
-            return true;
-        }
-        bool VisitObjCInterfaceDecl(ObjCInterfaceDecl *declaration)
-        {
             return true;
         }
         bool VisitStmt(Stmt *s) {
@@ -96,7 +135,7 @@ namespace
                     receiverType = receiverType.substr(0,pos);
                 }
                 if(objcMethodFilename.length()){
-                    CodeCheckHelper::sharedInstance()->appendObjcMethodCall(objcIsInstanceMethod, objcCls, objcSelector,calleeIsInstanceMethod, receiverType, objcExpr->getSelector().getAsString());
+                    CodeCheckHelper::sharedInstance()->appendObjcMethodImplCall(objcIsInstanceMethod, objcClsImpl, objcSelector,calleeIsInstanceMethod, receiverType, objcExpr->getSelector().getAsString());
                 }
             }
             return true;
