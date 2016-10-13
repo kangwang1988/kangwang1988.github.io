@@ -1,12 +1,12 @@
 #include<iostream>
 #include<sstream>
+#include<typeinfo>
 
 #include "clang/Frontend/FrontendPluginRegistry.h"
 #include "clang/AST/AST.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/Frontend/CompilerInstance.h"
 #include "clang/AST/RecursiveASTVisitor.h"
-
 #include "CodeCheckHelper.h"
 /**
  * @discussion Enviroment:clang-3.9.1(release 39)
@@ -19,6 +19,8 @@
  */
 using namespace clang;
 using namespace std;
+using namespace llvm;
+
 extern string gSrcRootPath;
 namespace
 {
@@ -134,8 +136,59 @@ namespace
                 if(pos!=string::npos){
                     receiverType = receiverType.substr(0,pos);
                 }
+                string calleeSel = objcExpr->getSelector().getAsString();
                 if(objcMethodFilename.length()){
-                    CodeCheckHelper::sharedInstance()->appendObjcMethodImplCall(objcIsInstanceMethod, objcClsImpl, objcSelector,calleeIsInstanceMethod, receiverType, objcExpr->getSelector().getAsString());
+                    CodeCheckHelper::sharedInstance()->appendObjcMethodImplCall(objcIsInstanceMethod, objcClsImpl, objcSelector,calleeIsInstanceMethod, receiverType,calleeSel);
+                }
+                LangOptions LangOpts;
+                LangOpts.CPlusPlus = true;
+                PrintingPolicy Policy(LangOpts);
+
+                if(calleeIsInstanceMethod && !receiverType.compare("NSNotificationCenter")){
+                    //此处不处理:postNotification(运行时才知道)，addObserverForName:object:queue:usingBlock(无需处理)
+                    if(calleeSel.find("addObserver:selector:name:object:")!=string::npos){
+                        string s0,s1,s2;
+                        raw_string_ostream param0(s0),param1(s1),param2(s2);
+                        objcExpr->getArg(0)->printPretty(param0, 0, Policy);
+                        objcExpr->getArg(1)->printPretty(param1, 0, Policy);
+                        objcExpr->getArg(2)->printPretty(param2, 0, Policy);
+                        string paramType0 = objcExpr->getArg(0)->getType().getAsString(),
+                        paramType1 = objcExpr->getArg(1)->getType().getAsString(),
+                        paramType2 = objcExpr->getArg(2)->getType().getAsString();
+                        string calleeSelector = param1.str();
+                        if(calleeSelector.find("@selector(")!=string::npos){
+                            calleeSelector = calleeSelector.substr(string("@selector(").length(),calleeSelector.length()-string("@selector(").length()-1);
+                        }
+                        string notif = param2.str();
+                        if(notif.find("@\"")!=string::npos){
+                            notif = notif.substr(string("@\"").length(),notif.length()-string("@\"").length()-1);
+                        }
+                        if(!param0.str().compare("self") &&!paramType1.compare("SEL")){
+                            if(!paramType2.compare("NSString *")){
+                                CodeCheckHelper::sharedInstance()->appendObjcAddNotificationCall(objcIsInstanceMethod, objcClsImpl, objcSelector,objcClsImpl,calleeSelector,notif);
+                            }
+                            else if(!paramType2.compare("NSNotificationName")){
+                                CodeCheckHelper::sharedInstance()->appendObjcAddNotificationCall(objcIsInstanceMethod, objcClsImpl, objcSelector,objcClsImpl,calleeSelector,param2.str());
+                                CodeCheckHelper::sharedInstance()->appendObjcPostNotificationCall(true, kAppMainEntryClass, kAppMainEntrySelector,notif);
+                            }
+                        }
+                    }
+                    else if(calleeSel.find("postNotificationName:")!=string::npos){
+                        string s0;
+                        raw_string_ostream param0(s0);
+                        objcExpr->getArg(0)->printPretty(param0, 0, Policy);
+                        string paramType0 = objcExpr->getArg(0)->getType().getAsString();
+                        string notif = param0.str();
+                        if(notif.find("@\"")!=string::npos){
+                            notif = notif.substr(string("@\"").length(),notif.length()-string("@\"").length()-1);
+                        }
+                        if(!paramType0.compare("NSString *")){
+                            CodeCheckHelper::sharedInstance()->appendObjcPostNotificationCall(objcIsInstanceMethod, objcClsImpl, objcSelector,notif);
+                        }
+                        else if(!paramType0.compare("NSNotificationName")){
+                            CodeCheckHelper::sharedInstance()->appendObjcPostNotificationCall(true, kAppMainEntryClass, kAppMainEntrySelector,notif);
+                        }
+                    }
                 }
             }
             return true;

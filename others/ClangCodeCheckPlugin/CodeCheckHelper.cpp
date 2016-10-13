@@ -21,6 +21,7 @@ string kKeyInterfSelDictRefProtos = "refProtos";
 string kKeyInterfSelDictSuperClass = "superClass";
 string kKeyInterfSelDictProtos = "protos";
 string kKeyInterfSelDictInterfs = "interfs";
+string kKeyInterfSelDictNotifCallers = "notifCallers";
 
 CodeCheckHelper *sCodeCheckHelper;
 
@@ -106,6 +107,31 @@ void CodeCheckHelper::appendObjcProtoInterf(string proto, bool isInstanceInterf,
     protoInterfHierachy[proto]={{kKeyInterfSelDictInterfs,interfs},{kKeyInterfSelDictProtos,protoHierachyObj[kKeyInterfSelDictProtos]}};
 }
 
+void CodeCheckHelper::appendObjcAddNotificationCall(bool isInstanceMethod, string cls, string selector, string calleeCls, string calleeSel, string notif){
+    string key = string(true?"-":"+")+"["+calleeCls+" "+calleeSel+"]";
+    string callerValueItem = string(isInstanceMethod?"-":"+")+"["+cls+" "+selector+"]";
+    json clsMethodNotifsJson = json(clsMethodAddNotifsJson[key]);
+    json notifJson = json(clsMethodNotifsJson[notif]);
+    vector<string> notifJsonVector;
+    if(notifJson.is_array())
+        notifJsonVector = notifJson.get<vector<string>>();
+    if(find(notifJsonVector.begin(),notifJsonVector.end(),callerValueItem)==notifJsonVector.end())
+        notifJson.push_back(callerValueItem);
+    clsMethodNotifsJson[notif]=notifJson;
+    clsMethodAddNotifsJson[key]=clsMethodNotifsJson;
+}
+
+void CodeCheckHelper::appendObjcPostNotificationCall(bool isInstanceMethod, string cls, string selector, string notif){
+        string callerValueItem = string(isInstanceMethod?"-":"+")+"["+cls+" "+selector+"]";;
+        json notifJson = json(notifPostedCallerJson[notif]);
+        vector<string> notifJsonVector;
+        if(notifJson.is_array())
+            notifJsonVector = notifJson.get<vector<string>>();
+        if(find(notifJsonVector.begin(),notifJsonVector.end(),callerValueItem)==notifJsonVector.end())
+            notifJson.push_back(callerValueItem);;
+        notifPostedCallerJson[notif]=notifJson;
+}
+
 void CodeCheckHelper::synchronize(){
     milliseconds time = duration_cast< milliseconds >(
                                                       system_clock::now().time_since_epoch()
@@ -132,6 +158,22 @@ void CodeCheckHelper::synchronize(){
         ss<<gSrcRootPath<<"/Analyzer/"<<time.count()<<".protoInterfHierachy.jsonpart";
         ofs.open (ss.str(),ofstream::out | ofstream::trunc);
         ofs<<protoInterfHierachy<<endl;
+        ofs.close();
+    }
+    if(!clsMethodAddNotifsJson.is_null()){
+        ofstream ofs;
+        stringstream ss;
+        ss<<gSrcRootPath<<"/Analyzer/"<<time.count()<<".clsMethodAddNotifs.jsonpart";
+        ofs.open (ss.str(),ofstream::out | ofstream::trunc);
+        ofs<<clsMethodAddNotifsJson<<endl;
+        ofs.close();
+    }
+    if(!notifPostedCallerJson.is_null()){
+        ofstream ofs;
+        stringstream ss;
+        ss<<gSrcRootPath<<"/Analyzer/"<<time.count()<<".notifPostedCaller.jsonpart";
+        ofs.open (ss.str(),ofstream::out | ofstream::trunc);
+        ofs<<notifPostedCallerJson<<endl;
         ofs.close();
     }
 }

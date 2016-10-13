@@ -13,6 +13,10 @@
 #include <vector>
 #include <map>
 #include "json.hpp"
+
+#define kAppMainEntryClass  "UIApplication"
+#define kAppMainEntrySelector  "main"
+
 using namespace std;
 using namespace nlohmann;
 
@@ -25,10 +29,14 @@ public:
    void appendObjcClsInterf(string cls,bool isInstanceInterf,string selector);
    void appendObjcProto(string proto,vector<string> refProto);
    void appendObjcProtoInterf(string proto,bool isInstanceInterf,string selector);
+   void appendObjcAddNotificationCall(bool isInstanceMethod,string cls,string selector,string calleeCls,string calleeSel,string notif);
+   void appendObjcPostNotificationCall(bool isInstanceMethod, string cls, string selector, string notif);
    void synchronize();
 private:
     json clsMethodJson;
     json clsInterfHierachy;
     json protoInterfHierachy;
+    json clsMethodAddNotifsJson;
+    json notifPostedCallerJson;
 };
 #endif /* CodeCheckHelper_h */
