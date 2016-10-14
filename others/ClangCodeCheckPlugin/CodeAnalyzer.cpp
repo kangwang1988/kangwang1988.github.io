@@ -1,12 +1,12 @@
 //
-//  CodeCheckHelper.cpp
+//  CodeAnalyzer.cpp
 //  ClangCodeCheckPlugin
 //
 //  Created by KyleWong on 11/10/2016.
 //
 //
 
-#include "CodeCheckHelper.h"
+#include "CodeAnalyzer.h"
 #include <streambuf>
 #include <chrono>
 using namespace std::chrono;
@@ -23,23 +23,23 @@ string kKeyInterfSelDictProtos = "protos";
 string kKeyInterfSelDictInterfs = "interfs";
 string kKeyInterfSelDictNotifCallers = "notifCallers";
 
-CodeCheckHelper *sCodeCheckHelper;
+CodeAnalyzer *sCodeAnalyzer;
 
-CodeCheckHelper* CodeCheckHelper::sharedInstance(){
-    if(!sCodeCheckHelper){
-        sCodeCheckHelper = new CodeCheckHelper();
+CodeAnalyzer* CodeAnalyzer::sharedInstance(){
+    if(!sCodeAnalyzer){
+        sCodeAnalyzer = new CodeAnalyzer();
     }
-    return sCodeCheckHelper;
+    return sCodeAnalyzer;
 }
 
-void CodeCheckHelper::appendObjcClsMethodImpl(bool isInstanceMethod,string cls,string selector,string filename,unsigned rangeFrom,unsigned rangeTo,string sourcecode){
+void CodeAnalyzer::appendObjcClsMethodImpl(bool isInstanceMethod,string cls,string selector,string filename,unsigned rangeFrom,unsigned rangeTo,string sourcecode){
     stringstream ss;
     ss<<rangeFrom<<'-'<<rangeTo;
     string key = string(isInstanceMethod?"-":"+")+"["+cls+" "+selector+"]";
     clsMethodJson[key]={{kKeyInterfSelDictFilename,filename},{kKeyInterfSelDictSourceCode,sourcecode},{kKeyInterfSelDictRange,ss.str()}};
 }
 
-void CodeCheckHelper::appendObjcMethodImplCall(bool isInstanceMethod, string cls, string selector, bool calleeIsInstanceMethod, string calleeCls, string calleeSel){
+void CodeAnalyzer::appendObjcMethodImplCall(bool isInstanceMethod, string cls, string selector, bool calleeIsInstanceMethod, string calleeCls, string calleeSel){
     string key = string(isInstanceMethod?"-":"+")+"["+cls+" "+selector+"]";
     string value = string(calleeIsInstanceMethod?"-":"+")+"["+calleeCls+" "+calleeSel+"]";
     json clsMethodObj = json(clsMethodJson[key]);
@@ -53,7 +53,7 @@ void CodeCheckHelper::appendObjcMethodImplCall(bool isInstanceMethod, string cls
     clsMethodJson[key]=clsMethodObj;
 }
 
-void CodeCheckHelper::appendObjcCls(string cls,string supCls,vector<string> protoVec){
+void CodeAnalyzer::appendObjcCls(string cls,string supCls,vector<string> protoVec){
     stringstream ss;
     json clsJson = json(clsInterfHierachy[cls]);
     json protoJson = json(clsJson[kKeyInterfSelDictProtos]);
@@ -69,7 +69,7 @@ void CodeCheckHelper::appendObjcCls(string cls,string supCls,vector<string> prot
     clsInterfHierachy[cls]={{kKeyInterfSelDictSuperClass,supCls},{kKeyInterfSelDictProtos,protoJson},{kKeyInterfSelDictInterfs,clsJson[kKeyInterfSelDictInterfs]}};
 }
 
-void CodeCheckHelper::appendObjcClsInterf(string cls,bool isInstanceInterf,string selector){
+void CodeAnalyzer::appendObjcClsInterf(string cls,bool isInstanceInterf,string selector){
     json interfHierachyObj = json(clsInterfHierachy[cls]);
     json interfs = json(interfHierachyObj[kKeyInterfSelDictInterfs]);
     string value = string(isInstanceInterf?"-":"+")+"["+cls+" "+selector+"]";
@@ -81,7 +81,7 @@ void CodeCheckHelper::appendObjcClsInterf(string cls,bool isInstanceInterf,strin
     clsInterfHierachy[cls]={{kKeyInterfSelDictSuperClass,interfHierachyObj[kKeyInterfSelDictSuperClass]},{kKeyInterfSelDictProtos,interfHierachyObj[kKeyInterfSelDictProtos]},{kKeyInterfSelDictInterfs,interfs}};
 }
 
-void CodeCheckHelper::appendObjcProto(string proto,vector<string> refProto){
+void CodeAnalyzer::appendObjcProto(string proto,vector<string> refProto){
     json protoJson = json(protoInterfHierachy[proto]);
     json protoRefProtosJson = json(protoJson[kKeyInterfSelDictProtos]);
     vector<string> oldProtoRefProtoVec;
@@ -95,7 +95,7 @@ void CodeCheckHelper::appendObjcProto(string proto,vector<string> refProto){
     protoInterfHierachy[proto]={{kKeyInterfSelDictInterfs,protoJson[kKeyInterfSelDictInterfs]},{kKeyInterfSelDictProtos,protoRefProtosJson}};
 }
 
-void CodeCheckHelper::appendObjcProtoInterf(string proto, bool isInstanceInterf, string selector){
+void CodeAnalyzer::appendObjcProtoInterf(string proto, bool isInstanceInterf, string selector){
     json protoHierachyObj = json(protoInterfHierachy[proto]);
     json interfs = json(protoHierachyObj[kKeyInterfSelDictInterfs]);
     string value = string(isInstanceInterf?"-":"+")+"["+proto+" "+selector+"]";
@@ -107,7 +107,7 @@ void CodeCheckHelper::appendObjcProtoInterf(string proto, bool isInstanceInterf,
     protoInterfHierachy[proto]={{kKeyInterfSelDictInterfs,interfs},{kKeyInterfSelDictProtos,protoHierachyObj[kKeyInterfSelDictProtos]}};
 }
 
-void CodeCheckHelper::appendObjcAddNotificationCall(bool isInstanceMethod, string cls, string selector, string calleeCls, string calleeSel, string notif){
+void CodeAnalyzer::appendObjcAddNotificationCall(bool isInstanceMethod, string cls, string selector, string calleeCls, string calleeSel, string notif){
     string key = string(true?"-":"+")+"["+calleeCls+" "+calleeSel+"]";
     string callerValueItem = string(isInstanceMethod?"-":"+")+"["+cls+" "+selector+"]";
     json clsMethodNotifsJson = json(clsMethodAddNotifsJson[key]);
@@ -121,18 +121,30 @@ void CodeCheckHelper::appendObjcAddNotificationCall(bool isInstanceMethod, strin
     clsMethodAddNotifsJson[key]=clsMethodNotifsJson;
 }
 
-void CodeCheckHelper::appendObjcPostNotificationCall(bool isInstanceMethod, string cls, string selector, string notif){
-        string callerValueItem = string(isInstanceMethod?"-":"+")+"["+cls+" "+selector+"]";;
+void CodeAnalyzer::appendObjcPostNotificationCall(bool isInstanceMethod, string cls, string selector, string notif){
+        string callerValueItem = string(isInstanceMethod?"-":"+")+"["+cls+" "+selector+"]";
         json notifJson = json(notifPostedCallerJson[notif]);
         vector<string> notifJsonVector;
         if(notifJson.is_array())
             notifJsonVector = notifJson.get<vector<string>>();
         if(find(notifJsonVector.begin(),notifJsonVector.end(),callerValueItem)==notifJsonVector.end())
-            notifJson.push_back(callerValueItem);;
+            notifJson.push_back(callerValueItem);
         notifPostedCallerJson[notif]=notifJson;
 }
 
-void CodeCheckHelper::synchronize(){
+void CodeAnalyzer::appendObjcProtoInterfCall(bool isInstanceMethod, string cls, string selector, string proto, string protoSel){
+    string key = string("-")+"["+proto+" "+protoSel+"]";
+    string callerValueItem = string(isInstanceMethod?"-":"+")+"["+cls+" "+selector+"]";
+    json protoInterfJson = json(protoInterfCallJson[key]);
+    vector<string> protoInterfVector;
+    if(protoInterfJson.is_array())
+        protoInterfVector = protoInterfJson.get<vector<string>>();
+    if(find(protoInterfVector.begin(),protoInterfVector.end(),callerValueItem)==protoInterfVector.end())
+        protoInterfJson.push_back(callerValueItem);
+    protoInterfCallJson[key]=protoInterfJson;
+}
+
+void CodeAnalyzer::synchronize(){
     milliseconds time = duration_cast< milliseconds >(
                                                       system_clock::now().time_since_epoch()
                                                       );
@@ -174,6 +186,14 @@ void CodeCheckHelper::synchronize(){
         ss<<gSrcRootPath<<"/Analyzer/"<<time.count()<<".notifPostedCaller.jsonpart";
         ofs.open (ss.str(),ofstream::out | ofstream::trunc);
         ofs<<notifPostedCallerJson<<endl;
+        ofs.close();
+    }
+    if(!protoInterfCallJson.is_null()){
+        ofstream ofs;
+        stringstream ss;
+        ss<<gSrcRootPath<<"/Analyzer/"<<time.count()<<".protoInterfCall.jsonpart";
+        ofs.open (ss.str(),ofstream::out | ofstream::trunc);
+        ofs<<protoInterfCallJson<<endl;
         ofs.close();
     }
 }

@@ -1,13 +1,13 @@
 //
-//  CodeCheckHelper.h
+//  CodeAnalyzer.h
 //  ClangCodeCheckPlugin
 //
 //  Created by KyleWong on 11/10/2016.
 //
 //
 
-#ifndef CodeCheckHelper_h
-#define CodeCheckHelper_h
+#ifndef CodeAnalyzer_h
+#define CodeAnalyzer_h
 #include <string>
 #include <fstream>
 #include <vector>
@@ -20,9 +20,9 @@
 using namespace std;
 using namespace nlohmann;
 
-class CodeCheckHelper{
+class CodeAnalyzer{
 public:
-   static CodeCheckHelper *sharedInstance();
+   static CodeAnalyzer *sharedInstance();
    void appendObjcClsMethodImpl(bool isInstanceMethod,string cls,string selector,string filename,unsigned rangeFrom,unsigned rangeTo,string sourcecode);
    void appendObjcMethodImplCall(bool isInstanceMethod,string cls,string selector,bool calleeIsInstanceMethod,string calleeCls,string calleeSel);
    void appendObjcCls(string cls,string supCls,vector<string> protoVec);
@@ -31,6 +31,7 @@ public:
    void appendObjcProtoInterf(string proto,bool isInstanceInterf,string selector);
    void appendObjcAddNotificationCall(bool isInstanceMethod,string cls,string selector,string calleeCls,string calleeSel,string notif);
    void appendObjcPostNotificationCall(bool isInstanceMethod, string cls, string selector, string notif);
+    void appendObjcProtoInterfCall(bool isInstanceMethod,string cls,string selector,string proto,string protoSel);
    void synchronize();
 private:
     json clsMethodJson;
@@ -38,5 +39,6 @@ private:
     json protoInterfHierachy;
     json clsMethodAddNotifsJson;
     json notifPostedCallerJson;
+    json protoInterfCallJson;
 };
-#endif /* CodeCheckHelper_h */
+#endif /* CodeAnalyzer_h */

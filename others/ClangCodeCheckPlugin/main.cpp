@@ -7,7 +7,8 @@
 #include "clang/AST/ASTConsumer.h"
 #include "clang/Frontend/CompilerInstance.h"
 #include "clang/AST/RecursiveASTVisitor.h"
-#include "CodeCheckHelper.h"
+#include "CodeAnalyzer.h"
+#include "CodeCheckUtil.hpp"
 /**
  * @discussion Enviroment:clang-3.9.1(release 39)
  * In terminal, use "/opt/llvm/llvm_build/bin/clang ../test.m -Xclang -load -Xclang lib/Debug/ClangCodeCheckPlugin.dylib -Xclang -plugin -Xclang ClangCodeCheckPlugin".
@@ -63,7 +64,7 @@ namespace
                 for(ObjCList<ObjCProtocolDecl>::iterator it = interfDecl->all_referenced_protocol_begin();it!=interfDecl->all_referenced_protocol_end();it++){
                     protoVec.push_back((*it)->getNameAsString());
                 }
-                CodeCheckHelper::sharedInstance()->appendObjcCls(objcClsInterface, (interfDecl->getSuperClass()?interfDecl->getSuperClass()->getNameAsString():""),protoVec);
+                CodeAnalyzer::sharedInstance()->appendObjcCls(objcClsInterface, (interfDecl->getSuperClass()?interfDecl->getSuperClass()->getNameAsString():""),protoVec);
             }
             if(isa<ObjCProtocolDecl>(decl)){
                 ObjCProtocolDecl *protoDecl = (ObjCProtocolDecl *)decl;
@@ -75,7 +76,7 @@ namespace
                 for(ObjCProtocolList::iterator it = protoDecl->protocol_begin();it!=protoDecl->protocol_end();it++){
                     refProtos.push_back((*it)->getNameAsString());
                 }
-                CodeCheckHelper::sharedInstance()->appendObjcProto(objcProtocol, refProtos);
+                CodeAnalyzer::sharedInstance()->appendObjcProto(objcProtocol, refProtos);
             }
             if(isa<ObjCImplDecl>(decl)){
                 ObjCImplDecl *interDecl = (ObjCImplDecl *)decl;
@@ -90,10 +91,10 @@ namespace
                 stringStream<<methodDecl->getSelector().getAsString();
                 objcSelector = stringStream.str();
                 if(objcClsInterface.length()){
-                    CodeCheckHelper::sharedInstance()->appendObjcClsInterf(objcClsInterface, objcIsInstanceMethod,objcSelector);
+                    CodeAnalyzer::sharedInstance()->appendObjcClsInterf(objcClsInterface, objcIsInstanceMethod,objcSelector);
                 }
                 else if(objcProtocol.length()){
-                    CodeCheckHelper::sharedInstance()->appendObjcProtoInterf(objcProtocol, objcIsInstanceMethod, objcSelector);
+                    CodeAnalyzer::sharedInstance()->appendObjcProtoInterf(objcProtocol, objcIsInstanceMethod, objcSelector);
                 }
                 else if(objcClsImpl.length()){
                     if(methodDecl->hasBody()){
@@ -106,7 +107,7 @@ namespace
                             ostringstream stringStream;
                             stringStream<<methodBody->getSourceRange().getBegin().getRawEncoding()<<"-"<<methodBody->getSourceRange().getEnd().getRawEncoding();
                             objcMethodRange = stringStream.str();
-                            CodeCheckHelper::sharedInstance()->appendObjcClsMethodImpl(objcIsInstanceMethod, objcClsImpl, objcSelector, objcMethodFilename, methodBody->getSourceRange().getBegin().getRawEncoding(),methodBody->getSourceRange().getEnd().getRawEncoding(), objcMethodSrcCode);
+                            CodeAnalyzer::sharedInstance()->appendObjcClsMethodImpl(objcIsInstanceMethod, objcClsImpl, objcSelector, objcMethodFilename, methodBody->getSourceRange().getBegin().getRawEncoding(),methodBody->getSourceRange().getEnd().getRawEncoding(), objcMethodSrcCode);
                         }
                     }
                 }
@@ -120,6 +121,12 @@ namespace
                 ostringstream stringStream;
                 ObjCMessageExpr::ReceiverKind kind = objcExpr->getReceiverKind();
                 bool calleeIsInstanceMethod = true;
+                string calleeSel = objcExpr->getSelector().getAsString();
+                string receiverType =objcExpr->getReceiverType().getAsString();
+                size_t pos = receiverType.find(" ");
+                if(pos!=string::npos){
+                    receiverType = receiverType.substr(0,pos);
+                }
                 switch (kind) {
                     case ObjCMessageExpr::Class:
                     case ObjCMessageExpr::SuperClass:
@@ -131,12 +138,23 @@ namespace
                     default:
                         break;
                 }
-                string receiverType =objcExpr->getReceiverType().getAsString(),receiverInterface = objcExpr->getReceiverInterface()->getNameAsString();
-                size_t pos = receiverType.find(" ");
-                if(pos!=string::npos){
-                    receiverType = receiverType.substr(0,pos);
+                //无明确类型，形如id<XXXDelegate>的调用，仅处理形如id<UITableViewDataSource> dataSource, id<UITableViewDelegate> delegate，而不是id<UITableViewDataSource,UITableViewDelegate>这种。
+                if(!objcExpr->getReceiverInterface()){
+                    if(receiverType.find("id<")==0 && receiverType.at(receiverType.length()-1)=='>'){
+                        string protocol = receiverType.substr(string("id<").length(),receiverType.length()-string("id<").length()-1);
+                        int pos = protocol.find(",");
+                        if(pos!=string::npos){
+                            protocol = protocol.substr(0,pos);
+                        }
+                        protocol = trim(protocol);
+                        if(!calleeSel.compare("viewController:execFunc:")){
+                            CodeAnalyzer::sharedInstance()->appendObjcProtoInterfCall(objcIsInstanceMethod, objcClsImpl, objcSelector, protocol,calleeSel );
+                        }
+                    }
+                    return true;
                 }
-                string calleeSel = objcExpr->getSelector().getAsString();
+                //有明确类型的调用
+                string receiverInterface = objcExpr->getReceiverInterface()->getNameAsString();
                 //处理通知
                 if(!receiverInterface.compare("NSNotificationCenter")){
                     this->handleNotificationMessageExpr(objcExpr,calleeSel);
@@ -154,7 +172,7 @@ namespace
                     this->handlePerformSelectorMessageExpr(objcExpr,calleeSel);
                 }
                 else if(objcMethodFilename.length()){
-                    CodeCheckHelper::sharedInstance()->appendObjcMethodImplCall(objcIsInstanceMethod, objcClsImpl, objcSelector,calleeIsInstanceMethod, receiverType,calleeSel);
+                    CodeAnalyzer::sharedInstance()->appendObjcMethodImplCall(objcIsInstanceMethod, objcClsImpl, objcSelector,calleeIsInstanceMethod, receiverType,calleeSel);
                 }
             }
             return true;
@@ -183,11 +201,11 @@ namespace
                 }
                 if(!param0.str().compare("self") &&!paramType1.compare("SEL")){
                     if(!paramType2.compare("NSString *")){
-                        CodeCheckHelper::sharedInstance()->appendObjcAddNotificationCall(objcIsInstanceMethod, objcClsImpl, objcSelector,objcClsImpl,param1Sel,notif);
+                        CodeAnalyzer::sharedInstance()->appendObjcAddNotificationCall(objcIsInstanceMethod, objcClsImpl, objcSelector,objcClsImpl,param1Sel,notif);
                     }
                     else if(!paramType2.compare("NSNotificationName")){
-                        CodeCheckHelper::sharedInstance()->appendObjcAddNotificationCall(objcIsInstanceMethod, objcClsImpl, objcSelector,objcClsImpl,param1Sel,param2.str());
-                        CodeCheckHelper::sharedInstance()->appendObjcPostNotificationCall(true, kAppMainEntryClass, kAppMainEntrySelector,notif);
+                        CodeAnalyzer::sharedInstance()->appendObjcAddNotificationCall(objcIsInstanceMethod, objcClsImpl, objcSelector,objcClsImpl,param1Sel,param2.str());
+                        CodeAnalyzer::sharedInstance()->appendObjcPostNotificationCall(true, kAppMainEntryClass, kAppMainEntrySelector,notif);
                     }
                 }
             }
@@ -201,10 +219,10 @@ namespace
                     notif = notif.substr(string("@\"").length(),notif.length()-string("@\"").length()-1);
                 }
                 if(!paramType0.compare("NSString *")){
-                    CodeCheckHelper::sharedInstance()->appendObjcPostNotificationCall(objcIsInstanceMethod, objcClsImpl, objcSelector,notif);
+                    CodeAnalyzer::sharedInstance()->appendObjcPostNotificationCall(objcIsInstanceMethod, objcClsImpl, objcSelector,notif);
                 }
                 else if(!paramType0.compare("NSNotificationName")){
-                    CodeCheckHelper::sharedInstance()->appendObjcPostNotificationCall(true, kAppMainEntryClass, kAppMainEntrySelector,notif);
+                    CodeAnalyzer::sharedInstance()->appendObjcPostNotificationCall(true, kAppMainEntryClass, kAppMainEntrySelector,notif);
                 }
             }
         }
@@ -223,7 +241,7 @@ namespace
                 string receiverType = objcExpr->getReceiverType().getAsString(),receiverInterface = objcExpr->getReceiverInterface()->getNameAsString();
                 //支持可明确知道类型的调用，如[self perform]/[VCClass perform]
                 if(objcExpr->getReceiverInterface()){
-                    CodeCheckHelper::sharedInstance()->appendObjcMethodImplCall(objcIsInstanceMethod, objcClsImpl, objcSelector, receiverType.compare(receiverInterface), receiverInterface, param0Sel);
+                    CodeAnalyzer::sharedInstance()->appendObjcMethodImplCall(objcIsInstanceMethod, objcClsImpl, objcSelector, receiverType.compare(receiverInterface), receiverInterface, param0Sel);
                 }
             }
         }
@@ -254,7 +272,7 @@ namespace
     {
     public:
         void HandleTranslationUnit(ASTContext &context){
-            CodeCheckHelper *helper = CodeCheckHelper::sharedInstance();
+            CodeAnalyzer *helper = CodeAnalyzer::sharedInstance();
             visitor.setContext(context);
             visitor.TraverseDecl(context.getTranslationUnitDecl());
             helper->synchronize();
