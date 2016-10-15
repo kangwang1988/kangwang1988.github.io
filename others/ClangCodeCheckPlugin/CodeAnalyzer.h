@@ -38,7 +38,7 @@ private:
     json clsInterfHierachy;
     json protoInterfHierachy;
     json clsMethodAddNotifsJson;
-    json notifPostedCallerJson;
+    json notifPostedCallersJson;
     json protoInterfCallJson;
 };
 #endif /* CodeAnalyzer_h */

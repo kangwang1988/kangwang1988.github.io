@@ -12,7 +12,6 @@
 using namespace std::chrono;
 
 string gSrcRootPath = "";
-string kTokenSeperator="B6D0013E3994E4DA54531E783F795B";
 string kKeyInterfSelDictFilename = "filename";
 string kKeyInterfSelDictSourceCode = "sourceCode";
 string kKeyInterfSelDictRange = "range";
@@ -123,13 +122,13 @@ void CodeAnalyzer::appendObjcAddNotificationCall(bool isInstanceMethod, string c
 
 void CodeAnalyzer::appendObjcPostNotificationCall(bool isInstanceMethod, string cls, string selector, string notif){
         string callerValueItem = string(isInstanceMethod?"-":"+")+"["+cls+" "+selector+"]";
-        json notifJson = json(notifPostedCallerJson[notif]);
+        json notifJson = json(notifPostedCallersJson[notif]);
         vector<string> notifJsonVector;
         if(notifJson.is_array())
             notifJsonVector = notifJson.get<vector<string>>();
         if(find(notifJsonVector.begin(),notifJsonVector.end(),callerValueItem)==notifJsonVector.end())
             notifJson.push_back(callerValueItem);
-        notifPostedCallerJson[notif]=notifJson;
+        notifPostedCallersJson[notif]=notifJson;
 }
 
 void CodeAnalyzer::appendObjcProtoInterfCall(bool isInstanceMethod, string cls, string selector, string proto, string protoSel){
@@ -180,12 +179,12 @@ void CodeAnalyzer::synchronize(){
         ofs<<clsMethodAddNotifsJson<<endl;
         ofs.close();
     }
-    if(!notifPostedCallerJson.is_null()){
+    if(!notifPostedCallersJson.is_null()){
         ofstream ofs;
         stringstream ss;
-        ss<<gSrcRootPath<<"/Analyzer/"<<time.count()<<".notifPostedCaller.jsonpart";
+        ss<<gSrcRootPath<<"/Analyzer/"<<time.count()<<".notifPostedCallers.jsonpart";
         ofs.open (ss.str(),ofstream::out | ofstream::trunc);
-        ofs<<notifPostedCallerJson<<endl;
+        ofs<<notifPostedCallersJson<<endl;
         ofs.close();
     }
     if(!protoInterfCallJson.is_null()){
