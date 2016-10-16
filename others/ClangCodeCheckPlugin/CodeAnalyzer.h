@@ -23,6 +23,7 @@ using namespace nlohmann;
 class CodeAnalyzer{
 public:
    static CodeAnalyzer *sharedInstance();
+   bool writeJsonToFile(json j,string filename);
    void appendObjcClsMethodImpl(bool isInstanceMethod,string cls,string selector,string filename,unsigned rangeFrom,unsigned rangeTo,string sourcecode);
    void appendObjcMethodImplCall(bool isInstanceMethod,string cls,string selector,bool calleeIsInstanceMethod,string calleeCls,string calleeSel);
    void appendObjcCls(string cls,string supCls,vector<string> protoVec);

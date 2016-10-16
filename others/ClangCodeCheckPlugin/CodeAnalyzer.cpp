@@ -8,8 +8,7 @@
 
 #include "CodeAnalyzer.h"
 #include <streambuf>
-#include <chrono>
-using namespace std::chrono;
+#include<uuid/uuid.h>
 
 string gSrcRootPath = "";
 string kKeyInterfSelDictFilename = "filename";
@@ -29,6 +28,17 @@ CodeAnalyzer* CodeAnalyzer::sharedInstance(){
         sCodeAnalyzer = new CodeAnalyzer();
     }
     return sCodeAnalyzer;
+}
+
+bool CodeAnalyzer::writeJsonToFile(json j, string filename){
+    if(j.is_null()){
+        return false;
+    }
+    ofstream ofs;
+    ofs.open (filename,ofstream::out | ofstream::trunc);
+    ofs<<j<<endl;
+    ofs.close();
+    return true;
 }
 
 void CodeAnalyzer::appendObjcClsMethodImpl(bool isInstanceMethod,string cls,string selector,string filename,unsigned rangeFrom,unsigned rangeTo,string sourcecode){
@@ -70,14 +80,14 @@ void CodeAnalyzer::appendObjcCls(string cls,string supCls,vector<string> protoVe
 
 void CodeAnalyzer::appendObjcClsInterf(string cls,bool isInstanceInterf,string selector){
     json interfHierachyObj = json(clsInterfHierachy[cls]);
-    json interfs = json(interfHierachyObj[kKeyInterfSelDictInterfs]);
+    json interfsJson = json(interfHierachyObj[kKeyInterfSelDictInterfs]);
     string value = string(isInstanceInterf?"-":"+")+"["+cls+" "+selector+"]";
     vector<string> oldInterfsVec;
-    if(interfs.is_array())
-        oldInterfsVec = interfs.get<vector<string>>();
+    if(interfsJson.is_array())
+        oldInterfsVec = interfsJson.get<vector<string>>();
     if(find(oldInterfsVec.begin(),oldInterfsVec.end(),value)==oldInterfsVec.end())
-        interfs.push_back(value);
-    clsInterfHierachy[cls]={{kKeyInterfSelDictSuperClass,interfHierachyObj[kKeyInterfSelDictSuperClass]},{kKeyInterfSelDictProtos,interfHierachyObj[kKeyInterfSelDictProtos]},{kKeyInterfSelDictInterfs,interfs}};
+        interfsJson.push_back(value);
+    clsInterfHierachy[cls]={{kKeyInterfSelDictSuperClass,interfHierachyObj[kKeyInterfSelDictSuperClass]},{kKeyInterfSelDictProtos,interfHierachyObj[kKeyInterfSelDictProtos]},{kKeyInterfSelDictInterfs,interfsJson}};
 }
 
 void CodeAnalyzer::appendObjcProto(string proto,vector<string> refProto){
@@ -144,55 +154,26 @@ void CodeAnalyzer::appendObjcProtoInterfCall(bool isInstanceMethod, string cls, 
 }
 
 void CodeAnalyzer::synchronize(){
-    milliseconds time = duration_cast< milliseconds >(
-                                                      system_clock::now().time_since_epoch()
-                                                      );
-    if(!clsMethodJson.is_null()){
-        ofstream ofs;
-        stringstream ss;
-        ss<<gSrcRootPath<<"/Analyzer/"<<time.count()<<".clsMethod.jsonpart";
-        ofs.open (ss.str(),ofstream::out | ofstream::trunc);
-        ofs<<clsMethodJson<<endl;
-        ofs.close();
-    }
-    if(!clsInterfHierachy.is_null()){
-        ofstream ofs;
-        stringstream ss;
-        ss<<gSrcRootPath<<"/Analyzer/"<<time.count()<<".clsInterfHierachy.jsonpart";
-        ofs.open (ss.str(),ofstream::out | ofstream::trunc);
-        ofs<<clsInterfHierachy<<endl;
-        ofs.close();
-    }
-    if(!protoInterfHierachy.is_null()){
-        ofstream ofs;
-        stringstream ss;
-        ss<<gSrcRootPath<<"/Analyzer/"<<time.count()<<".protoInterfHierachy.jsonpart";
-        ofs.open (ss.str(),ofstream::out | ofstream::trunc);
-        ofs<<protoInterfHierachy<<endl;
-        ofs.close();
-    }
-    if(!clsMethodAddNotifsJson.is_null()){
-        ofstream ofs;
-        stringstream ss;
-        ss<<gSrcRootPath<<"/Analyzer/"<<time.count()<<".clsMethodAddNotifs.jsonpart";
-        ofs.open (ss.str(),ofstream::out | ofstream::trunc);
-        ofs<<clsMethodAddNotifsJson<<endl;
-        ofs.close();
-    }
-    if(!notifPostedCallersJson.is_null()){
-        ofstream ofs;
-        stringstream ss;
-        ss<<gSrcRootPath<<"/Analyzer/"<<time.count()<<".notifPostedCallers.jsonpart";
-        ofs.open (ss.str(),ofstream::out | ofstream::trunc);
-        ofs<<notifPostedCallersJson<<endl;
-        ofs.close();
-    }
-    if(!protoInterfCallJson.is_null()){
-        ofstream ofs;
-        stringstream ss;
-        ss<<gSrcRootPath<<"/Analyzer/"<<time.count()<<".protoInterfCall.jsonpart";
-        ofs.open (ss.str(),ofstream::out | ofstream::trunc);
-        ofs<<protoInterfCallJson<<endl;
-        ofs.close();
-    }
+    uuid_t uuid;
+    uuid_generate_time(uuid);
+    char uuid_str[37]={0};
+    uuid_unparse_lower(uuid, uuid_str);
+    stringstream ss;
+    ss<<gSrcRootPath<<"/Analyzer/"<<uuid_str<<".clsMethod.jsonpart";
+    this->writeJsonToFile(clsMethodJson, ss.str());
+    ss.str("");
+    ss<<gSrcRootPath<<"/Analyzer/"<<uuid_str<<".clsInterfHierachy.jsonpart";
+    this->writeJsonToFile(clsInterfHierachy, ss.str());
+    ss.str("");
+    ss<<gSrcRootPath<<"/Analyzer/"<<uuid_str<<".protoInterfHierachy.jsonpart";
+    this->writeJsonToFile(protoInterfHierachy, ss.str());
+    ss.str("");
+    ss<<gSrcRootPath<<"/Analyzer/"<<uuid_str<<".clsMethodAddNotifs.jsonpart";
+    this->writeJsonToFile(clsMethodAddNotifsJson, ss.str());
+    ss.str("");
+    ss<<gSrcRootPath<<"/Analyzer/"<<uuid_str<<".notifPostedCallers.jsonpart";
+    this->writeJsonToFile(notifPostedCallersJson, ss.str());
+    ss.str("");
+    ss<<gSrcRootPath<<"/Analyzer/"<<uuid_str<<".protoInterfCall.jsonpart";
+    this->writeJsonToFile(protoInterfCallJson, ss.str());
 }

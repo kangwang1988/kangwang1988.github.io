@@ -71,7 +71,6 @@ namespace
                 ostringstream stringStream;
                 stringStream<<protoDecl->getNameAsString();
                 objcProtocol = stringStream.str();
-                
                 vector<string> refProtos;
                 for(ObjCProtocolList::iterator it = protoDecl->protocol_begin();it!=protoDecl->protocol_end();it++){
                     refProtos.push_back((*it)->getNameAsString());
@@ -101,11 +100,13 @@ namespace
                         Stmt *methodBody = methodDecl->getBody();
                         objcMethodSrcCode.assign(context->getSourceManager().getCharacterData(methodBody->getSourceRange().getBegin()),methodBody->getSourceRange().getEnd().getRawEncoding()-methodBody->getSourceRange().getBegin().getRawEncoding()+1);
                         objcMethodFilename = context->getSourceManager().getFilename(methodBody->getSourceRange().getBegin()).str();
-                        objcMethodFilename = objcMethodFilename.substr(gSrcRootPath.length(),objcMethodFilename.length()-gSrcRootPath.length());
-                        ostringstream stringStream;
-                        stringStream<<methodBody->getSourceRange().getBegin().getRawEncoding()<<"-"<<methodBody->getSourceRange().getEnd().getRawEncoding();
-                        objcMethodRange = stringStream.str();
-                        CodeAnalyzer::sharedInstance()->appendObjcClsMethodImpl(objcIsInstanceMethod, objcClsImpl, objcSelector, objcMethodFilename, methodBody->getSourceRange().getBegin().getRawEncoding(),methodBody->getSourceRange().getEnd().getRawEncoding(), objcMethodSrcCode);
+                        if(objcMethodFilename.find(gSrcRootPath)!=string::npos){
+                            objcMethodFilename = objcMethodFilename.substr(gSrcRootPath.length(),objcMethodFilename.length()-gSrcRootPath.length());
+                            ostringstream stringStream;
+                            stringStream<<methodBody->getSourceRange().getBegin().getRawEncoding()<<"-"<<methodBody->getSourceRange().getEnd().getRawEncoding();
+                            objcMethodRange = stringStream.str();
+                            CodeAnalyzer::sharedInstance()->appendObjcClsMethodImpl(objcIsInstanceMethod, objcClsImpl, objcSelector, objcMethodFilename, methodBody->getSourceRange().getBegin().getRawEncoding(),methodBody->getSourceRange().getEnd().getRawEncoding(), objcMethodSrcCode);
+                        }
                     }
                 }
             }
@@ -144,9 +145,7 @@ namespace
                             protocol = protocol.substr(0,pos);
                         }
                         protocol = trim(protocol);
-                        if(!calleeSel.compare("viewController:execFunc:")){
-                            CodeAnalyzer::sharedInstance()->appendObjcProtoInterfCall(objcIsInstanceMethod, objcClsImpl, objcSelector, protocol,calleeSel );
-                        }
+                        CodeAnalyzer::sharedInstance()->appendObjcProtoInterfCall(objcIsInstanceMethod, objcClsImpl, objcSelector, protocol,calleeSel );
                     }
                     return true;
                 }
@@ -167,6 +166,12 @@ namespace
                         !calleeSel.compare("performSelector:withObject:afterDelay:inModes:") ||
                         !calleeSel.compare("performSelector:withObject:afterDelay:")){
                     this->handlePerformSelectorMessageExpr(objcExpr,calleeSel);
+                }
+                else if(!calleeSel.compare("new")){
+                    if(!calleeIsInstanceMethod){
+                        CodeAnalyzer::sharedInstance()->appendObjcMethodImplCall(objcIsInstanceMethod, objcClsImpl, objcSelector,false, receiverType,"alloc");
+                        CodeAnalyzer::sharedInstance()->appendObjcMethodImplCall(objcIsInstanceMethod, objcClsImpl, objcSelector,true, receiverType,"init");
+                    }
                 }
                 else if(objcMethodFilename.length()){
                     CodeAnalyzer::sharedInstance()->appendObjcMethodImplCall(objcIsInstanceMethod, objcClsImpl, objcSelector,calleeIsInstanceMethod, receiverType,calleeSel);
