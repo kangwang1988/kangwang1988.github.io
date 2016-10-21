@@ -8,7 +8,6 @@
 
 #include "CodeAnalyzer.h"
 #include <streambuf>
-#include<uuid/uuid.h>
 
 string gSrcRootPath = "";
 string kKeyInterfSelDictFilename = "filename";
@@ -19,6 +18,7 @@ string kKeyInterfSelDictRefProtos = "refProtos";
 string kKeyInterfSelDictSuperClass = "superClass";
 string kKeyInterfSelDictProtos = "protos";
 string kKeyInterfSelDictInterfs = "interfs";
+string kKeyInterfSelDictIsInSrcDir = "isInSrcDir";
 string kKeyInterfSelDictNotifCallers = "notifCallers";
 
 CodeAnalyzer *sCodeAnalyzer;
@@ -28,6 +28,17 @@ CodeAnalyzer* CodeAnalyzer::sharedInstance(){
         sCodeAnalyzer = new CodeAnalyzer();
     }
     return sCodeAnalyzer;
+}
+
+void CodeAnalyzer::setFilename(string fname,bool forceSet){
+    if(!fname.length())
+        return;
+    if(!forceSet && filename.length())
+        return;
+    filename = fname;
+    string cs2Remove = "/\\";
+    for (unsigned int i = 0; i < cs2Remove.length(); ++i)
+        filename.erase (remove(filename.begin(), filename.end(), cs2Remove.at(i)), filename.end());
 }
 
 bool CodeAnalyzer::writeJsonToFile(json j, string filename){
@@ -90,7 +101,7 @@ void CodeAnalyzer::appendObjcClsInterf(string cls,bool isInstanceInterf,string s
     clsInterfHierachy[cls]={{kKeyInterfSelDictSuperClass,interfHierachyObj[kKeyInterfSelDictSuperClass]},{kKeyInterfSelDictProtos,interfHierachyObj[kKeyInterfSelDictProtos]},{kKeyInterfSelDictInterfs,interfsJson}};
 }
 
-void CodeAnalyzer::appendObjcProto(string proto,vector<string> refProto){
+void CodeAnalyzer::appendObjcProto(string proto,vector<string> refProto,bool isInSrcDir){
     json protoJson = json(protoInterfHierachy[proto]);
     json protoRefProtosJson = json(protoJson[kKeyInterfSelDictProtos]);
     vector<string> oldProtoRefProtoVec;
@@ -101,7 +112,7 @@ void CodeAnalyzer::appendObjcProto(string proto,vector<string> refProto){
         if(find(oldProtoRefProtoVec.begin(),oldProtoRefProtoVec.end(),value)==oldProtoRefProtoVec.end())
             protoRefProtosJson.push_back(*it);
     }
-    protoInterfHierachy[proto]={{kKeyInterfSelDictInterfs,protoJson[kKeyInterfSelDictInterfs]},{kKeyInterfSelDictProtos,protoRefProtosJson}};
+    protoInterfHierachy[proto]={{kKeyInterfSelDictInterfs,protoJson[kKeyInterfSelDictInterfs]},{kKeyInterfSelDictProtos,protoRefProtosJson},{kKeyInterfSelDictIsInSrcDir,isInSrcDir?"1":"0"}};
 }
 
 void CodeAnalyzer::appendObjcProtoInterf(string proto, bool isInstanceInterf, string selector){
@@ -113,7 +124,7 @@ void CodeAnalyzer::appendObjcProtoInterf(string proto, bool isInstanceInterf, st
         oldInterfsVec = interfs.get<vector<string>>();
     if(find(oldInterfsVec.begin(),oldInterfsVec.end(),value)==oldInterfsVec.end())
         interfs.push_back(value);
-    protoInterfHierachy[proto]={{kKeyInterfSelDictInterfs,interfs},{kKeyInterfSelDictProtos,protoHierachyObj[kKeyInterfSelDictProtos]}};
+    protoInterfHierachy[proto]={{kKeyInterfSelDictInterfs,interfs},{kKeyInterfSelDictProtos,protoHierachyObj[kKeyInterfSelDictProtos]},{kKeyInterfSelDictIsInSrcDir,protoHierachyObj[kKeyInterfSelDictIsInSrcDir]}};
 }
 
 void CodeAnalyzer::appendObjcAddNotificationCall(bool isInstanceMethod, string cls, string selector, string calleeCls, string calleeSel, string notif){
@@ -154,26 +165,18 @@ void CodeAnalyzer::appendObjcProtoInterfCall(bool isInstanceMethod, string cls, 
 }
 
 void CodeAnalyzer::synchronize(){
-    uuid_t uuid;
-    uuid_generate_time(uuid);
-    char uuid_str[37]={0};
-    uuid_unparse_lower(uuid, uuid_str);
-    stringstream ss;
-    ss<<gSrcRootPath<<"/Analyzer/"<<uuid_str<<".clsMethod.jsonpart";
-    this->writeJsonToFile(clsMethodJson, ss.str());
-    ss.str("");
-    ss<<gSrcRootPath<<"/Analyzer/"<<uuid_str<<".clsInterfHierachy.jsonpart";
-    this->writeJsonToFile(clsInterfHierachy, ss.str());
-    ss.str("");
-    ss<<gSrcRootPath<<"/Analyzer/"<<uuid_str<<".protoInterfHierachy.jsonpart";
-    this->writeJsonToFile(protoInterfHierachy, ss.str());
-    ss.str("");
-    ss<<gSrcRootPath<<"/Analyzer/"<<uuid_str<<".clsMethodAddNotifs.jsonpart";
-    this->writeJsonToFile(clsMethodAddNotifsJson, ss.str());
-    ss.str("");
-    ss<<gSrcRootPath<<"/Analyzer/"<<uuid_str<<".notifPostedCallers.jsonpart";
-    this->writeJsonToFile(notifPostedCallersJson, ss.str());
-    ss.str("");
-    ss<<gSrcRootPath<<"/Analyzer/"<<uuid_str<<".protoInterfCall.jsonpart";
-    this->writeJsonToFile(protoInterfCallJson, ss.str());
+    string fileprefix = string(filename);
+    if(!fileprefix.length()){
+        ofstream ofs;
+        ofs.open (gSrcRootPath+"/Analyzer/"+"error.json",ofstream::out);
+        ofs<<"Error:Filename not set."<<clsMethodJson<<endl;
+        ofs.close();
+        cout<<"[KWLM]:Nofilename"<<endl;
+    }
+    writeJsonToFile(clsMethodJson, gSrcRootPath+"/Analyzer/"+fileprefix+".clsMethod.jsonpart");
+    writeJsonToFile(clsInterfHierachy, gSrcRootPath+"/Analyzer/"+fileprefix+".clsInterfHierachy.jsonpart");
+    writeJsonToFile(protoInterfHierachy, gSrcRootPath+"/Analyzer/"+fileprefix+".protoInterfHierachy.jsonpart");
+    writeJsonToFile(clsMethodAddNotifsJson,gSrcRootPath+"/Analyzer/"+fileprefix+".clsMethodAddNotifs.jsonpart");
+    writeJsonToFile(notifPostedCallersJson, gSrcRootPath+"/Analyzer/"+fileprefix+".notifPostedCallers.jsonpart");
+    writeJsonToFile(protoInterfCallJson, gSrcRootPath+"/Analyzer/"+fileprefix+".protoInterfCall.jsonpart");
 }

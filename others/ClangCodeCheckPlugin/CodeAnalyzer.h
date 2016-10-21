@@ -23,17 +23,18 @@ using namespace nlohmann;
 class CodeAnalyzer{
 public:
    static CodeAnalyzer *sharedInstance();
-   bool writeJsonToFile(json j,string filename);
+   void setFilename(string fname,bool forceSet);
    void appendObjcClsMethodImpl(bool isInstanceMethod,string cls,string selector,string filename,unsigned rangeFrom,unsigned rangeTo,string sourcecode);
    void appendObjcMethodImplCall(bool isInstanceMethod,string cls,string selector,bool calleeIsInstanceMethod,string calleeCls,string calleeSel);
    void appendObjcCls(string cls,string supCls,vector<string> protoVec);
    void appendObjcClsInterf(string cls,bool isInstanceInterf,string selector);
-   void appendObjcProto(string proto,vector<string> refProto);
+   void appendObjcProto(string proto,vector<string> refProto,bool isInSrcDir);
    void appendObjcProtoInterf(string proto,bool isInstanceInterf,string selector);
    void appendObjcAddNotificationCall(bool isInstanceMethod,string cls,string selector,string calleeCls,string calleeSel,string notif);
    void appendObjcPostNotificationCall(bool isInstanceMethod, string cls, string selector, string notif);
     void appendObjcProtoInterfCall(bool isInstanceMethod,string cls,string selector,string proto,string protoSel);
-   void synchronize();
+    bool writeJsonToFile(json j,string filename);
+    void synchronize();
 private:
     json clsMethodJson;
     json clsInterfHierachy;
@@ -41,5 +42,6 @@ private:
     json clsMethodAddNotifsJson;
     json notifPostedCallersJson;
     json protoInterfCallJson;
+    string filename;
 };
 #endif /* CodeAnalyzer_h */

@@ -7,6 +7,8 @@ appPath=$1
 ipaPath=$2
 dir=$(dirname "$appPath")
 basename=$(basename "$appPath" ".app")
+ipadir=$(dirname "$ipaPath")
+ipabasename=$(basename "$ipaPath" ".ipa")
 
 cd $dir
 
@@ -18,6 +20,6 @@ rm -rf "$payloadDir/*"
 cp -rf "$appPath" "$payloadDir"
 zip -qry "$dir/$basename.ipa" "Payload"
 mv "$dir/$basename.ipa" "$ipaPath"
-
+mv "$dir/"$basename".app.dsym" "$ipadir/"$ipabasename".app.dsym"
 #恢复环境
 cd "$priorWD"

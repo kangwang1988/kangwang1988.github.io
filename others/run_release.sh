@@ -10,9 +10,9 @@
 
 priorWD=$PWD
 configuration="Release"
-codeParDir="~/Documents/Codes/$configuration"
-prjName="your-project-name"
-gitURL="git@git.xxx.com:username/repository.git"
+codeParDir="/Users/Shared/Jenkins/Documents/Codes/$configuration"
+prjName="PRJ"
+gitURL="git@git.com:user/reposityro.git"
 gitBranch="master"
 baseDir=$(dirname "$0")
 codeDir="$codeParDir/$prjName"
@@ -21,17 +21,19 @@ workspaceName="$targetName.xcworkspace"
 schemeName="$targetName" #与xcworkspace配合使用
 sdkName="iphoneos"
 gccMacros=""
-provisionUUID="your-provision-uuid"
+codesignIdentity="CertificateName"
+provisionUUID="provisionUUID"
 buildOutputDir="$codeDir/tmpSysRoot$configuration"
-ipaOutputDir="~/$targetName$configuration/$targetName$configuration"".ipa"
-jsonOutputDir="~/$targetName$configuration/$targetName$configuration"".json"
+ipaOutputDir="/Users/Shared/Jenkins/Share/$targetName$configuration/$targetName$configuration"".ipa"
+jsonOutputDir="/Users/Shared/Jenkins/Share/$targetName$configuration/$targetName$configuration"".json"
+
 
 #获取代码
 sh "$baseDir/git_common.sh" "$codeParDir" "$prjName" "$gitURL" "$gitBranch"
 
 #切入实际代码并pod
 cd "$codeDir"
-/usr/local/bin/pod _0.39.0_ install
+/usr/local/bin/pod  install
 cd "$priorWD"
 
 #确保scheme存在且可被xcodebuild正常使用
@@ -39,7 +41,7 @@ open "$codeDir/$workspaceName" -a Xcode
 sleep 5
 
 #compile
-sh "$baseDir/compile_common.sh" "$codeDir" "$workspaceName" "$schemeName" "$sdkName" "$configuration" "$gccMacros" "$provisionUUID" "$buildOutputDir"
+sh "$baseDir/compile_common.sh" "$codeDir" "$workspaceName" "$schemeName" "$sdkName" "$configuration" "$gccMacros" "$codesignIdentity" "$provisionUUID" "$buildOutputDir"
 
 #package
 sh "$baseDir/package_common.sh" "$buildOutputDir/$targetName.app" "$ipaOutputDir"

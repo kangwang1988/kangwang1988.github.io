@@ -14,6 +14,18 @@
 
 using namespace std;
 
+static inline void remove_blank(string &str)
+{
+    str.erase(remove(str.begin(), str.end(), ' '), str.end());
+    str.erase(remove(str.begin(), str.end(), '\t'), str.end());
+}
+
+static inline bool has_suffix(const std::string &str, const std::string &suffix)
+{
+    return str.size() >= suffix.size() &&
+    str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0;
+}
+
 static inline string &ltrim(std::string &s) {
     s.erase(s.begin(), find_if(s.begin(), s.end(),
                                not1(ptr_fun<int, int>(isspace))));
