@@ -20,10 +20,9 @@ tags: [ 'clang' ]
 
 ## 使用Clang检查代码风格
 
-   Clang适合于解决给定格式的情形，对于清晰的命名等语义相关，语法糖(dot-syntax在Clang输入前已被修改)，未知类型(如面对一个String并不知道是不是用于通知的名称)并不适用。
-​    
-   下面就介绍若干常见的可用于Clang分析的Case及处理方式:
-​    
+	Clang适合于解决给定格式的情形，对于清晰的命名等语义相关，语法糖(dot-syntax在Clang输入前已被修改)，未知类型(如面对一个String并不知道是不是用于通知的名称)并不适用。
+	下面就介绍若干常见的可用于Clang分析的Case及处理方式:
+	
 	1.类命名:(假设需要前缀为XX，不能包含_)
 	@interface user_Model : NSObject;
 	@end
@@ -31,7 +30,7 @@ tags: [ 'clang' ]
 	bool RecursiveASTVisitor::VisitDecl(Decl *decl);
 	表达式分析则需要重载
 	bool RecursiveASTVisitor::VisitStmt(Stmt *stmt);
-	其中当decl:ObjCInterfaceDecl代表类声明,decl:ObjCImplDecl代表类定义，参考此两个类的方法即可完成名称的判断。
+	其中当decl:ObjCInterfaceDecl代表类声明,decl:ObjCImplDecl代表类定义，参考此两个类的方法即可完成名称的判断
 	
 	2.ivar以下划线开头
 	@interface user_Model : NSObject{
