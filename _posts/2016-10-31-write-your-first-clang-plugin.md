@@ -20,7 +20,7 @@ tags: [ 'clang' ]
 
 ## LLVM & Clang
 
-​	LLVM工程包含了一组模块化，可服用的编译器和工具链。和其名字的原意(Low level virtual machine)不同的是,LLVM不是一个首字母缩写，而是工程的名字。
+​	LLVM工程包含了一组模块化，可复用的编译器和工具链。和其名字的原意(Low level virtual machine)不同的是,LLVM不是一个首字母缩写，而是工程的名字。
 
 ​	目前LLVM的主要子项目包括:
 
@@ -74,6 +74,9 @@ tags: [ 'clang' ]
 ## 例子(分析某.m文件中用户定义的OC类)
 ### 环境搭建
   1.下载clang相关源代码并编译
+
+
+
 	cd /opt
 	sudo mkdir llvm
 	sudo chown `whoami` llvm
@@ -213,6 +216,9 @@ PS.文件很多，也很大，如果clone缓慢，请先设置代理
 ![clang插件运行结果](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/clang-find-user-defined-class.png)
 
 ##Xcode集成Clang插件
+
+
+
 	要在Xcode中使用Clang插件，需要Hack Xcode.app。
 	[下载XcodeHacking.zip](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/others/XcodeHacking.zip)
 	执行:
