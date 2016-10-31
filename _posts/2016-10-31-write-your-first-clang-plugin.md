@@ -16,11 +16,16 @@ tags: [ 'clang' ]
        为了获取到所有API的调用，就需要分析源代码(二进制相关记录中是基于selector的，而我们需要的是-/+[cls msg]).这就不得的不提到大名鼎鼎的llvm和clang了。
        Clang系列将推出多篇文章，基于Xcode和Clang，实现诸如代码风格规范，有效API检查，无用代码筛查等特性，欢迎关注和讨论。
 
+
+
 ## LLVM & Clang
 
 ​	LLVM工程包含了一组模块化，可服用的编译器和工具链。和其名字的原意(Low level virtual machine)不同的是,LLVM不是一个首字母缩写，而是工程的名字。
 
 ​	目前LLVM的主要子项目包括:
+
+
+
 	1.LLVM Core:包含一个现在的源代码/目标设备无关的优化器，一集一个针对很多主流(甚至于一些非主流)的CPU的汇编代码生成支持。
 	2.Clang:一个C/C++/Objective-C编译器，致力于提供令人惊讶的快速编译，极其有用的错误和警告信息，提供一个可用于构建很棒的源代码级别的工具.
 	3.dragonegg: gcc插件，可将GCC的优化和代码生成器替换为LLVM的相应工具。
@@ -84,9 +89,16 @@ tags: [ 'clang' ]
 	cd llvm_build
 	cmake ../llvm -DCMAKE_BUILD_TYPE:STRING=Release
 	make -j`sysctl -n hw.logicalcpu`
-  PS.文件很多，也很大，如果clone缓慢，请先设置代理
+  
 
-  2.编写clang插件
+PS.文件很多，也很大，如果clone缓慢，请先设置代理
+
+
+
+2.编写clang插件
+
+
+
 	//printClsPlugin.cpp
 	#include <iostream>
 	#include "clang/Frontend/FrontendPluginRegistry.h"
@@ -141,7 +153,12 @@ tags: [ 'clang' ]
 	<ClangPlugin::ClangPluginASTAction>X("ClangPlugin", 	
 	"ClangPlugin");
 
-  3.编译生成插件(dylib)
+ 
+
+ 3.编译生成插件(dylib)
+
+
+
 	clang -std=c++11 -stdlib=libc++ -L/opt/local/lib -
 	L/opt/llvm/llvm_build/lib  
 	-I/opt/llvm/llvm_build/tools/clang/include -
@@ -163,8 +180,13 @@ tags: [ 'clang' ]
 	Wcast-qual -fno-strict-aliasing -pedantic -Wno-long-long -Wall 
 	-Wno-unused-parameter -Wwrite-strings -fno-rtti -fPIC 	
 	./printClsPlugin.cpp -o ClangPlugin.dylib
-  4.编写测试用oc文件
-  //ocClsDemo.m
+
+
+
+4.编写测试用oc文件
+​	
+
+	//ocClsDemo.m
 	#import<UIKit/UIKit.h>
 	@interface MyViewController : UIViewController
 	@end
@@ -176,7 +198,12 @@ tags: [ 'clang' ]
 		return self;
 	}
 	@end
-  5.使用1生成的clang编译oc文件(载入3生成的ClangPlugin.dylib)
+  
+
+5.使用1生成的clang编译oc文件(载入3生成的ClangPlugin.dylib)
+
+
+
 	/opt/llvm/llvm_build/bin/clang -isysroot	/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator10.0.sdk -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 
 	-mios-version-min=8.0 -Xclang -load -Xclang 		
 	~/Desktop/ClangPlugin.dylib -Xclang -add-plugin -Xclang 
@@ -190,7 +217,8 @@ tags: [ 'clang' ]
 	[下载XcodeHacking.zip](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/others/XcodeHacking.zip)
 	执行:
 	sudo mv HackedClang.xcplugin `xcode-select -print-
-path`/../PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Xcode/Plug-ins
-	sudo mv HackedBuildSystem.xcspec `xcode-select -print-path`/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Specifications
+	path`/../PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Xcode/Plug-ins
+	sudo mv HackedBuildSystem.xcspec `xcode-select -print-
+	path`/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Specifications
 	之后在Xcode->Target-Build Settings->Build Options->Compiler for C/C++/Objective-C选择Clang LLVM Trunk即可使得Xcode使用1生成的的Clang来编译。至于其他的命令行参数，均可以通过Xcode设置完成。
 [Contact me](mailto:kang.wang1988@gmail.com)
