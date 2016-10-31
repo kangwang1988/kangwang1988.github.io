@@ -92,7 +92,7 @@ tags: [ 'clang' ]
 	cd llvm_build
 	cmake ../llvm -DCMAKE_BUILD_TYPE:STRING=Release
 	make -j`sysctl -n hw.logicalcpu`
-  
+
 
 PS.文件很多，也很大，如果clone缓慢，请先设置代理
 
@@ -201,7 +201,7 @@ PS.文件很多，也很大，如果clone缓慢，请先设置代理
 		return self;
 	}
 	@end
-  
+
 
 5.使用1生成的clang编译oc文件(载入3生成的ClangPlugin.dylib)
 
@@ -220,7 +220,9 @@ PS.文件很多，也很大，如果clone缓慢，请先设置代理
 
 
 	要在Xcode中使用Clang插件，需要Hack Xcode.app。
-	[下载XcodeHacking.zip](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/others/XcodeHacking.zip)
+
+[下载XcodeHacking.zip](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/others/XcodeHacking.zip)
+
 	执行:
 	sudo mv HackedClang.xcplugin `xcode-select -print-
 	path`/../PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Xcode/Plug-ins
