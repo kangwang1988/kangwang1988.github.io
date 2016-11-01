@@ -128,7 +128,7 @@ tags: [ 'clang' ]
 		NSLog(@"5");
 	当VisitStmt(Stmt *stmt)中的stmt为IfStmt时，其getCond()接口返回用于判断的条件cond。针对一元表达式，cond为UnaryOperator，需要使用getSubExpr()获取新的cond并脱去一元运算符，再去分析后面的内容。对于常量条件请参考IntegerLiteral,CharacterLiteral,FloatingLiteral。结合一元表达式类型和常亮的bool内容，即可判断出If的body一定会走到或走不到并提醒用户。
 
-## 代码FixHint功能
+## 代码FixItHint功能
 
 	clang本身提供诊断的功能，可使用
 	FixItHint fixItHint = FixItHint::CreateReplacement(SourceRange(nameStart, nameEnd), replacement);
