@@ -45,7 +45,7 @@ tags: [ 'clang' ]
 ​	
 	2.无用代码的分析
 	分析的对象在于clsMethod.json里面所有的key，即实际拥有源代码的-/+[cls method]调用。
-	a.初始化默认的调用关系usedClsMethodJson:{-[AppDelegate alloc],"-[UIApplication main]"},{"-[UIApplication main]","-[UIApplication main]"},{"+[NSObject alloc]","-[UIApplication main]"},其中AppDelegate由用户传给Analyzer.
+	a.初始化默认的调用关系usedClsMethodJson:-[AppDelegate alloc],"-[UIApplication main]","-[UIApplication main]","-[UIApplication main]","+[NSObject alloc]","-[UIApplication main]",其中AppDelegate由用户传给Analyzer.
 	b.分析-/+[cls method]是否存在一条路可以被已经调用usedClsMethodJson中的key调用。
 	对于某一个clsMethod，其需要检查的路径包括三个，继承体系，Protocol体系和Notification体系。
 	针对Notification体系，前文已经有过分析。
@@ -77,13 +77,13 @@ tags: [ 'clang' ]
 	2.Model转化
 	如如果MTLModel使用到了modelOfClass:[XXXModel class] fromJSONDictionary:error:，则暗含了+[XXXModel alloc]和+[XXXModel init]
 	3.message swizzle
-	假设用户swizzle了[UIViewController viewDidLoad]和[UIViewController XXviewDidLoad]，则需要在implicitCallStackJson中添加{[UIViewController XXviewDidLoad],[UIViewController viewDidLoad]}
+	假设用户swizzle了[UIViewController viewDidLoad]和[UIViewController XXviewDidLoad]，则需要在implicitCallStackJson中添加[UIViewController XXviewDidLoad],[UIViewController viewDidLoad]
 	4.第三方Framework暗含的逻辑
-	如高德地图的AnnotationView,需要implicitCallStackJson中添加{"-[MAAnnotationView prepareForReuse:]","+[MAAnnotationView alloc]"}等。包括第三方Framework里面的一些Protocol，可能也需要参考前文提到的UIApplicationDelegate按照系统级别的Protocol来处理。
+	如高德地图的AnnotationView,需要implicitCallStackJson中添加"-[MAAnnotationView prepareForReuse:]","+[MAAnnotationView alloc]"等。包括第三方Framework里面的一些Protocol，可能也需要参考前文提到的UIApplicationDelegate按照系统级别的Protocol来处理。
 	5.一些遗漏的重载方法
-	如-[XXDerivedManager sharedInstance]并无实现，而XXDerivedManager的基类XXBaseManager的sharedInstance调用了-[self alloc],但因为self静态分析时被认定为XXBaseManager，这就导致-[XXDerivedManager sharedManager]虽然被usedclsmethod.json调用，但是-[XXDerivedManager alloc]却不能被调用。这种情况，可以在usedClsMethodJson初始化的时候，加入 {"+[XXDerivedManager alloc]","-[UIApplication main]"}。
+	如-[XXDerivedManager sharedInstance]并无实现，而XXDerivedManager的基类XXBaseManager的sharedInstance调用了-[self alloc],但因为self静态分析时被认定为XXBaseManager，这就导致-[XXDerivedManager sharedManager]虽然被usedclsmethod.json调用，但是-[XXDerivedManager alloc]却不能被调用。这种情况，可以在usedClsMethodJson初始化的时候，加入 "+[XXDerivedManager alloc]","-[UIApplication main]"。
 	6.类似Cell Class
-	我们常会使用动态的方法去使用[[[XXX cellClassWithCellModel:] alloc] initWithStyle:reuseIdentifier:]去构造Cell，这种情况下，应该针对cellClassWithCellModel里面会包含的各种return [XXXCell class]，在implicitCallStackJson中添加{[[XXXCell alloc] initWithStyle:reuseIdentifier:],-[XXX cellClassWithCellModel:]}这种调用。
+	我们常会使用动态的方法去使用[[[XXX cellClassWithCellModel:] alloc] initWithStyle:reuseIdentifier:]去构造Cell，这种情况下，应该针对cellClassWithCellModel里面会包含的各种return [XXXCell class]，在implicitCallStackJson中添加[[XXXCell alloc] initWithStyle:reuseIdentifier:],-[XXX cellClassWithCellModel:]这种调用。
 	其他隐含的逻辑或者动态特性导致的调用关系遗漏。
 ## 其他问题
 
