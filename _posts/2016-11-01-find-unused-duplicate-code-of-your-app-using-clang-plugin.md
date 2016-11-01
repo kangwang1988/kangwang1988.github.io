@@ -52,7 +52,7 @@ tags: [ 'clang' ]
 	针对Notification体系，前文已经有过分析。
 	针对类继承体系，从当前类一直向上追溯(直到发现有被调用或者NSObject)，每一个基类对应的-/+[cls method]是否被隐含的调用关系所调用，如-[ViewController viewDidLoad]被-[ViewController alloc]隐含调用，当-[ViewController alloc]已经被调用的时候，-[ViewController viewDidLoad]也将被认为调用。这里需要注意需要写一个隐含调用关系表以供查询，如下所示:
 
-![clang-find-duplicate-unused-code-implicitCallStackJson]https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/clang-find-duplicate-unused-code-implicitCallStackJson.pn
+![clang-find-duplicate-unused-code-implicitCallStackJson](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/clang-find-duplicate-unused-code-implicitCallStackJson.png)
 
 	针对Protocol体系，需要参考类似Protocol引用体系向上追溯(直到发现有被调用或者NSObject协议)，针对某一个特定的Protocol判断的时候，需要区分两种，一种是系统级的Protocol，如UIApplicationDelegate，对于-[AppDelegate application:didFinishLaunchingWithOptions:]这种，因为AppDelegate<UIApplicationDelegate>，如果-[AppDelegate alloc]被调用则直接认为-[AppDelegate application:didFinishLaunchingWithOptions:]被调用。针对用户定义的Protocol,如ViewControllerDelegate，对于-[AppDelegate viewController:execFunc:]不仅需要-[AppDelegate alloc]被调用并且protoInterfCall.json中-[ViewControllerDelegate viewController:execFunc:]对应的Callers有已经存在于usedClsMethodJson的Caller.
 
