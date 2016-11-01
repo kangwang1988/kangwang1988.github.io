@@ -2,7 +2,7 @@
 layout: post
 comments: true
 section-type: post
-title: Clang技术分享系列三:API有效性检查(A clang plugin approach)
+title: Clang技术分享系列三:API有效性检查
 category: tech
 tags: [ 'clang' ]
 
@@ -86,7 +86,7 @@ tags: [ 'clang' ]
 ![clang-validate-ios-api-protoInterfCall](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/clang-validate-ios-api-protoInterfCall.png)
 
     这些信息获取入口位于VisitStmt(Stmt *stmt)的重载函数里，相关的stmt是ObjCMessageExpr.
-    
+
 ## 处理过的苹果官方文档
 
     此处过程可参见上文提到的我的另一篇博客XCODE8 API文档解析，此处只截图说明下处理过的各种API对应版本支持信息的数据结构。
@@ -108,7 +108,7 @@ tags: [ 'clang' ]
 ![clang-validate-ios-api-verProtoProperty](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/clang-validate-ios-api-verProtoProperty.png)
 
 ## 最终分析
-	
+
 	对于变量，枚举，函数等，只需要拿到名称之后到对应的verXXX.json去比对，如果发现了匹配，提取其对应的支持版本信息，并与传入clang的deployTarget和当前最新支持的系统作比较，根据需要确定是否输出警告。
 	对于类，需要在其继承层次上去查看每一个基类的支持版本信息，做判断，直到到达NSOBject或者已经有警告为止；
 	对于-/+[Cls Sel]这种，首先需要从clsMethod.json中提取所有的-/+[Cls Sel]调用(包括调用者和被调用者)，然后针对每一个-/+[Cls Sel]，沿着两个维度去搜索。一个是类继承体系(一直到已经存在的匹配方法/追溯到到NSObject类/遇到警告)，一个是Protocol引用体系(一直到已经存在的匹配方法/追溯到到NSObject协议/遇到警告)。这两个维度里，判断的时候针对-/+[Cls Sel]既要考虑Sel可能是一个Sel，也可能是一个Property，尝试Property时需把Sel隐射到property上(使用clsPropertyGS)，再同VerClsProperty比较方可。
@@ -124,18 +124,18 @@ tags: [ 'clang' ]
 [检出示例工程](https://github.com/kangwang1988/XcodeValidAPI.git)
 
 ## 局限
-	
+
 	说到底这种静态的分析适合的时比较容易判断出消息接收者类型的例子，面对静态分析的类型和实际不一致，或者静态分析不出来类型的时候，是无能为力的。
 	此外，这种分析，对于代码的书写规范有要求。例如一个Class实现了某个Protocol，一定要在声明里说明，或者Property中delegate是id<XXXDelegate>的时候也要注明。当然，这种规范的工作本来就是应该的。
-	
-## 如何与Xcode集成
-	
-    现有的机制是
-	1.书写ClangPlugin
-	2.书写分析可执行文件
-	3.使用用户编译的Clang载入ClangPlugin去编译并生成各种中间文件。
-	4.Build结束的时候，使用Xcode提供的post_build_action_shell机制调用分析工具，生成最终结果。
 
+## 如何与Xcode集成
+
+    现有的机制是
+    1.书写ClangPlugin
+    2.书写分析可执行文件
+    3.使用用户编译的Clang载入ClangPlugin去编译并生成各种中间文件。
+    4.Build结束的时候，使用Xcode提供的post_build_action_shell机制调用分析工具，生成最终结果。
+    
     如果需要与Xcode集成，那么利用4之后生成的结果文件，结合 Clang技术分享系列二:代码风格检查提到的FixItHint功能，在Xcode中提示用户。
-	
+
 [Contact me](mailto:kang.wang1988@gmail.com)
