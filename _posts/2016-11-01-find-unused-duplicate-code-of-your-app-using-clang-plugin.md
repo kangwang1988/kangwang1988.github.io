@@ -44,7 +44,7 @@ tags: [ 'clang' ]
 ![clang-validate-ios-api-repeatCode](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/clang-validate-ios-api-repeatCode.png)
 ​	
     2.无用代码的分析
-	
+
 	分析的对象在于clsMethod.json里面所有的key，即实际拥有源代码的-/+[cls method]调用。
 	a.初始化默认的调用关系usedClsMethodJson:-[AppDelegate alloc],"-[UIApplication main]","-[UIApplication main]","-[UIApplication main]","+[NSObject alloc]","-[UIApplication main]",其中AppDelegate由用户传给Analyzer.
 	b.分析-/+[cls method]是否存在一条路可以被已经调用usedClsMethodJson中的key调用。
@@ -69,6 +69,12 @@ tags: [ 'clang' ]
 
 [检出示例工程](https://github.com/kangwang1988/XcodeZombieCode.git)
 
+鉴于示例工程规模较小，另选取开源的[zulip-ios](https://github.com/zulip/zulip-ios)工程，结合本文所述方法去除未被最终调用的代码(包括业务代码，第三方库)，效果如下:
+![clang-find-duplicate-unused-code-zulip-original-binary](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/clang-find-duplicate-unused-code-zulip-original-binary.png)
+![clang-find-duplicate-unused-code-zulip-trimmed-binary](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/master/img/clang-find-duplicate-unused-code-zulip-trimmed-binary.png)
+
+其中原始工程Archieve生成的可执行文件大小为3.4MB,去除最终未被调用的代码后，可执行文件变为3MB。对于这样一个设计良好的工程，纯代码的瘦身效果还是比较可观的。
+
 ## 针对不同工程的定制
 
 	虽然此项目已经给了一个完整的重复代码和无用代码分析工具，但也有其局限性(主要是动态特性)。具体分析如下:
@@ -84,7 +90,8 @@ tags: [ 'clang' ]
 	如-[XXDerivedManager sharedInstance]并无实现，而XXDerivedManager的基类XXBaseManager的sharedInstance调用了-[self alloc],但因为self静态分析时被认定为XXBaseManager，这就导致-[XXDerivedManager sharedManager]虽然被usedclsmethod.json调用，但是-[XXDerivedManager alloc]却不能被调用。这种情况，可以在usedClsMethodJson初始化的时候，加入 "+[XXDerivedManager alloc]","-[UIApplication main]"。
 	6.类似Cell Class
 	我们常会使用动态的方法去使用[[[XXX cellClassWithCellModel:] alloc] initWithStyle:reuseIdentifier:]去构造Cell，这种情况下，应该针对cellClassWithCellModel里面会包含的各种return [XXXCell class]，在implicitCallStackJson中添加[[XXXCell alloc] initWithStyle:reuseIdentifier:],-[XXX cellClassWithCellModel:]这种调用。
-	其他隐含的逻辑或者动态特性导致的调用关系遗漏。
+	7.Xib/Storyboard会暗含一些UI元素(Controller,Table,Button,Cell,View等)的alloc方法或调用关系。
+	8.其他隐含的逻辑或者动态特性导致的调用关系遗漏。
 ## 其他问题
 
 	正如API有效性检查一文提到的，分析工具要求代码书写要规范。并且对于很多只有运行时才能知道类型的问题无能为力。
