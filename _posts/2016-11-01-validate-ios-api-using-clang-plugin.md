@@ -49,7 +49,9 @@ tags: [ 'clang' ]
 	CADisplayLink
 	displayLinkWithTarget:selector:
 	KVO机制
-	addObserver:forKeyPath:options:context:,不同于别的都要处理方法本身调用和对应target:selector调用，这里KVO的addObserver则暗含了observeValueForKeyPath:ofObject:change:context:函数。
+	IBAction机制
+	如基于xib/Storyboard的ViewController中`-(IBAction)onBtnPressed:(id)sender`方法，认为暗含了`+[ViewController的 alloc]`对于`+[ViewController的 onBtnPressed:]`的调用关系。
+	
 	[XXX new]
 	暗含了+[XXX alloc]和-[XXX init]
 	
