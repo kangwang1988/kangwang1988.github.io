@@ -110,6 +110,7 @@ syntax-highlight: True
 # Timeline #
 ############
 
+
 events:
   - image: "/img/timeline/alibaba.jpeg"
     date: "March 2017 - Today"
