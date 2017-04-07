@@ -143,7 +143,7 @@ email: "kang.wang1988@gmail.com"
 # This works best when your author blurb image has a transparent background, or matches your site background color.
 
 # if the author_blurb is not set, then this feature is skipped
-author_blurb: "Kyle is a iOS developer in China. He likes mathematics,physics,art,computer science. In his spare time, he would like to read books, write some codes he likes, go swimming or hiking."
+author_blurb: "Kyle is a software developer in China. He likes mathematics,physics,art,computer science. In his spare time, he would like to read books, write some codes he likes, go swimming or hiking."
 author_blurb_image: "/img/author.png"
 
 ##################
