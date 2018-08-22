@@ -90,7 +90,7 @@ tags: [ 'clang' ]
 	
 	mkdir llvm_build
 	cd llvm_build
-	cmake ../llvm -DCMAKE_BUILD_TYPE:STRING=Release
+	cmake ../llvm -DCMAKE_BUILD_TYPE:STRING=Release -DLLVM_ENABLE_RTTI:BOOL=ON
 	make -j`sysctl -n hw.logicalcpu`
 
 
