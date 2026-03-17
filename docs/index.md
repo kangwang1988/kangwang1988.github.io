@@ -66,4 +66,4 @@ tags:
 这是我的 AI 学习笔记站点，用于系统化地整理和沉淀学习过程中的知识、实践和思考。
 
 - 内容持续更新中
-- 欢迎通过 [GitHub](https://github.com/kylewong/ai-learning-notes) 交流讨论
+- 欢迎通过 [GitHub](https://github.com/kangwang1988/kangwang1988.github.io) 交流讨论
