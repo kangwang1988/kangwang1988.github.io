@@ -322,3 +322,7 @@ graph TB
 > 一张简洁现代的中国风信息图海报，标题"十五五规划一图读懂"。放射状思维导图布局，中央是金色徽标"2026-2030"。六条主分支向外延伸并配有图标：(1) 齿轮与芯片代表产业，(2) 显微镜与原子代表科技，(3) 云朵与卫星代表数字化，(4) 光伏板与风机代表绿色能源，(5) 家庭剪影代表民生保障，(6) 地球与贸易航线代表对外开放。每个分支有3-4个子项配简洁中文标签。背景是浅灰色中国地形纹理。扁平化设计，Material Design配色，专业数据可视化风格。 --ar 3:4
 
 ![](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/refs/heads/main/docs/practice/fifteen-five/IMG_No.6_NanoBananoPro.png.png)
+
+---
+
+[:octicons-arrow-right-24: 查看本案例的完整交互过程复盘](process.md)
