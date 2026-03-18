@@ -51,6 +51,14 @@ tags:
 
     [:octicons-arrow-right-24: 开始阅读](tools/index.md)
 
+-   :material-rocket-launch:{ .lg .middle } **工程实践**
+
+    ---
+
+    政策分析、数据洞察等 AI 实际应用案例
+
+    [:octicons-arrow-right-24: 开始阅读](practice/index.md)
+
 -   :material-notebook:{ .lg .middle } **学习日志**
 
     ---

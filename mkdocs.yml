@@ -126,5 +126,8 @@ nav:
     - agents/index.md
   - 工具与实践:
     - tools/index.md
+  - 工程实践:
+    - practice/index.md
+    - 十五五规划分析: practice/fifteen-five/index.md
   - 学习日志:
     - journal/index.md
