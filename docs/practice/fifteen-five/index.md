@@ -282,6 +282,7 @@ graph TB
 > 一幅宏大的全景分层插画，展现中国2030年的发展蓝图。画面从下到上分为多层：最底层是戈壁沙漠上延绵的光伏板阵列和白色风力发电机组，金色沙丘映着夕阳；中间层是璀璨的智慧城市，矗立着6G信号塔，无人驾驶汽车和人形机器人穿行其间，高架上飞驰着银色子弹头高铁；上层是环绕地球的卫星群、散发蓝色冷光的量子计算机、以及辐射温暖能量的核聚变装置；最顶端是星空中的中国空间站和月球科研基地。配色：深海蓝、电光青、暖金色、翡翠绿。等距透视，超精细，矢量风格配渐变质感，未来感与现实感并存。 --ar 16:9
 
 ---
+![](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/refs/heads/main/docs/practice/fifteen-five/IMG_No.1_NanoBananoPro.png.png)
 
 ### 提示词 2: 科技自立自强 — "新质生产力"
 
@@ -289,6 +290,7 @@ graph TB
 > 一座未来科技枢纽，象征中国新质生产力。画面中央是一枚巨大的发光AI芯片悬浮在张开的手掌上方，周围环绕着全息投影图标：量子纠缠粒子组成的量子计算机、被金色光束编辑的DNA双螺旋、等离子环包裹的紧凑型核聚变反应堆、正在迈步前行的人形机器人、反射彩虹光芒的集成电路晶圆。背景是深蓝与青色交织的抽象神经网络图案，下方是城市天际线轮廓，5G/6G天线阵列林立。风格：电影级科幻概念艺术，体积光照明，戏剧性景深，超写实细节。 --ar 3:2
 
 ---
+![](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/refs/heads/main/docs/practice/fifteen-five/IMG_No.2_NanoBananoPro.png.png)
 
 ### 提示词 3: 新能源基建 — "绿色能源革命"
 
@@ -296,6 +298,7 @@ graph TB
 > 壮丽的航拍视角，展现中国绿色能源革命的全景画卷：戈壁荒漠上一望无际的光伏阵列和风机群在绚烂晚霞下延伸，碧蓝海面上矗立着海上风电机组，现代核电站冷却塔只排放洁白蒸汽，特高压输电铁塔跨越崇山峻岭将西部电力输送东部，绿色群山间坐落着抽水蓄能电站。角落点缀：氢燃料电池和托卡马克聚变装置微光闪烁。黄金时刻光线，航拍摄影质感，暖琥珀色与冷青色的和谐搭配。 --ar 21:9
 
 ---
+![](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/refs/heads/main/docs/practice/fifteen-five/IMG_No.3_NanoBananoPro.png.png)
 
 ### 提示词 4: 数字中国 — "万物互联"
 
@@ -303,6 +306,7 @@ graph TB
 > 一幅关于2030数字中国的前瞻性插画：全息中国地图悬浮在太空中，发光数据流在城市间穿梭，低轨卫星星座在上空编织成光网，6G信号波从基站群辐射开来，无人配送飞行器和eVTOL空中出租车穿行在城市低空廊道中，大型数据中心嵌入山体发出蓝色LED光芒，区块链网络节点闪烁着绿色脉冲光，市民在街头与AR增强现实界面互动。风格：赛博朋克与清洁科技融合美学，霓虹蓝与薄荷绿色调，等距3D渲染。 --ar 16:9
 
 ---
+![](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/refs/heads/main/docs/practice/fifteen-five/IMG_No.4_NanoBananoPro.png.png)
 
 ### 提示词 5: 民生与社会 — "人民美好生活"
 
@@ -310,8 +314,11 @@ graph TB
 > 一幅温暖而充满希望的插画，描绘2030年中国人的幸福生活：多代同堂的家庭场景中，老人在现代社区中心使用智能健康设备，父母在阳光充沛的共享办公空间用全息屏幕远程工作，孩子在充满绿植的教室里跟AI老师互动学习，一位年轻毕业生自信地走进高科技工厂。背景元素：配备远程医疗舱的现代医院、屋顶花园的保障性住房、热闹的夜市中扫码支付的场景、老人们在智慧公园里使用健身追踪设备锻炼。配色：温暖日出色调、柔和桃粉、天空蓝、自然绿。吉卜力式温馨感与现代设计融合，柔和光线。 --ar 16:9
 
 ---
+![](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/refs/heads/main/docs/practice/fifteen-five/IMG_No.5_NanoBananoPro.png.png)
 
 ### 提示词 6: 综合信息图 — "十五五规划一图读懂"
 
 > **提示词:**
 > 一张简洁现代的中国风信息图海报，标题"十五五规划一图读懂"。放射状思维导图布局，中央是金色徽标"2026-2030"。六条主分支向外延伸并配有图标：(1) 齿轮与芯片代表产业，(2) 显微镜与原子代表科技，(3) 云朵与卫星代表数字化，(4) 光伏板与风机代表绿色能源，(5) 家庭剪影代表民生保障，(6) 地球与贸易航线代表对外开放。每个分支有3-4个子项配简洁中文标签。背景是浅灰色中国地形纹理。扁平化设计，Material Design配色，专业数据可视化风格。 --ar 3:4
+
+![](https://raw.githubusercontent.com/kangwang1988/kangwang1988.github.io/refs/heads/main/docs/practice/fifteen-five/IMG_No.6_NanoBananoPro.png.png)
