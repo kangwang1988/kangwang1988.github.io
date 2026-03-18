@@ -128,6 +128,8 @@ nav:
     - tools/index.md
   - 工程实践:
     - practice/index.md
-    - 十五五规划分析: practice/fifteen-five/index.md
+    - 十五五规划分析:
+      - practice/fifteen-five/index.md
+      - 案例复盘: practice/fifteen-five/process.md
   - 学习日志:
     - journal/index.md
